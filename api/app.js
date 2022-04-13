@@ -1,17 +1,23 @@
-const { PrismaClient } = require("@prisma/client");
+const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
 
-const prisma = new PrismaClient();
+const app = express();
 
-const getAllUsers = async () => {
-  const users = await prisma.user.findMany({
-    include: {
-      profile: true,
-      followedBy: true,
-      following: true,
-    },
-  });
-  console.log(JSON.stringify(users, undefined, 4));
-  return users;
-};
+const isDev = process.env.NODE_ENV === 'development';
 
-getAllUsers();
+app.use(helmet());
+
+if (isDev) {
+  app.use(
+    cors({
+      origin: 'http://localhost:3000',
+      optionsSuccessStatus: 200,
+      credentials: true,
+    })
+  );
+}
+
+app.use(express.json({ type: 'application/json' }));
+
+module.exports = app;
