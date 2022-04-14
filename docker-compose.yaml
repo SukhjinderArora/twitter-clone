@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: twitter_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=sukhjinder_psql
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=twitterdb
+      - PGDATA=/var/lib/postgresql/data/
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  twitter_clone_api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: twitter_clone_api
+    volumes:
+      - ./api:/home/node/app:ro
+      - /home/node/app/node_modules
+    depends_on:
+      - postgres
+    ports:
+      - "5000:5000"
+      - "5555:5555"
+    restart: always
+
+volumes:
+  pgdata:
