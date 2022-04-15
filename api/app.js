@@ -11,13 +11,20 @@ const isDev = process.env.NODE_ENV === 'development';
 app.use(helmet());
 
 if (isDev) {
-  app.use(
-    cors({
-      origin: 'http://localhost:3000',
-      optionsSuccessStatus: 200,
-      credentials: true,
-    })
-  );
+  const whitelist = process.env.WHITELISTED_DOMAINS
+    ? process.env.WHITELISTED_DOMAINS.split(',')
+    : [];
+  const corsOptions = {
+    origin(origin, callback) {
+      if (!origin || whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
 }
 
 app.use(express.json({ type: 'application/json' }));
