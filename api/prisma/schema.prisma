@@ -13,7 +13,8 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
   email String @db.VarChar(255) @unique
-  username String @db.VarChar(15) @unique
+  username String? @db.VarChar(30) @unique
+  hashedPassword String? @db.VarChar(64)
   profile Profile?
   tweets Tweet[]
   retweets Retweet[]
@@ -22,6 +23,8 @@ model User {
   followedBy User[]  @relation("UserFollows", references: [id])
   following  User[]  @relation("UserFollows", references: [id])
   sessions Session[]
+  googleId String? @db.VarChar(100) @unique
+  provider String? @db.VarChar(50)
   createdAt DateTime @default(now())
 }
 

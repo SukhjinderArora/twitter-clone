@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
     container_name: twitter_clone_api
     volumes:
-      - ./api:/home/node/app:ro
+      - ./api:/home/node/app
       - ./api/prisma:/home/node/app/prisma
       - /home/node/app/node_modules
     depends_on:
