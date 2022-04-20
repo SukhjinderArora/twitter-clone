@@ -28,7 +28,7 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     restart: unless-stopped
 
-  twitter_clone_api:
+  api:
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -43,6 +43,21 @@ services:
       - "5000:5000"
       - "5555:5555"
     restart: always
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: twitter_clone_client
+    volumes:
+      - ./client:/home/node/app
+      - /home/node/app/node_modules
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - api
 
 volumes:
   pgdata:
