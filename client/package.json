@@ -25,6 +25,7 @@
     "prepare": "cd .. && husky install client/.husky",
     "pre-commit": "lint-staged"
   },
+  "proxy": "http://twitter_clone_api:5000",
   "lint-staged": {
     "*.+(js|jsx)": [
       "eslint --fix"
