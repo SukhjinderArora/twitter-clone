@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 const Signup = () => {
   return (
     <div className="bg-black h-screen py-10 px-10 flex justify-center items-center">
-      <div>
+      <div className="max-w-xs w-full">
         <div className="mb-4">
-          <h3 className="text-gray-100 text-3xl font-black">
+          <h3 className="text-gray-100 text-3xl font-black text-center">
             Join Kookoo today.
           </h3>
         </div>

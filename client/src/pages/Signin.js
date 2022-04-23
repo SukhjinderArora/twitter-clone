@@ -1,11 +1,34 @@
 import { Link } from 'react-router-dom';
 
+import useForm from '../hooks/useForm';
+
+const validate = (values) => {
+  const errors = {};
+  if (!values.username.trim()) {
+    errors.username = 'This is a mandatory field';
+  }
+  if (!values.password.trim()) {
+    errors.password = 'This is a mandatory field';
+  }
+  return errors;
+};
+
 const Signin = () => {
+  const form = useForm({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    validate,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
   return (
     <div className="bg-black h-screen py-10 px-10 flex justify-center items-center">
-      <div>
+      <div className="max-w-xs w-full">
         <div className="mb-4">
-          <h3 className="text-gray-100 text-3xl font-black">
+          <h3 className="text-gray-100 text-3xl font-black text-center">
             Sign in to Kookoo
           </h3>
         </div>
@@ -49,12 +72,16 @@ const Signin = () => {
         </div>
         <div>
           <form className="mb-8">
-            <div className="relative">
+            <div className="relative mb-4">
               <input
                 type="text"
                 id="username"
-                className="text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-sky-600 mb-4"
+                name="username"
+                className="text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-sky-600"
                 placeholder="   "
+                onFocus={form.handleFocus}
+                onBlur={form.handleBlur}
+                onChange={form.handleChange}
               />
               <label
                 htmlFor="username"
@@ -62,13 +89,20 @@ const Signin = () => {
               >
                 Email or username
               </label>
+              <span className="text-red-500 text-xs inline-block w-full">
+                {form.touched.username && form.errors.username}
+              </span>
             </div>
             <div className="relative mb-4">
               <input
                 type="password"
                 id="password"
+                name="password"
                 className="text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-sky-600"
                 placeholder="   "
+                onFocus={form.handleFocus}
+                onBlur={form.handleBlur}
+                onChange={form.handleChange}
               />
               <label
                 htmlFor="password"
@@ -76,10 +110,13 @@ const Signin = () => {
               >
                 Password
               </label>
+              <span className="text-red-500 text-xs inline-block w-full">
+                {form.touched.password && form.errors.password}
+              </span>
             </div>
             <div>
               <button
-                type="button"
+                type="submit"
                 className="font-raleway bg-sky-600 text-sky-50 rounded-full font-semibold block w-full py-4"
               >
                 Sign in
