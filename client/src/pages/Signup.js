@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Signup = () => {
   return (
     <div className="bg-black h-screen py-10 px-10 flex justify-center items-center">
@@ -57,12 +59,12 @@ const Signup = () => {
           <h4 className="text-white font-bold text-base mb-2">
             Already have an account?
           </h4>
-          <button
-            type="button"
-            className="font-raleway text-sky-600 bg-transparent border border-solid border-sky-600 rounded-full font-semibold block w-full py-4"
+          <Link
+            to="/signin"
+            className="font-raleway text-sky-600 bg-transparent border border-solid border-sky-600 rounded-full font-semibold  w-full py-4 inline-block text-center"
           >
             Sign in
-          </button>
+          </Link>
         </div>
       </div>
     </div>
