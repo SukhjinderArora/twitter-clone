@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Modal from '../components/Modal';
 
 const Signup = () => {
+  const [modalOpen, setModalOpen] = useState(false);
   return (
     <div className="bg-black h-screen py-10 px-10 flex justify-center items-center">
       <div className="max-w-xs w-full">
@@ -51,6 +54,7 @@ const Signup = () => {
           <button
             type="button"
             className="font-raleway bg-sky-600 text-sky-50 rounded-full font-semibold block w-full py-4"
+            onClick={() => setModalOpen(true)}
           >
             Sign up with phone or email
           </button>
@@ -66,6 +70,7 @@ const Signup = () => {
             Sign in
           </Link>
         </div>
+        <Modal modalOpen={modalOpen} closeModal={() => setModalOpen(false)} />
       </div>
     </div>
   );
