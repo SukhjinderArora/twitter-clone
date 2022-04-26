@@ -5,6 +5,7 @@ const TextInput = ({
   name,
   label,
   value,
+  type,
   error,
   onFocus,
   onBlur,
@@ -13,10 +14,12 @@ const TextInput = ({
   return (
     <div className="relative">
       <input
-        type="text"
+        type={type}
         id={id}
         name={name}
-        className="text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-sky-600"
+        className={`text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-sky-600 ${
+          type === 'password' ? 'font-verdana text-2xl tracking-tighter' : ''
+        }`}
         placeholder="   "
         onFocus={onFocus}
         onBlur={onBlur}
@@ -39,6 +42,15 @@ TextInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  type: PropTypes.oneOf([
+    'text',
+    'email',
+    'password',
+    'search',
+    'tel',
+    'url',
+    'number',
+  ]),
   error: PropTypes.string,
   onFocus: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
@@ -47,6 +59,7 @@ TextInput.propTypes = {
 
 TextInput.defaultProps = {
   error: '',
+  type: 'text',
 };
 
 export default TextInput;

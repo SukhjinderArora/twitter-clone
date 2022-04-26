@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Modal from '../components/Modal';
-import SignupForm from '../components/SignupForm';
+import SignupForm from '../components/SignupForm/SignupForm';
 
 const Signup = () => {
   const [modalOpen, setModalOpen] = useState(false);

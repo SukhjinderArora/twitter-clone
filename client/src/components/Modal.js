@@ -13,8 +13,12 @@ const Modal = ({ children, closeModal, modalOpen }) => {
           !modalOpen && 'hidden'
         }`}
       >
-        <div className="p-4 flex items-center">
-          <button type="button" onClick={closeModal}>
+        <div className="p-4 flex items-center relative">
+          <button
+            type="button"
+            onClick={closeModal}
+            className="absolute top-1/2 -translate-y-1/2"
+          >
             <IconContext.Provider
               // eslint-disable-next-line react/jsx-no-constructed-context-values
               value={{

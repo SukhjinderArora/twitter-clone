@@ -4,6 +4,7 @@ module.exports = {
     fontFamily: {
       lato: ['Lato', 'sans-serif'],
       raleway: ['Raleway', 'sans-serif'],
+      verdana: ['verdana', 'sans-serif'],
     },
     extend: {},
   },
