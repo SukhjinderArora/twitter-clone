@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import Modal from '../components/Modal';
+import SignupForm from '../components/SignupForm';
 
 const Signup = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -70,7 +72,9 @@ const Signup = () => {
             Sign in
           </Link>
         </div>
-        <Modal modalOpen={modalOpen} closeModal={() => setModalOpen(false)} />
+        <Modal modalOpen={modalOpen} closeModal={() => setModalOpen(false)}>
+          <SignupForm />
+        </Modal>
       </div>
     </div>
   );

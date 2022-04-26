@@ -79,6 +79,7 @@ const Signin = () => {
                 name="username"
                 className="text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-sky-600"
                 placeholder="   "
+                value={form.values.username}
                 onFocus={form.handleFocus}
                 onBlur={form.handleBlur}
                 onChange={form.handleChange}
@@ -100,6 +101,7 @@ const Signin = () => {
                 name="password"
                 className="text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-sky-600"
                 placeholder="   "
+                value={form.values.password}
                 onFocus={form.handleFocus}
                 onBlur={form.handleBlur}
                 onChange={form.handleChange}
