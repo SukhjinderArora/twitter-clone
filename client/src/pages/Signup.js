@@ -72,9 +72,11 @@ const Signup = () => {
             Sign in
           </Link>
         </div>
-        <Modal modalOpen={modalOpen} closeModal={() => setModalOpen(false)}>
-          <SignupForm />
-        </Modal>
+        {modalOpen && (
+          <Modal modalOpen={modalOpen} closeModal={() => setModalOpen(false)}>
+            <SignupForm closeModal={() => setModalOpen(false)} />
+          </Modal>
+        )}
       </div>
     </div>
   );

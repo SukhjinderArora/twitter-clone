@@ -40,7 +40,7 @@ const DateOptions = {
   },
 };
 
-const Form1 = ({ formData }) => {
+const Form1 = ({ formData, onButtonClick }) => {
   return (
     <form>
       <div className="mb-6">
@@ -120,6 +120,7 @@ const Form1 = ({ formData }) => {
       <div>
         <button
           type="button"
+          onClick={onButtonClick}
           className="font-raleway bg-sky-600 text-sky-50 rounded-full font-semibold block w-full py-4"
         >
           Continue
@@ -156,6 +157,7 @@ Form1.propTypes = {
       year: PropTypes.string,
     }),
   }).isRequired,
+  onButtonClick: PropTypes.func.isRequired,
 };
 
 export default Form1;

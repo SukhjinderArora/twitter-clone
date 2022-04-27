@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+
 import Form1 from './Form1';
 import Form2 from './Form2';
 import Form3 from './Form3';
@@ -49,7 +52,9 @@ const validateForm4 = (values) => {
   return errors;
 };
 
-const SignupForm = () => {
+const SignupForm = ({ closeModal }) => {
+  const [activeFormIndex, setActiveFormIndex] = useState(0);
+
   const form1 = useForm({
     initialValues: {
       name: '',
@@ -60,32 +65,74 @@ const SignupForm = () => {
     },
     validate: validateForm1,
   });
+
   const form2 = useForm({
     initialValues: {
       password: '',
     },
     validate: validateForm2,
   });
+
   const form3 = useForm({
     initialValues: {
       username: '',
     },
     validate: validateForm3,
   });
+
   const form4 = useForm({
     initialValues: {
       bio: '',
     },
     validate: validateForm4,
   });
+
+  const renderForm = (formIndex) => {
+    switch (formIndex) {
+      case 0: {
+        return (
+          <Form1
+            formData={form1}
+            onButtonClick={() =>
+              setActiveFormIndex((prevIndex) => prevIndex + 1)
+            }
+          />
+        );
+      }
+      case 1:
+        return (
+          <Form2
+            formData={form2}
+            onButtonClick={() =>
+              setActiveFormIndex((prevIndex) => prevIndex + 1)
+            }
+          />
+        );
+      case 2:
+        return (
+          <Form3
+            formData={form3}
+            onButtonClick={() =>
+              setActiveFormIndex((prevIndex) => prevIndex + 1)
+            }
+          />
+        );
+      case 3:
+        return <Form4 formData={form4} onButtonClick={closeModal} />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="h-full w-full z-20 sm:w-[500px] sm:h-[500px] p-6">
-      <Form1 formData={form1} />
-      <Form2 formData={form2} />
-      <Form3 formData={form3} />
-      <Form4 formData={form4} />
+    <div className="h-[calc(100%_-_70px)] w-full z-20 sm:w-[500px] sm:h-[500px] p-6">
+      {renderForm(activeFormIndex)}
     </div>
   );
+};
+
+SignupForm.propTypes = {
+  closeModal: PropTypes.func.isRequired,
 };
 
 export default SignupForm;

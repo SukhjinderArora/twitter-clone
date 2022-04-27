@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import TextArea from '../TextArea';
 
-const Form4 = ({ formData }) => {
+const Form4 = ({ formData, onButtonClick }) => {
   return (
     <form className="h-full relative">
       <div className="mb-10">
@@ -29,6 +29,7 @@ const Form4 = ({ formData }) => {
       <div className="absolute bottom-0 left-0 w-full">
         <button
           type="button"
+          onClick={onButtonClick}
           className="font-raleway bg-sky-600 text-sky-50 rounded-full font-semibold block w-full py-4"
         >
           Continue
@@ -53,6 +54,7 @@ Form4.propTypes = {
       bio: PropTypes.string,
     }),
   }).isRequired,
+  onButtonClick: PropTypes.func.isRequired,
 };
 
 export default Form4;
