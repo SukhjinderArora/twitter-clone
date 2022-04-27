@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 
+import TextInput from '../components/TextInput';
+
 import useForm from '../hooks/useForm';
 
 const validate = (values) => {
@@ -73,48 +75,29 @@ const Signin = () => {
         <div>
           <form className="mb-8">
             <div className="relative mb-4">
-              <input
-                type="text"
+              <TextInput
                 id="username"
                 name="username"
-                className="text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-sky-600"
-                placeholder="   "
+                label="Email or username"
                 value={form.values.username}
+                error={form.touched.username ? form.errors.username : ''}
                 onFocus={form.handleFocus}
                 onBlur={form.handleBlur}
                 onChange={form.handleChange}
               />
-              <label
-                htmlFor="username"
-                className="text-sm text-gray-300 absolute top-1 left-4 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base  peer-focus:top-1 peer-focus:text-sm transition-all peer-focus:text-sky-600"
-              >
-                Email or username
-              </label>
-              <span className="text-red-500 text-xs inline-block w-full">
-                {form.touched.username && form.errors.username}
-              </span>
             </div>
             <div className="relative mb-4">
-              <input
-                type="password"
+              <TextInput
                 id="password"
                 name="password"
-                className="text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-sky-600"
-                placeholder="   "
+                label="Password"
+                type="password"
                 value={form.values.password}
+                error={form.touched.password ? form.errors.password : ''}
                 onFocus={form.handleFocus}
                 onBlur={form.handleBlur}
                 onChange={form.handleChange}
               />
-              <label
-                htmlFor="password"
-                className="text-sm text-gray-300 absolute top-1 left-4 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base  peer-focus:top-1 peer-focus:text-sm transition-all peer-focus:text-sky-600"
-              >
-                Password
-              </label>
-              <span className="text-red-500 text-xs inline-block w-full">
-                {form.touched.password && form.errors.password}
-              </span>
             </div>
             <div>
               <button
