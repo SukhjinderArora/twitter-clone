@@ -1,6 +1,7 @@
 import Form1 from './Form1';
 import Form2 from './Form2';
 import Form3 from './Form3';
+import Form4 from './Form4';
 
 import useForm from '../../hooks/useForm';
 
@@ -40,6 +41,14 @@ const validateForm3 = (values) => {
   return errors;
 };
 
+const validateForm4 = (values) => {
+  const errors = {};
+  if (!values.bio.trim()) {
+    errors.bio = 'This is a mandatory field';
+  }
+  return errors;
+};
+
 const SignupForm = () => {
   const form1 = useForm({
     initialValues: {
@@ -63,11 +72,18 @@ const SignupForm = () => {
     },
     validate: validateForm3,
   });
+  const form4 = useForm({
+    initialValues: {
+      bio: '',
+    },
+    validate: validateForm4,
+  });
   return (
     <div className="h-full w-full z-20 sm:w-[500px] sm:h-[500px] p-6">
-      {/* <Form1 formData={form1} /> */}
-      {/* <Form2 formData={form2} /> */}
+      <Form1 formData={form1} />
+      <Form2 formData={form2} />
       <Form3 formData={form3} />
+      <Form4 formData={form4} />
     </div>
   );
 };

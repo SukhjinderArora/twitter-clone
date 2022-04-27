@@ -50,7 +50,7 @@ const TextInput = ({
         </span>
       )}
       {type === 'username' && !error && (
-        <span className="text-white peer-focus:text-sky-600 absolute right-0 top-7 mr-3">
+        <span className="peer-placeholder-shown:hidden text-white peer-focus:text-sky-600 absolute right-0 top-7 mr-3">
           <IconContext.Provider
             // eslint-disable-next-line react/jsx-no-constructed-context-values
             value={{
