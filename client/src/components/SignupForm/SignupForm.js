@@ -32,6 +32,14 @@ const validateForm2 = (values) => {
   return errors;
 };
 
+const validateForm3 = (values) => {
+  const errors = {};
+  if (!values.username.trim()) {
+    errors.username = 'This is a mandatory field';
+  }
+  return errors;
+};
+
 const SignupForm = () => {
   const form1 = useForm({
     initialValues: {
@@ -49,11 +57,17 @@ const SignupForm = () => {
     },
     validate: validateForm2,
   });
+  const form3 = useForm({
+    initialValues: {
+      username: '',
+    },
+    validate: validateForm3,
+  });
   return (
     <div className="h-full w-full z-20 sm:w-[500px] sm:h-[500px] p-6">
       {/* <Form1 formData={form1} /> */}
-      <Form2 formData={form2} />
-      {/* <Form3 /> */}
+      {/* <Form2 formData={form2} /> */}
+      <Form3 formData={form3} />
     </div>
   );
 };
