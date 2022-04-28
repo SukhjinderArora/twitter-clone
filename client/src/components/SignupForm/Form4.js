@@ -6,10 +6,10 @@ const Form4 = ({ formData, onButtonClick }) => {
   return (
     <form className="h-full relative">
       <div className="mb-10">
-        <h1 className="text-white text-3xl font-bold mb-1">
+        <h1 className="text-neutral-100 text-3xl font-bold mb-1">
           Describe yourself
         </h1>
-        <h4 className="text-gray-400 text-sm">
+        <h4 className="text-neutral-400 text-sm">
           What makes you special? Don&apos;t think too hard, just have fun with
           it.
         </h4>
@@ -30,7 +30,7 @@ const Form4 = ({ formData, onButtonClick }) => {
         <button
           type="button"
           onClick={onButtonClick}
-          className="font-raleway bg-sky-600 text-sky-50 rounded-full font-semibold block w-full py-4"
+          className="font-raleway bg-primary-500 text-primary-100 rounded-full font-semibold block w-full py-4"
         >
           Continue
         </button>

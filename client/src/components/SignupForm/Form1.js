@@ -44,7 +44,9 @@ const Form1 = ({ formData, onButtonClick }) => {
   return (
     <form>
       <div className="mb-6">
-        <h1 className="text-white text-3xl font-bold">Create your account</h1>
+        <h1 className="text-neutral-100 text-3xl font-bold">
+          Create your account
+        </h1>
       </div>
       <div className="mb-4">
         <TextInput
@@ -71,7 +73,9 @@ const Form1 = ({ formData, onButtonClick }) => {
         />
       </div>
       <div className="mb-4">
-        <h3 className="text-base text-white font-semibold">Date of birth</h3>
+        <h3 className="text-base text-neutral-100 font-semibold">
+          Date of birth
+        </h3>
       </div>
       <div className="flex justify-between gap-3 mb-4">
         <div className="w-1/2">
@@ -121,7 +125,7 @@ const Form1 = ({ formData, onButtonClick }) => {
         <button
           type="button"
           onClick={onButtonClick}
-          className="font-raleway bg-sky-600 text-sky-50 rounded-full font-semibold block w-full py-4"
+          className="font-raleway bg-primary-500 text-primary-100 rounded-full font-semibold block w-full py-4"
         >
           Continue
         </button>
