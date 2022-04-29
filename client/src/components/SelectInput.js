@@ -23,7 +23,7 @@ const SelectInput = ({
           onChange={onChange}
           onBlur={onBlur}
           onFocus={onFocus}
-          className="text-gray-100 border border-solid border-gray-600 bg-black px-4 pt-6 pb-2 w-full rounded-md appearance-none peer focus:outline focus:outline-1 focus:outline-sky-600 cursor-pointer"
+          className="text-on-surface border border-solid border-primary bg-surface px-4 pt-6 pb-2 w-full rounded-md appearance-none peer focus:outline focus:outline-1 focus:outline-primary cursor-pointer"
         >
           <option value="" disabled>
             {' '}
@@ -36,11 +36,11 @@ const SelectInput = ({
         </select>
         <label
           htmlFor={id}
-          className="text-sm text-gray-300 absolute top-1 left-4 transition-all peer-focus:text-sky-600 pointer-events-none"
+          className="text-sm text-on-surface absolute top-1 left-4 transition-all peer-focus:text-primary pointer-events-none"
         >
           {label}
         </label>
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 mr-1 text-[#71767b] peer-focus:text-sky-600 pointer-events-none">
+        <div className="absolute top-1/2 right-0 -translate-y-1/2 mr-1 text-[#71767b] peer-focus:text-primary pointer-events-none">
           <IconContext.Provider
             // eslint-disable-next-line react/jsx-no-constructed-context-values
             value={{
@@ -54,7 +54,7 @@ const SelectInput = ({
           </IconContext.Provider>
         </div>
       </div>
-      <span className="text-red-500 text-xs inline-block w-full">{error}</span>
+      <span className="text-error text-xs inline-block w-full">{error}</span>
     </div>
   );
 };

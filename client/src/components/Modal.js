@@ -9,7 +9,7 @@ const Modal = ({ children, closeModal, modalOpen }) => {
     <div className="relative">
       <Backdrop backdropVisible={modalOpen} hideBackdrop={closeModal} />
       <div
-        className={`bg-neutral-900 fixed top-0 left-0 h-full w-full z-20 sm:w-[500px] sm:h-fit sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 ${
+        className={`bg-surface fixed top-0 left-0 h-full w-full z-20 sm:w-[500px] sm:h-fit sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 ${
           !modalOpen && 'hidden'
         }`}
       >
@@ -17,7 +17,7 @@ const Modal = ({ children, closeModal, modalOpen }) => {
           <button
             type="button"
             onClick={closeModal}
-            className="absolute top-1/2 -translate-y-1/2 text-neutral-100"
+            className="absolute top-1/2 -translate-y-1/2 text-on-surface"
           >
             <IconContext.Provider
               // eslint-disable-next-line react/jsx-no-constructed-context-values
@@ -31,7 +31,7 @@ const Modal = ({ children, closeModal, modalOpen }) => {
               <FiX />
             </IconContext.Provider>
           </button>
-          <h1 className="text-neutral-100 font-bold text-2xl text-center flex-1">
+          <h1 className="text-on-surface font-bold text-2xl text-center flex-1">
             Kookoo
           </h1>
         </div>

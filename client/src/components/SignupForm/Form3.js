@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 
 import TextInput from '../TextInput';
 
-const Form3 = ({ formData, onButtonClick }) => {
+const Form3 = ({ formData }) => {
   return (
-    <form className="h-full relative">
+    <form className="h-full relative" onSubmit={formData.handleSubmit}>
       <div className="mb-10">
-        <h1 className="text-neutral-100 text-3xl font-bold mb-1">
+        <h1 className="text-on-surface text-3xl font-bold mb-1">
           What should we call you?
         </h1>
-        <h4 className="text-neutral-400 text-sm">
+        <h4 className="text-on-surface text-sm">
           Your @username is unique. You can always change is later.
         </h4>
       </div>
@@ -28,9 +28,8 @@ const Form3 = ({ formData, onButtonClick }) => {
       </div>
       <div className="absolute bottom-0 left-0 w-full">
         <button
-          type="button"
-          onClick={onButtonClick}
-          className="font-raleway bg-primary-500 text-primary-100 rounded-full font-semibold block w-full py-4"
+          type="submit"
+          className="font-raleway bg-primary text-on-primary rounded-full font-semibold block w-full py-4"
         >
           Continue
         </button>
@@ -44,6 +43,7 @@ Form3.propTypes = {
     handleFocus: PropTypes.func.isRequired,
     handleBlur: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
     values: PropTypes.shape({
       username: PropTypes.string.isRequired,
     }),
@@ -54,7 +54,6 @@ Form3.propTypes = {
       username: PropTypes.string,
     }),
   }).isRequired,
-  onButtonClick: PropTypes.func.isRequired,
 };
 
 export default Form3;

@@ -27,17 +27,17 @@ const Signin = () => {
     },
   });
   return (
-    <div className="bg-neutral-900 h-screen py-10 px-10 flex justify-center items-center">
+    <div className="bg-background h-screen py-10 px-10 flex justify-center items-center">
       <div className="max-w-xs w-full">
         <div className="mb-4">
-          <h3 className="text-neutral-100 text-3xl font-black text-center">
+          <h3 className="text-on-background text-3xl font-black text-center">
             Sign in to Kookoo
           </h3>
         </div>
         <div className="mb-4">
           <a
             href="http://localhost:5000/api/auth/login/google"
-            className="text-neutral-600 bg-neutral-100 py-4 flex justify-center gap-4 text-base font-normal rounded-full font-lato"
+            className="text-neutral-800 bg-white py-4 flex justify-center gap-4 text-base font-normal rounded-full font-lato"
           >
             <svg
               viewBox="0 0 24 24"
@@ -68,9 +68,9 @@ const Signin = () => {
           </a>
         </div>
         <div className="flex items-center gap-4 mb-4">
-          <div className="bg-neutral-500 h-px flex-1" />
-          <div className="text-neutral-100">or</div>
-          <div className="bg-neutral-500 h-px flex-1" />
+          <div className="bg-on-background h-px flex-1" />
+          <div className="text-on-background">or</div>
+          <div className="bg-on-background h-px flex-1" />
         </div>
         <div>
           <form className="mb-8">
@@ -102,19 +102,19 @@ const Signin = () => {
             <div>
               <button
                 type="submit"
-                className="font-raleway bg-primary-500 text-primary-100 rounded-full font-semibold block w-full py-4"
+                className="font-raleway bg-primary text-on-primary rounded-full font-semibold block w-full py-4"
               >
                 Sign in
               </button>
             </div>
           </form>
           <div>
-            <span className="text-neutral-300 text-base mb-2">
+            <span className="text-on-background text-base mb-2">
               Don&apos;t have an account?
             </span>
             <Link
               to="/signup"
-              className="font-raleway text-primary-600 inline-block ml-1 font-semibold"
+              className="font-raleway text-primary inline-block ml-1 font-semibold"
             >
               Sign up
             </Link>

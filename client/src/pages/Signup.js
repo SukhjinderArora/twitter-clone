@@ -7,17 +7,17 @@ import SignupForm from '../components/SignupForm/SignupForm';
 const Signup = () => {
   const [modalOpen, setModalOpen] = useState(false);
   return (
-    <div className="bg-neutral-900 h-screen py-10 px-10 flex justify-center items-center">
+    <div className="bg-background h-screen py-10 px-10 flex justify-center items-center">
       <div className="max-w-xs w-full">
         <div className="mb-4">
-          <h3 className="text-neutral-100 text-3xl font-black text-center">
+          <h3 className="text-on-background text-3xl font-black text-center">
             Join Kookoo today.
           </h3>
         </div>
         <div className="mb-4">
           <a
             href="http://localhost:5000/api/auth/login/google"
-            className="text-neutral-800 bg-neutral-100 py-4 flex justify-center gap-4 text-base font-normal rounded-full font-lato"
+            className="text-neutral-800 bg-white py-4 flex justify-center gap-4 text-base font-normal rounded-full font-lato"
           >
             <svg
               viewBox="0 0 24 24"
@@ -48,26 +48,26 @@ const Signup = () => {
           </a>
         </div>
         <div className="flex items-center gap-4 mb-4">
-          <div className="bg-neutral-500 h-px flex-1" />
-          <div className="text-neutral-100">or</div>
-          <div className="bg-neutral-500 h-px flex-1" />
+          <div className="bg-on-background h-px flex-1" />
+          <div className="text-on-background">or</div>
+          <div className="bg-on-background h-px flex-1" />
         </div>
         <div className="mb-4">
           <button
             type="button"
-            className="font-raleway bg-primary-500 text-primary-100 rounded-full font-semibold block w-full py-4"
+            className="font-raleway bg-primary text-on-primary rounded-full font-semibold block w-full py-4"
             onClick={() => setModalOpen(true)}
           >
             Sign up with phone or email
           </button>
         </div>
         <div>
-          <h4 className="text-neutral-200 font-bold text-base mb-2">
+          <h4 className="text-on-background font-bold text-base mb-2">
             Already have an account?
           </h4>
           <Link
             to="/signin"
-            className="font-raleway bg-transparent border border-solid border-primary-500 rounded-full font-semibold  w-full py-4 inline-block text-center text-primary-500"
+            className="font-raleway bg-transparent border border-solid border-primary rounded-full font-semibold  w-full py-4 inline-block text-center text-primary"
           >
             Sign in
           </Link>

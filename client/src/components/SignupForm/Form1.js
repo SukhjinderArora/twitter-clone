@@ -40,11 +40,11 @@ const DateOptions = {
   },
 };
 
-const Form1 = ({ formData, onButtonClick }) => {
+const Form1 = ({ formData }) => {
   return (
-    <form>
+    <form onSubmit={formData.handleSubmit}>
       <div className="mb-6">
-        <h1 className="text-neutral-100 text-3xl font-bold">
+        <h1 className="text-on-surface text-3xl font-bold">
           Create your account
         </h1>
       </div>
@@ -65,6 +65,7 @@ const Form1 = ({ formData, onButtonClick }) => {
           id="email"
           name="email"
           label="Email"
+          type="email"
           onFocus={formData.handleFocus}
           onBlur={formData.handleBlur}
           onChange={formData.handleChange}
@@ -73,7 +74,7 @@ const Form1 = ({ formData, onButtonClick }) => {
         />
       </div>
       <div className="mb-4">
-        <h3 className="text-base text-neutral-100 font-semibold">
+        <h3 className="text-base text-on-surface font-semibold">
           Date of birth
         </h3>
       </div>
@@ -123,9 +124,8 @@ const Form1 = ({ formData, onButtonClick }) => {
       </div>
       <div>
         <button
-          type="button"
-          onClick={onButtonClick}
-          className="font-raleway bg-primary-500 text-primary-100 rounded-full font-semibold block w-full py-4"
+          type="submit"
+          className="font-raleway bg-primary text-on-primary rounded-full font-semibold block w-full py-4"
         >
           Continue
         </button>
@@ -139,6 +139,7 @@ Form1.propTypes = {
     handleFocus: PropTypes.func.isRequired,
     handleBlur: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
     values: PropTypes.shape({
       name: PropTypes.string.isRequired,
       email: PropTypes.string.isRequired,
@@ -161,7 +162,6 @@ Form1.propTypes = {
       year: PropTypes.string,
     }),
   }).isRequired,
-  onButtonClick: PropTypes.func.isRequired,
 };
 
 export default Form1;
