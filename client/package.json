@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.27.2",
     "lint-staged": "^12.3.8",
     "prop-types": "^15.8.1",
     "react": "^18.0.0",
@@ -28,7 +29,7 @@
     "prepare": "cd .. && husky install client/.husky",
     "pre-commit": "lint-staged"
   },
-  "proxy": "http://twitter_clone_api:5000",
+  "proxy": "http://host.docker.internal:5000",
   "lint-staged": {
     "*.+(js|jsx)": [
       "eslint --fix"

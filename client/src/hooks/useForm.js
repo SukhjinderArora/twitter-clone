@@ -43,6 +43,10 @@ const reducer = (state, action) => {
     case actionTypes.ERROR:
       return { ...state, errors: action.errors };
     case actionTypes.TOUCHALL: {
+      const alreadyTouched = Object.values(state.touched).every(
+        (x) => x === true
+      );
+      if (alreadyTouched) return state;
       const touched = setAllObjectProperties(state.touched, true);
       return { ...state, touched };
     }

@@ -51,6 +51,28 @@ const register = async (req, res, next) => {
   }
 };
 
+const signupForm = {
+  stepOne: async (req, res, next) => {
+    const { email, name, dateOfBirth } = req.body;
+    try {
+      const user = await prisma.user.create({
+        data: {
+          email,
+          profile: {
+            create: {
+              name,
+              dob: dateOfBirth,
+            },
+          },
+        },
+      });
+      return res.status(201).json({ user });
+    } catch (error) {
+      return next(error);
+    }
+  },
+};
+
 const googleLoginSuccess = async (req, res) => {
   const refreshToken = generateJWT(
     req.user.id,
@@ -89,4 +111,4 @@ const googleLoginSuccess = async (req, res) => {
   res.redirect('http://localhost:3000/signin/oauth?provider=google');
 };
 
-module.exports = { loginPassword, register, googleLoginSuccess };
+module.exports = { loginPassword, register, signupForm, googleLoginSuccess };

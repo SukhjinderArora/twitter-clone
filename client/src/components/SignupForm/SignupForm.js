@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import validator from 'validator';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
 import Form1 from './Form1';
 import Form2 from './Form2';
@@ -72,8 +74,13 @@ const validateForm4 = (values) => {
 
 const SignupForm = ({ closeModal }) => {
   const [activeFormIndex, setActiveFormIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const form1 = useForm({
+  const mutation1 = useMutation((user) => {
+    return axios.post('/api/auth/signup/1', user);
+  });
+
+  const { setMultipleFieldsError, ...form1 } = useForm({
     initialValues: {
       name: '',
       email: '',
@@ -82,8 +89,30 @@ const SignupForm = ({ closeModal }) => {
       year: '',
     },
     validate: validateForm1,
-    onSubmit: () => {
-      setActiveFormIndex((prevIndex) => prevIndex + 1);
+    onSubmit: async (values) => {
+      const user = {
+        email: values.email,
+        name: values.name,
+        dateOfBirth: new Date(
+          `${values.year}/${values.month}/${values.day}`
+        ).toISOString(),
+      };
+      try {
+        setIsLoading(true);
+        await mutation1.mutateAsync(user);
+        setIsLoading(false);
+        setActiveFormIndex((prevIndex) => prevIndex + 1);
+      } catch (err) {
+        setIsLoading(false);
+        const error = err.response.data.errors || err.response.data.error;
+        if (Array.isArray(error)) {
+          const errors = error.reduce((acc, cur) => {
+            acc[cur.param] = cur.msg;
+            return acc;
+          }, {});
+          setMultipleFieldsError(errors);
+        }
+      }
     },
   });
 
@@ -119,9 +148,8 @@ const SignupForm = ({ closeModal }) => {
 
   const renderForm = (formIndex) => {
     switch (formIndex) {
-      case 0: {
+      case 0:
         return <Form1 formData={form1} />;
-      }
       case 1:
         return <Form2 formData={form2} />;
       case 2:
@@ -135,7 +163,8 @@ const SignupForm = ({ closeModal }) => {
 
   return (
     <div className="h-[calc(100%_-_70px)] w-full z-20 sm:w-[500px] sm:h-[500px] p-6">
-      {renderForm(activeFormIndex)}
+      {isLoading && <p>Loading....</p>}
+      {!isLoading && renderForm(activeFormIndex)}
     </div>
   );
 };

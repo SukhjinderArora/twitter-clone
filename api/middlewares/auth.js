@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const ms = require('ms');
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
 
 const prisma = require('../services/connect-db');
 const { generateJWT, COOKIE_OPTIONS } = require('../utils/auth');
@@ -107,7 +108,18 @@ const generateAuthTokens = async (req, res, next) => {
   }
 };
 
+const validateRequest = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array({ onlyFirstError: true }),
+    });
+  }
+  return next();
+};
+
 module.exports = {
   isAuthenticated,
   generateAuthTokens,
+  validateRequest,
 };

@@ -10,6 +10,8 @@ WORKDIR /home/node/app
 
 COPY --chown=node:node package.json .
 
+RUN npm set-script prepare ""
+
 RUN npm install
 
 COPY --chown=node:node . .
