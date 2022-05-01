@@ -1,6 +1,7 @@
 const passport = require('passport');
 const ms = require('ms');
 const bcrypt = require('bcrypt');
+const createError = require('http-errors');
 
 const prisma = require('../services/connect-db');
 const { generateJWT, COOKIE_OPTIONS } = require('../utils/auth');
@@ -51,8 +52,8 @@ const register = async (req, res, next) => {
   }
 };
 
-const signupForm = {
-  stepOne: async (req, res, next) => {
+const signup = {
+  phaseOne: async (req, res, next) => {
     const { email, name, dateOfBirth } = req.body;
     try {
       const user = await prisma.user.create({
@@ -67,6 +68,87 @@ const signupForm = {
         },
       });
       return res.status(201).json({ user });
+    } catch (error) {
+      return next(error);
+    }
+  },
+  phaseTwo: async (req, res, next) => {
+    const { userId, password } = req.body;
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      if (!user) {
+        throw createError.NotFound();
+      }
+      const saltRounds = 12;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          hashedPassword,
+        },
+      });
+      delete updatedUser.hashedPassword;
+      return res.status(201).json({ user: updatedUser });
+    } catch (error) {
+      return next(error);
+    }
+  },
+  phaseThree: async (req, res, next) => {
+    const { userId, username } = req.body;
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      if (!user) {
+        throw createError.NotFound();
+      }
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          username,
+        },
+      });
+      delete updatedUser.hashedPassword;
+      return res.status(201).json({ user: updatedUser });
+    } catch (error) {
+      return next(error);
+    }
+  },
+  phaseFour: async (req, res, next) => {
+    const { userId, bio } = req.body;
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      if (!user) {
+        throw createError.NotFound();
+      }
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          profile: {
+            update: {
+              bio,
+            },
+          },
+        },
+      });
+      delete updatedUser.hashedPassword;
+      return res.status(201).json({ user: updatedUser });
     } catch (error) {
       return next(error);
     }
@@ -111,4 +193,4 @@ const googleLoginSuccess = async (req, res) => {
   res.redirect('http://localhost:3000/signin/oauth?provider=google');
 };
 
-module.exports = { loginPassword, register, signupForm, googleLoginSuccess };
+module.exports = { loginPassword, register, signup, googleLoginSuccess };

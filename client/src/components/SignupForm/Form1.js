@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
+import Button from '../Button';
 import SelectInput from '../SelectInput';
+import Spinner from '../Spinner';
 
 import TextInput from '../TextInput';
 
@@ -40,7 +42,7 @@ const DateOptions = {
   },
 };
 
-const Form1 = ({ formData }) => {
+const Form1 = ({ formData, isLoading }) => {
   return (
     <form onSubmit={formData.handleSubmit}>
       <div className="mb-6">
@@ -123,12 +125,9 @@ const Form1 = ({ formData }) => {
         </div>
       </div>
       <div>
-        <button
-          type="submit"
-          className="font-raleway bg-primary text-on-primary rounded-full font-semibold block w-full py-4"
-        >
+        <Button type="submit" isLoading={isLoading}>
           Continue
-        </button>
+        </Button>
       </div>
     </form>
   );
@@ -162,6 +161,7 @@ Form1.propTypes = {
       year: PropTypes.string,
     }),
   }).isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default Form1;

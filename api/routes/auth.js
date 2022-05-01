@@ -16,9 +16,27 @@ router.post(
 router.post('/register', authController.register, generateAuthTokens);
 router.post(
   '/signup/1',
-  checkSchema(signupSchema.stepOne),
+  checkSchema(signupSchema.phaseOne),
   validateRequest,
-  authController.signupForm.stepOne
+  authController.signup.phaseOne
+);
+router.post(
+  '/signup/2',
+  checkSchema(signupSchema.phaseTwo),
+  validateRequest,
+  authController.signup.phaseTwo
+);
+router.post(
+  '/signup/3',
+  checkSchema(signupSchema.phaseThree),
+  validateRequest,
+  authController.signup.phaseThree
+);
+router.post(
+  '/signup/4',
+  checkSchema(signupSchema.phaseFour),
+  validateRequest,
+  authController.signup.phaseFour
 );
 router.get(
   '/login/google',

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 import TextInput from '../TextInput';
+import Button from '../Button';
 
 const Form3 = ({ formData }) => {
   return (
@@ -27,12 +28,7 @@ const Form3 = ({ formData }) => {
         />
       </div>
       <div className="absolute bottom-0 left-0 w-full">
-        <button
-          type="submit"
-          className="font-raleway bg-primary text-on-primary rounded-full font-semibold block w-full py-4"
-        >
-          Continue
-        </button>
+        <Button type="submit">Continue</Button>
       </div>
     </form>
   );

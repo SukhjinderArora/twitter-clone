@@ -35,7 +35,7 @@ model Profile {
   img String? @db.VarChar(4000)
   website String? @db.VarChar(100)
   dob DateTime?
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int @unique
 }
 
@@ -80,7 +80,7 @@ model Session {
   id Int @id @default(autoincrement())
   refreshToken String
   expirationTime DateTime
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
   createdAt DateTime @default(now())
 }

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import validator from 'validator';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 
@@ -11,76 +10,34 @@ import Form4 from './Form4';
 
 import useForm from '../../hooks/useForm';
 
-const validateForm1 = (values) => {
-  const errors = {};
-  if (!values.name.trim()) {
-    errors.name = 'This is a mandatory field';
-  } else if (values.name.length < 2) {
-    errors.name = 'Name cannot be less than 2 characters';
-  } else if (values.name.length > 15) {
-    errors.name = 'Name cannot be more than 15 characters';
-  }
-  if (!values.email.trim()) {
-    errors.email = 'This is a mandatory field';
-  } else if (!validator.isEmail(values.email)) {
-    errors.email =
-      'Email address is invalid. Please enter a valid email address.';
-  }
-  if (!values.month.trim()) {
-    errors.month = 'This is a mandatory field';
-  }
-  if (!values.day.trim()) {
-    errors.day = 'This is a mandatory field';
-  }
-  if (!values.year.trim()) {
-    errors.year = 'This is a mandatory field';
-  }
-  return errors;
-};
-
-const validateForm2 = (values) => {
-  const errors = {};
-  if (!values.password.trim()) {
-    errors.password = 'This is a mandatory field';
-  } else if (values.password.length < 8) {
-    errors.password = 'Password cannot be less than 8 characters';
-  } else if (values.password.length > 16) {
-    errors.password = 'Password cannot be more than 16 characters';
-  }
-  return errors;
-};
-
-const validateForm3 = (values) => {
-  const errors = {};
-  if (!values.username.trim()) {
-    errors.username = 'This is a mandatory field';
-  } else if (values.username.length < 3) {
-    errors.username = 'Username cannot be less than 3 characters';
-  } else if (values.username.length > 15) {
-    errors.username = 'Username cannot be more than 15 characters';
-  } else if (validator.isNumeric(values.username)) {
-    errors.username = 'Username must be alphanumeric';
-  }
-  return errors;
-};
-
-const validateForm4 = (values) => {
-  const errors = {};
-  if (!values.bio.trim()) {
-    errors.bio = 'This is a mandatory field';
-  }
-  return errors;
-};
+import { signupFormValidator } from '../../utils/validator';
 
 const SignupForm = ({ closeModal }) => {
   const [activeFormIndex, setActiveFormIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
 
-  const mutation1 = useMutation((user) => {
-    return axios.post('/api/auth/signup/1', user);
+  const mutation1 = useMutation(({ email, name, dateOfBirth }) => {
+    return axios.post('/api/auth/signup/1', { email, name, dateOfBirth });
   });
 
-  const { setMultipleFieldsError, ...form1 } = useForm({
+  const mutation2 = useMutation(({ userId, password }) => {
+    return axios.post('/api/auth/signup/2', {
+      userId,
+      password,
+    });
+  });
+
+  const mutation3 = useMutation(({ userId, username }) => {
+    return axios.post('/api/auth/signup/3', { userId, username });
+  });
+
+  const mutation4 = useMutation(({ userId, bio }) => {
+    return axios.post('/api/auth/signup/4', { userId, bio });
+  });
+
+  const { validateForm1, validateForm2, validateForm3 } = signupFormValidator;
+
+  const form1 = useForm({
     initialValues: {
       name: '',
       email: '',
@@ -90,27 +47,25 @@ const SignupForm = ({ closeModal }) => {
     },
     validate: validateForm1,
     onSubmit: async (values) => {
-      const user = {
-        email: values.email,
-        name: values.name,
-        dateOfBirth: new Date(
-          `${values.year}/${values.month}/${values.day}`
-        ).toISOString(),
-      };
       try {
-        setIsLoading(true);
-        await mutation1.mutateAsync(user);
-        setIsLoading(false);
+        const user = {
+          email: values.email,
+          name: values.name,
+          dateOfBirth: new Date(
+            `${values.year}/${values.month}/${values.day}`
+          ).toISOString(),
+        };
+        const response = await mutation1.mutateAsync(user);
+        setUserData(response.data.user);
         setActiveFormIndex((prevIndex) => prevIndex + 1);
       } catch (err) {
-        setIsLoading(false);
         const error = err.response.data.errors || err.response.data.error;
         if (Array.isArray(error)) {
           const errors = error.reduce((acc, cur) => {
             acc[cur.param] = cur.msg;
             return acc;
           }, {});
-          setMultipleFieldsError(errors);
+          form1.setMultipleFieldsError(errors);
         }
       }
     },
@@ -121,8 +76,23 @@ const SignupForm = ({ closeModal }) => {
       password: '',
     },
     validate: validateForm2,
-    onSubmit: () => {
-      setActiveFormIndex((prevIndex) => prevIndex + 1);
+    onSubmit: async (values) => {
+      try {
+        await mutation2.mutateAsync({
+          userId: userData.id,
+          password: values.password,
+        });
+        setActiveFormIndex((prevIndex) => prevIndex + 1);
+      } catch (err) {
+        const error = err.response.data.errors || err.response.data.error;
+        if (Array.isArray(error)) {
+          const errors = error.reduce((acc, cur) => {
+            acc[cur.param] = cur.msg;
+            return acc;
+          }, {});
+          form2.setMultipleFieldsError(errors);
+        }
+      }
     },
   });
 
@@ -131,8 +101,23 @@ const SignupForm = ({ closeModal }) => {
       username: '',
     },
     validate: validateForm3,
-    onSubmit: () => {
-      setActiveFormIndex((prevIndex) => prevIndex + 1);
+    onSubmit: async (values) => {
+      try {
+        await mutation3.mutateAsync({
+          userId: userData.id,
+          username: values.username,
+        });
+        setActiveFormIndex((prevIndex) => prevIndex + 1);
+      } catch (err) {
+        const error = err.response.data.errors || err.response.data.error;
+        if (Array.isArray(error)) {
+          const errors = error.reduce((acc, cur) => {
+            acc[cur.param] = cur.msg;
+            return acc;
+          }, {});
+          form3.setMultipleFieldsError(errors);
+        }
+      }
     },
   });
 
@@ -140,18 +125,34 @@ const SignupForm = ({ closeModal }) => {
     initialValues: {
       bio: '',
     },
-    validate: validateForm4,
-    onSubmit: () => {
-      closeModal();
+    onSubmit: async (values) => {
+      try {
+        if (values.bio.trim()) {
+          await mutation4.mutateAsync({
+            userId: userData.id,
+            bio: values.bio,
+          });
+        }
+        closeModal();
+      } catch (err) {
+        const error = err.response.data.errors || err.response.data.error;
+        if (Array.isArray(error)) {
+          const errors = error.reduce((acc, cur) => {
+            acc[cur.param] = cur.msg;
+            return acc;
+          }, {});
+          form4.setMultipleFieldsError(errors);
+        }
+      }
     },
   });
 
   const renderForm = (formIndex) => {
     switch (formIndex) {
       case 0:
-        return <Form1 formData={form1} />;
+        return <Form1 formData={form1} isLoading={mutation1.isLoading} />;
       case 1:
-        return <Form2 formData={form2} />;
+        return <Form2 formData={form2} isLoading={mutation2.isLoading} />;
       case 2:
         return <Form3 formData={form3} />;
       case 3:
@@ -163,8 +164,7 @@ const SignupForm = ({ closeModal }) => {
 
   return (
     <div className="h-[calc(100%_-_70px)] w-full z-20 sm:w-[500px] sm:h-[500px] p-6">
-      {isLoading && <p>Loading....</p>}
-      {!isLoading && renderForm(activeFormIndex)}
+      {renderForm(activeFormIndex)}
     </div>
   );
 };
