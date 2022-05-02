@@ -6,33 +6,52 @@ import axios from 'axios';
 import Form1 from './Form1';
 import Form2 from './Form2';
 import Form3 from './Form3';
-import Form4 from './Form4';
 
 import useForm from '../../hooks/useForm';
+import { useAuth } from '../../contexts/auth-context';
 
 import { signupFormValidator } from '../../utils/validator';
 
 const SignupForm = ({ closeModal }) => {
   const [activeFormIndex, setActiveFormIndex] = useState(0);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({
+    user: null,
+    token: null,
+    expiresAt: null,
+  });
+  const { login } = useAuth();
 
   const mutation1 = useMutation(({ email, name, dateOfBirth }) => {
-    return axios.post('/api/auth/signup/1', { email, name, dateOfBirth });
+    return axios.post('/api/auth/signup/validate-email', {
+      email,
+      name,
+      dateOfBirth,
+    });
   });
 
-  const mutation2 = useMutation(({ userId, password }) => {
-    return axios.post('/api/auth/signup/2', {
-      userId,
+  const mutation2 = useMutation(({ email, name, dateOfBirth, password }) => {
+    return axios.post('/api/auth/signup/create-user', {
+      email,
+      name,
+      dateOfBirth,
       password,
     });
   });
 
   const mutation3 = useMutation(({ userId, username }) => {
-    return axios.post('/api/auth/signup/3', { userId, username });
-  });
-
-  const mutation4 = useMutation(({ userId, bio }) => {
-    return axios.post('/api/auth/signup/4', { userId, bio });
+    return axios.patch(
+      '/api/auth/signup/update-username',
+      {
+        userId,
+        username,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      }
+    );
   });
 
   const { validateForm1, validateForm2, validateForm3 } = signupFormValidator;
@@ -55,8 +74,8 @@ const SignupForm = ({ closeModal }) => {
             `${values.year}/${values.month}/${values.day}`
           ).toISOString(),
         };
-        const response = await mutation1.mutateAsync(user);
-        setUserData(response.data.user);
+        setUserData({ user });
+        await mutation1.mutateAsync(user);
         setActiveFormIndex((prevIndex) => prevIndex + 1);
       } catch (err) {
         const error = err.response.data.errors || err.response.data.error;
@@ -78,11 +97,18 @@ const SignupForm = ({ closeModal }) => {
     validate: validateForm2,
     onSubmit: async (values) => {
       try {
-        await mutation2.mutateAsync({
-          userId: userData.id,
+        const response = await mutation2.mutateAsync({
+          email: userData.user.email,
+          name: userData.user.name,
+          dateOfBirth: userData.user.dateOfBirth,
           password: values.password,
         });
         setActiveFormIndex((prevIndex) => prevIndex + 1);
+        setUserData({
+          user: response.data.user,
+          token: response.data.accessToken,
+          expiresAt: response.data.expiresAt,
+        });
       } catch (err) {
         const error = err.response.data.errors || err.response.data.error;
         if (Array.isArray(error)) {
@@ -103,11 +129,13 @@ const SignupForm = ({ closeModal }) => {
     validate: validateForm3,
     onSubmit: async (values) => {
       try {
-        await mutation3.mutateAsync({
-          userId: userData.id,
+        const response = await mutation3.mutateAsync({
+          userId: userData.user.id,
           username: values.username,
         });
         setActiveFormIndex((prevIndex) => prevIndex + 1);
+        login(response.data.user, userData.token, userData.expiresAt);
+        closeModal();
       } catch (err) {
         const error = err.response.data.errors || err.response.data.error;
         if (Array.isArray(error)) {
@@ -121,32 +149,6 @@ const SignupForm = ({ closeModal }) => {
     },
   });
 
-  const form4 = useForm({
-    initialValues: {
-      bio: '',
-    },
-    onSubmit: async (values) => {
-      try {
-        if (values.bio.trim()) {
-          await mutation4.mutateAsync({
-            userId: userData.id,
-            bio: values.bio,
-          });
-        }
-        closeModal();
-      } catch (err) {
-        const error = err.response.data.errors || err.response.data.error;
-        if (Array.isArray(error)) {
-          const errors = error.reduce((acc, cur) => {
-            acc[cur.param] = cur.msg;
-            return acc;
-          }, {});
-          form4.setMultipleFieldsError(errors);
-        }
-      }
-    },
-  });
-
   const renderForm = (formIndex) => {
     switch (formIndex) {
       case 0:
@@ -154,9 +156,7 @@ const SignupForm = ({ closeModal }) => {
       case 1:
         return <Form2 formData={form2} isLoading={mutation2.isLoading} />;
       case 2:
-        return <Form3 formData={form3} />;
-      case 3:
-        return <Form4 formData={form4} />;
+        return <Form3 formData={form3} isLoading={mutation3.isLoading} />;
       default:
         return null;
     }

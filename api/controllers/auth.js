@@ -2,9 +2,12 @@ const passport = require('passport');
 const ms = require('ms');
 const bcrypt = require('bcrypt');
 const createError = require('http-errors');
+const { customAlphabet } = require('nanoid');
 
 const prisma = require('../services/connect-db');
 const { generateJWT, COOKIE_OPTIONS } = require('../utils/auth');
+
+const nanoid = customAlphabet('1234567890', 10);
 
 const loginPassword = async (req, res, next) => {
   passport.authenticate(
@@ -53,12 +56,19 @@ const register = async (req, res, next) => {
 };
 
 const signup = {
-  phaseOne: async (req, res, next) => {
-    const { email, name, dateOfBirth } = req.body;
+  validateEmail: async (req, res) =>
+    res.status(200).json({ message: 'validation success' }),
+  createUser: async (req, res, next) => {
+    const { email, name, dateOfBirth, password } = req.body;
     try {
+      const saltRounds = 12;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      const username = name.split(' ')[0] + nanoid();
       const user = await prisma.user.create({
         data: {
           email,
+          hashedPassword,
+          username,
           profile: {
             create: {
               name,
@@ -67,40 +77,15 @@ const signup = {
           },
         },
       });
-      return res.status(201).json({ user });
+      req.userId = user.id;
+      return next();
     } catch (error) {
       return next(error);
     }
   },
-  phaseTwo: async (req, res, next) => {
-    const { userId, password } = req.body;
-    try {
-      const user = await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-      });
-      if (!user) {
-        throw createError.NotFound();
-      }
-      const saltRounds = 12;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-      const updatedUser = await prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          hashedPassword,
-        },
-      });
-      delete updatedUser.hashedPassword;
-      return res.status(201).json({ user: updatedUser });
-    } catch (error) {
-      return next(error);
-    }
-  },
-  phaseThree: async (req, res, next) => {
-    const { userId, username } = req.body;
+  updateUsername: async (req, res, next) => {
+    const { userId } = req;
+    const { username } = req.body;
     try {
       const user = await prisma.user.findUnique({
         where: {
@@ -124,35 +109,35 @@ const signup = {
       return next(error);
     }
   },
-  phaseFour: async (req, res, next) => {
-    const { userId, bio } = req.body;
-    try {
-      const user = await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-      });
-      if (!user) {
-        throw createError.NotFound();
-      }
-      const updatedUser = await prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          profile: {
-            update: {
-              bio,
-            },
-          },
-        },
-      });
-      delete updatedUser.hashedPassword;
-      return res.status(201).json({ user: updatedUser });
-    } catch (error) {
-      return next(error);
-    }
-  },
+  // phaseFour: async (req, res, next) => {
+  //   const { userId, bio } = req.body;
+  //   try {
+  //     const user = await prisma.user.findUnique({
+  //       where: {
+  //         id: userId,
+  //       },
+  //     });
+  //     if (!user) {
+  //       throw createError.NotFound();
+  //     }
+  //     const updatedUser = await prisma.user.update({
+  //       where: {
+  //         id: user.id,
+  //       },
+  //       data: {
+  //         profile: {
+  //           update: {
+  //             bio,
+  //           },
+  //         },
+  //       },
+  //     });
+  //     delete updatedUser.hashedPassword;
+  //     return res.status(201).json({ user: updatedUser });
+  //   } catch (error) {
+  //     return next(error);
+  //   }
+  // },
 };
 
 const googleLoginSuccess = async (req, res) => {

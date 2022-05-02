@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TextInput from '../TextInput';
 import Button from '../Button';
 
-const Form3 = ({ formData }) => {
+const Form3 = ({ formData, isLoading }) => {
   return (
     <form className="h-full relative" onSubmit={formData.handleSubmit}>
       <div className="mb-10">
@@ -28,7 +28,9 @@ const Form3 = ({ formData }) => {
         />
       </div>
       <div className="absolute bottom-0 left-0 w-full">
-        <Button type="submit">Continue</Button>
+        <Button type="submit" isLoading={isLoading}>
+          Continue
+        </Button>
       </div>
     </form>
   );
@@ -50,6 +52,7 @@ Form3.propTypes = {
       username: PropTypes.string,
     }),
   }).isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default Form3;

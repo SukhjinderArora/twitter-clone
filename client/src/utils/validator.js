@@ -7,8 +7,8 @@ export const signupFormValidator = {
       errors.name = 'This is a mandatory field';
     } else if (values.name.length < 2) {
       errors.name = 'Name cannot be less than 2 characters';
-    } else if (values.name.length > 15) {
-      errors.name = 'Name cannot be more than 15 characters';
+    } else if (values.name.length > 100) {
+      errors.name = 'Name cannot be more than 100 characters';
     }
     if (!values.email.trim()) {
       errors.email = 'This is a mandatory field';
@@ -44,8 +44,8 @@ export const signupFormValidator = {
       errors.username = 'This is a mandatory field';
     } else if (values.username.length < 3) {
       errors.username = 'Username cannot be less than 3 characters';
-    } else if (values.username.length > 15) {
-      errors.username = 'Username cannot be more than 15 characters';
+    } else if (values.username.length > 30) {
+      errors.username = 'Username cannot be more than 30 characters';
     } else if (validator.isNumeric(values.username)) {
       errors.username = 'Username must be alphanumeric';
     }

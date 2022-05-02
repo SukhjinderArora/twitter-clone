@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
+
 import Button from '../Button';
 import SelectInput from '../SelectInput';
-import Spinner from '../Spinner';
-
 import TextInput from '../TextInput';
 
 const DateOptions = {
@@ -96,6 +95,19 @@ const Form1 = ({ formData, isLoading }) => {
         </div>
         <div className="w-1/4">
           <SelectInput
+            id="year"
+            name="year"
+            value={formData.values.year}
+            label="Year"
+            onFocus={formData.handleFocus}
+            onBlur={formData.handleBlur}
+            onChange={formData.handleChange}
+            error={formData.touched.year ? formData.errors.year : ''}
+            options={DateOptions.getYearsInRange(DateOptions.year_range)}
+          />
+        </div>
+        <div className="w-1/4">
+          <SelectInput
             id="day"
             name="day"
             value={formData.values.day}
@@ -108,19 +120,6 @@ const Form1 = ({ formData, isLoading }) => {
               formData.values.month,
               formData.values.year
             )}
-          />
-        </div>
-        <div className="w-1/4">
-          <SelectInput
-            id="year"
-            name="year"
-            value={formData.values.year}
-            label="Year"
-            onFocus={formData.handleFocus}
-            onBlur={formData.handleBlur}
-            onChange={formData.handleChange}
-            error={formData.touched.year ? formData.errors.year : ''}
-            options={DateOptions.getYearsInRange(DateOptions.year_range)}
           />
         </div>
       </div>

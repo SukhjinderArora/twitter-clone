@@ -1,7 +1,7 @@
 const prisma = require('./connect-db');
 
 const signupSchema = {
-  phaseOne: {
+  validateEmail: {
     name: {
       notEmpty: {
         errorMessage: 'This is a mandatory field',
@@ -51,15 +51,7 @@ const signupSchema = {
       },
     },
   },
-  phaseTwo: {
-    userId: {
-      notEmpty: {
-        errorMessage: 'This is a mandatory field',
-      },
-      isInt: {
-        errorMessage: 'User ID must be an integer',
-      },
-    },
+  validatePassword: {
     password: {
       notEmpty: {
         errorMessage: 'This is a mandatory field',
@@ -74,7 +66,7 @@ const signupSchema = {
       },
     },
   },
-  phaseThree: {
+  validateUsername: {
     userId: {
       notEmpty: {
         errorMessage: 'This is a mandatory field',
@@ -92,10 +84,10 @@ const signupSchema = {
       isLength: {
         options: {
           min: 3,
-          max: 15,
+          max: 30,
         },
         errorMessage:
-          'Username must be at least 3 characters and at most 15 characters long',
+          'Username must be at least 3 characters and at most 30 characters long',
       },
       isNumeric: {
         negated: true,
@@ -114,20 +106,6 @@ const signupSchema = {
           return true;
         },
       },
-    },
-  },
-  phaseFour: {
-    userId: {
-      notEmpty: {
-        errorMessage: 'This is a mandatory field',
-      },
-      isInt: {
-        errorMessage: 'User ID must be an integer',
-      },
-    },
-    bio: {
-      trim: true,
-      escape: true,
     },
   },
 };

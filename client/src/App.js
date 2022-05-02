@@ -47,8 +47,8 @@ const App = () => {
 };
 
 const RequireAuth = ({ children, redirectTo }) => {
-  const { state } = useAuth();
-  const { isAuthenticated } = state;
+  const { isAuthenticated } = useAuth();
+  // const { isAuthenticated } = state;
   const location = useLocation();
 
   return isAuthenticated ? (
@@ -59,8 +59,8 @@ const RequireAuth = ({ children, redirectTo }) => {
 };
 
 const RedirectIfLoggedIn = ({ children, redirectTo }) => {
-  const { state } = useAuth();
-  const { isAuthenticated } = state;
+  const { isAuthenticated } = useAuth();
+  // const { isAuthenticated } = state;
 
   const location = useLocation();
 

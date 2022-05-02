@@ -3,7 +3,11 @@ const passport = require('passport');
 const { checkSchema } = require('express-validator');
 
 const authController = require('../controllers/auth');
-const { generateAuthTokens, validateRequest } = require('../middlewares/auth');
+const {
+  generateAuthTokens,
+  validateRequest,
+  isAuthenticated,
+} = require('../middlewares/auth');
 const { signupSchema } = require('../services/validators');
 
 const router = express.Router();
@@ -15,28 +19,27 @@ router.post(
 );
 router.post('/register', authController.register, generateAuthTokens);
 router.post(
-  '/signup/1',
-  checkSchema(signupSchema.phaseOne),
+  '/signup/validate-email',
+  checkSchema(signupSchema.validateEmail),
   validateRequest,
-  authController.signup.phaseOne
+  authController.signup.validateEmail
 );
 router.post(
-  '/signup/2',
-  checkSchema(signupSchema.phaseTwo),
+  '/signup/create-user',
+  checkSchema({
+    ...signupSchema.validateEmail,
+    ...signupSchema.validatePassword,
+  }),
   validateRequest,
-  authController.signup.phaseTwo
+  authController.signup.createUser,
+  generateAuthTokens
 );
-router.post(
-  '/signup/3',
-  checkSchema(signupSchema.phaseThree),
+router.patch(
+  '/signup/update-username',
+  isAuthenticated,
+  checkSchema(signupSchema.validateUsername),
   validateRequest,
-  authController.signup.phaseThree
-);
-router.post(
-  '/signup/4',
-  checkSchema(signupSchema.phaseFour),
-  validateRequest,
-  authController.signup.phaseFour
+  authController.signup.updateUsername
 );
 router.get(
   '/login/google',

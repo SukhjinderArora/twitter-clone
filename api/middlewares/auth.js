@@ -42,7 +42,7 @@ const isAuthenticated = async (req, res, next) => {
       const error = createError.Unauthorized();
       throw error;
     }
-    req.user = user;
+    req.userId = user.id;
     return next();
   } catch (error) {
     return next(error);
@@ -60,6 +60,7 @@ const generateAuthTokens = async (req, res, next) => {
         id: req.userId,
       },
     });
+    delete user.hashedPassword;
     if (!user) {
       const error = createError.Unauthorized();
       throw error;
@@ -92,11 +93,6 @@ const generateAuthTokens = async (req, res, next) => {
     res.cookie('refreshToken', refreshToken, {
       ...COOKIE_OPTIONS,
       expires: new Date(Date.now() + ms(process.env.REFRESH_TOKEN_LIFE)),
-    });
-    res.cookie('accessToken', accessToken, {
-      ...COOKIE_OPTIONS,
-      httpOnly: false,
-      expires: new Date(Date.now() + ms(process.env.ACCESS_TOKEN_LIFE)),
     });
     return res.status(200).json({
       user,

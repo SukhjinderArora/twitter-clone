@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
+import Button from '../Button';
 
 import TextArea from '../TextArea';
 
-const Form4 = ({ formData }) => {
+const Form4 = ({ formData, isLoading }) => {
   return (
     <form className="h-full relative" onSubmit={formData.handleSubmit}>
       <div className="mb-10">
@@ -27,12 +28,9 @@ const Form4 = ({ formData }) => {
         />
       </div>
       <div className="absolute bottom-0 left-0 w-full">
-        <button
-          type="submit"
-          className="font-raleway bg-primary text-on-primary rounded-full font-semibold block w-full py-4"
-        >
+        <Button type="submit" isLoading={isLoading}>
           Continue
-        </button>
+        </Button>
       </div>
     </form>
   );
@@ -54,6 +52,7 @@ Form4.propTypes = {
       bio: PropTypes.string,
     }),
   }).isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default Form4;
