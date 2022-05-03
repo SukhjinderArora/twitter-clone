@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
 import TextInput from '../components/TextInput';
+import Button from '../components/Button';
 
 import useForm from '../hooks/useForm';
+import { useAuth } from '../contexts/auth-context';
 
 const validate = (values) => {
   const errors = {};
@@ -16,14 +20,39 @@ const validate = (values) => {
 };
 
 const Signin = () => {
+  const mutation = useMutation(({ username, password }) => {
+    return axios.post('/api/auth/login/password', {
+      username,
+      password,
+    });
+  });
+  const { login } = useAuth();
   const form = useForm({
     initialValues: {
       username: '',
       password: '',
     },
     validate,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        const response = await mutation.mutateAsync({
+          username: values.username,
+          password: values.password,
+        });
+        const { user, token, expiresAt } = response.data;
+        login(user, token, expiresAt);
+      } catch (err) {
+        const error = err.response.data.errors || err.response.data.error;
+        if (Array.isArray(error)) {
+          const errors = error.reduce((acc, cur) => {
+            acc[cur.param] = cur.msg;
+            return acc;
+          }, {});
+          form.setMultipleFieldsError(errors);
+        } else {
+          form.setFieldError('password', error.message);
+        }
+      }
     },
   });
   return (
@@ -73,7 +102,7 @@ const Signin = () => {
           <div className="bg-on-background h-px flex-1" />
         </div>
         <div>
-          <form className="mb-8">
+          <form className="mb-8" onSubmit={form.handleSubmit}>
             <div className="relative mb-4">
               <TextInput
                 id="username"
@@ -100,12 +129,9 @@ const Signin = () => {
               />
             </div>
             <div>
-              <button
-                type="submit"
-                className="font-raleway bg-primary text-on-primary rounded-full font-semibold block w-full py-4"
-              >
+              <Button type="submit" isLoading={mutation.isLoading}>
                 Sign in
-              </button>
+              </Button>
             </div>
           </form>
           <div>

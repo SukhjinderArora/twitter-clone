@@ -93,6 +93,11 @@ const signupSchema = {
         negated: true,
         errorMessage: 'Username must be alphanumeric',
       },
+      contains: {
+        seed: '@',
+        negated: true,
+        errorMessage: 'Invalid username. Username must not contain @',
+      },
       custom: {
         options: async (value) => {
           const user = await prisma.user.findUnique({

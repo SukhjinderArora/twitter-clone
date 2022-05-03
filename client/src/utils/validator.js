@@ -48,6 +48,8 @@ export const signupFormValidator = {
       errors.username = 'Username cannot be more than 30 characters';
     } else if (validator.isNumeric(values.username)) {
       errors.username = 'Username must be alphanumeric';
+    } else if (validator.contains(values.username, '@')) {
+      errors.username = 'Invalid username. Username must not contain @';
     }
     return errors;
   },
