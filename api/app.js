@@ -28,9 +28,6 @@ if (isDev) {
 app.use(express.json({ type: 'application/json' }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-require('./services/localStrategy');
-require('./services/googleStrategy');
-
 app.use('/api/auth', authRoutes);
 app.get('/api/users', isAuthenticated, async (req, res, next) => {
   try {

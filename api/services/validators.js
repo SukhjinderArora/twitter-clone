@@ -110,6 +110,20 @@ const signupSchema = {
   },
 };
 
+const loginSchema = {
+  username: {
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+  },
+  password: {
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+  },
+};
+
 module.exports = {
   signupSchema,
+  loginSchema,
 };
