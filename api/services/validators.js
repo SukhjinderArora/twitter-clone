@@ -95,7 +95,6 @@ const signupSchema = {
       },
       contains: {
         seed: '@',
-        negated: true,
         errorMessage: 'Invalid username. Username must not contain @',
       },
       custom: {

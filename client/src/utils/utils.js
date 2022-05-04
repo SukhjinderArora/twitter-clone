@@ -13,4 +13,24 @@ const setAllObjectProperties = (obj, value) => {
   return newObj;
 };
 
-export { checkIfEmpty, setAllObjectProperties };
+const loadScript = (src) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        reject(new Error(`Failed to load the script ${src}`));
+      };
+      document.body.appendChild(script);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export { checkIfEmpty, setAllObjectProperties, loadScript };
