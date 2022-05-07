@@ -13,35 +13,31 @@ import { loadScript } from '../utils/utils';
 import { GOOGLE_CLIENT_ID } from '../utils/config';
 import * as logger from '../utils/logger';
 
-const validate = (values) => {
-  const errors = {};
-  if (!values.username.trim()) {
-    errors.username = 'This is a mandatory field';
-  }
-  if (!values.password.trim()) {
-    errors.password = 'This is a mandatory field';
-  }
-  return errors;
-};
+import { signinFormValidator } from '../utils/validator';
 
 const Signin = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const { validateForm } = signinFormValidator;
+
   const loginPassword = useMutation(({ username, password }) => {
     return axios.post('/api/auth/login/password', {
       username,
       password,
     });
   });
+
   const googleSignin = useMutation(({ token }) => {
     return axios.post('/api/auth/signin/google', { token });
   });
-  const navigate = useNavigate();
-  const { login } = useAuth();
+
   const form = useForm({
     initialValues: {
       username: '',
       password: '',
     },
-    validate,
+    validate: validateForm,
     onSubmit: async (values) => {
       loginPassword.mutate(
         {
@@ -51,16 +47,10 @@ const Signin = () => {
         {
           onSuccess: (response) => {
             const { user, accessToken, expiresAt } = response.data;
+            login(user, accessToken, expiresAt);
             if (user.newUser) {
-              navigate('/signup/success', {
-                state: {
-                  user,
-                  token: accessToken,
-                  expiresAt,
-                },
-              });
+              navigate('/signup/success');
             } else {
-              login(user, accessToken, expiresAt);
               navigate('/');
             }
           },
@@ -93,17 +83,11 @@ const Signin = () => {
               {
                 onSuccess: (res) => {
                   const { user, accessToken, expiresAt } = res.data;
+                  login(user, accessToken, expiresAt);
                   if (!user.newUser) {
-                    login(user, accessToken, expiresAt);
                     navigate('/');
                   } else {
-                    navigate('/signup/success', {
-                      state: {
-                        user,
-                        token: accessToken,
-                        expiresAt,
-                      },
-                    });
+                    navigate('/signup/success');
                   }
                 },
                 onError: (error) => {

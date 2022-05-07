@@ -45,13 +45,14 @@ const Modal = ({ children, closeModal, modalOpen, closeButtonVisible }) => {
 
 Modal.propTypes = {
   children: PropTypes.element.isRequired,
-  closeModal: PropTypes.func.isRequired,
+  closeModal: PropTypes.func,
   modalOpen: PropTypes.bool.isRequired,
   closeButtonVisible: PropTypes.bool,
 };
 
 Modal.defaultProps = {
   closeButtonVisible: true,
+  closeModal: () => {},
 };
 
 export default Modal;

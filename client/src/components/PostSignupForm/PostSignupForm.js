@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useMutation } from 'react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Form1 from './Form1';
@@ -12,13 +11,11 @@ import useForm from '../../hooks/useForm';
 import { postSignupFormValidator } from '../../utils/validator';
 import { useAuth } from '../../contexts/auth-context';
 
-const PostSignupForm = ({ closeModal }) => {
+const PostSignupForm = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(0);
   const { validateForm1, validateForm2 } = postSignupFormValidator;
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { login } = useAuth();
-  const { token, expiresAt } = state;
+  const { login, token, expiresAt } = useAuth();
 
   const updateDOB = useMutation(({ dateOfBirth }) => {
     return axios.patch(
@@ -95,7 +92,6 @@ const PostSignupForm = ({ closeModal }) => {
         {
           onSuccess: (response) => {
             login(response.data.user, token, expiresAt);
-            closeModal();
             navigate('/');
           },
           onError: (err) => {
@@ -128,10 +124,6 @@ const PostSignupForm = ({ closeModal }) => {
       {renderForm(activeFormIndex)}
     </div>
   );
-};
-
-PostSignupForm.propTypes = {
-  closeModal: PropTypes.func.isRequired,
 };
 
 export default PostSignupForm;

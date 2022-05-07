@@ -15,9 +15,7 @@ import * as logger from '../utils/logger';
 
 const Signup = () => {
   const [openSignupModal, setOpenSignupModal] = useState(false);
-
   const navigate = useNavigate();
-
   const { login } = useAuth();
 
   const googleSignup = useMutation(({ token }) => {
@@ -36,17 +34,11 @@ const Signup = () => {
               {
                 onSuccess: (res) => {
                   const { user, accessToken, expiresAt } = res.data;
+                  login(user, accessToken, expiresAt);
                   if (!user.newUser) {
-                    login(user, accessToken, expiresAt);
                     navigate('/');
                   } else {
-                    navigate('success', {
-                      state: {
-                        user,
-                        token: accessToken,
-                        expiresAt,
-                      },
-                    });
+                    navigate('success');
                   }
                 },
                 onError: (error) => {
@@ -112,7 +104,7 @@ const Signup = () => {
           modalOpen={openSignupModal}
           closeModal={() => setOpenSignupModal(false)}
         >
-          <SignupForm closeModal={() => setOpenSignupModal(false)} />
+          <SignupForm />
         </Modal>
       </div>
     </div>

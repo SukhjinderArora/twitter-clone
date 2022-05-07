@@ -41,7 +41,14 @@ const App = () => {
               </RedirectIfLoggedIn>
             }
           />
-          <Route path="/signup/success" element={<SignupSuccess />} />
+          <Route
+            path="/signup/success"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <SignupSuccess />
+              </RequireAuth>
+            }
+          />
         </Routes>
       </div>
     </AuthProvider>
