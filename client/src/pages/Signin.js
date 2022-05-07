@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 
@@ -25,12 +25,16 @@ const validate = (values) => {
 };
 
 const Signin = () => {
-  const mutation = useMutation(({ username, password }) => {
+  const loginPassword = useMutation(({ username, password }) => {
     return axios.post('/api/auth/login/password', {
       username,
       password,
     });
   });
+  const googleSignin = useMutation(({ token }) => {
+    return axios.post('/api/auth/signin/google', { token });
+  });
+  const navigate = useNavigate();
   const { login } = useAuth();
   const form = useForm({
     initialValues: {
@@ -39,25 +43,41 @@ const Signin = () => {
     },
     validate,
     onSubmit: async (values) => {
-      try {
-        const response = await mutation.mutateAsync({
+      loginPassword.mutate(
+        {
           username: values.username,
           password: values.password,
-        });
-        const { user, token, expiresAt } = response.data;
-        login(user, token, expiresAt);
-      } catch (err) {
-        const error = err.response.data.errors || err.response.data.error;
-        if (Array.isArray(error)) {
-          const errors = error.reduce((acc, cur) => {
-            acc[cur.param] = cur.msg;
-            return acc;
-          }, {});
-          form.setMultipleFieldsError(errors);
-        } else {
-          form.setFieldError('password', error.message);
+        },
+        {
+          onSuccess: (response) => {
+            const { user, accessToken, expiresAt } = response.data;
+            if (user.newUser) {
+              navigate('/signup/success', {
+                state: {
+                  user,
+                  token: accessToken,
+                  expiresAt,
+                },
+              });
+            } else {
+              login(user, accessToken, expiresAt);
+              navigate('/');
+            }
+          },
+          onError: (err) => {
+            const error = err.response.data.errors || err.response.data.error;
+            if (Array.isArray(error)) {
+              const errors = error.reduce((acc, cur) => {
+                acc[cur.param] = cur.msg;
+                return acc;
+              }, {});
+              form.setMultipleFieldsError(errors);
+            } else {
+              form.setFieldError('password', error.message);
+            }
+          },
         }
-      }
+      );
     },
   });
 
@@ -68,7 +88,29 @@ const Signin = () => {
         window.google.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
           callback: async (response) => {
-            logger.info(response);
+            googleSignin.mutate(
+              { token: response.credential },
+              {
+                onSuccess: (res) => {
+                  const { user, accessToken, expiresAt } = res.data;
+                  if (!user.newUser) {
+                    login(user, accessToken, expiresAt);
+                    navigate('/');
+                  } else {
+                    navigate('/signup/success', {
+                      state: {
+                        user,
+                        token: accessToken,
+                        expiresAt,
+                      },
+                    });
+                  }
+                },
+                onError: (error) => {
+                  logger.error(error);
+                },
+              }
+            );
           },
           ux_mode: 'popup',
           context: 'signin',
@@ -89,7 +131,7 @@ const Signin = () => {
       }
     };
     loadGoogleSDK();
-  }, []);
+  }, [navigate, login, googleSignin]);
 
   return (
     <div className="bg-background h-screen py-10 px-10 flex justify-center items-center">
@@ -135,7 +177,7 @@ const Signin = () => {
               />
             </div>
             <div>
-              <Button type="submit" isLoading={mutation.isLoading}>
+              <Button type="submit" isLoading={loginPassword.isLoading}>
                 Sign in
               </Button>
             </div>

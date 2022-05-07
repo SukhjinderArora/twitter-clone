@@ -39,17 +39,6 @@ const signupSchema = {
         },
       },
     },
-    dateOfBirth: {
-      notEmpty: {
-        errorMessage: 'This is a mandatory field',
-      },
-      isISO8601: {
-        errorMessage: 'Invalid Date',
-        options: {
-          strict: true,
-        },
-      },
-    },
   },
   validatePassword: {
     password: {
@@ -66,15 +55,20 @@ const signupSchema = {
       },
     },
   },
-  validateUsername: {
-    userId: {
+  validateDateOfBirth: {
+    dateOfBirth: {
       notEmpty: {
         errorMessage: 'This is a mandatory field',
       },
-      isInt: {
-        errorMessage: 'User ID must be an integer',
+      isISO8601: {
+        errorMessage: 'Invalid Date',
+        options: {
+          strict: true,
+        },
       },
     },
+  },
+  validateUsername: {
     username: {
       notEmpty: {
         errorMessage: 'This is a mandatory field',

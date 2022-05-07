@@ -16,15 +16,6 @@ export const signupFormValidator = {
       errors.email =
         'Email address is invalid. Please enter a valid email address.';
     }
-    if (!values.month.trim()) {
-      errors.month = 'This is a mandatory field';
-    }
-    if (!values.day.trim()) {
-      errors.day = 'This is a mandatory field';
-    }
-    if (!values.year.trim()) {
-      errors.year = 'This is a mandatory field';
-    }
     return errors;
   },
   validateForm2: (values) => {
@@ -55,4 +46,35 @@ export const signupFormValidator = {
   },
 };
 
-export default signupFormValidator;
+export const postSignupFormValidator = {
+  validateForm1: (values) => {
+    const errors = {};
+    if (!values.month.trim()) {
+      errors.month = 'This is a mandatory field';
+    }
+    if (!values.day.trim()) {
+      errors.day = 'This is a mandatory field';
+    }
+    if (!values.year.trim()) {
+      errors.year = 'This is a mandatory field';
+    }
+    return errors;
+  },
+  validateForm2: (values) => {
+    const errors = {};
+    if (!values.username.trim()) {
+      errors.username = 'This is a mandatory field';
+    } else if (values.username.length < 3) {
+      errors.username = 'Username cannot be less than 3 characters';
+    } else if (values.username.length > 30) {
+      errors.username = 'Username cannot be more than 30 characters';
+    } else if (validator.isNumeric(values.username)) {
+      errors.username = 'Username must be alphanumeric';
+    } else if (validator.contains(values.username, '@')) {
+      errors.username = 'Invalid username. Username must not contain @';
+    }
+    return errors;
+  },
+};
+
+// export default signupFormValidator;

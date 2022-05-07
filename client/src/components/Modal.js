@@ -4,7 +4,7 @@ import { FiX } from 'react-icons/fi';
 
 import Backdrop from './Backdrop';
 
-const Modal = ({ children, closeModal, modalOpen }) => {
+const Modal = ({ children, closeModal, modalOpen, closeButtonVisible }) => {
   return (
     <div className="relative">
       <Backdrop backdropVisible={modalOpen} hideBackdrop={closeModal} />
@@ -14,23 +14,25 @@ const Modal = ({ children, closeModal, modalOpen }) => {
         }`}
       >
         <div className="p-4 flex items-center relative">
-          <button
-            type="button"
-            onClick={closeModal}
-            className="absolute top-1/2 -translate-y-1/2 text-on-surface"
-          >
-            <IconContext.Provider
-              // eslint-disable-next-line react/jsx-no-constructed-context-values
-              value={{
-                size: '32px',
-                style: {
-                  color: 'inherit',
-                },
-              }}
+          {closeButtonVisible && (
+            <button
+              type="button"
+              onClick={closeModal}
+              className="absolute top-1/2 -translate-y-1/2 text-on-surface"
             >
-              <FiX />
-            </IconContext.Provider>
-          </button>
+              <IconContext.Provider
+                // eslint-disable-next-line react/jsx-no-constructed-context-values
+                value={{
+                  size: '32px',
+                  style: {
+                    color: 'inherit',
+                  },
+                }}
+              >
+                <FiX />
+              </IconContext.Provider>
+            </button>
+          )}
           <h1 className="text-on-surface font-bold text-2xl text-center flex-1">
             Kookoo
           </h1>
@@ -45,6 +47,11 @@ Modal.propTypes = {
   children: PropTypes.element.isRequired,
   closeModal: PropTypes.func.isRequired,
   modalOpen: PropTypes.bool.isRequired,
+  closeButtonVisible: PropTypes.bool,
+};
+
+Modal.defaultProps = {
+  closeButtonVisible: true,
 };
 
 export default Modal;

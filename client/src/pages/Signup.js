@@ -1,15 +1,28 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
 import Modal from '../components/Modal';
+import Button from '../components/Button';
 import SignupForm from '../components/SignupForm/SignupForm';
+
+import { useAuth } from '../contexts/auth-context';
 
 import { GOOGLE_CLIENT_ID } from '../utils/config';
 import { loadScript } from '../utils/utils';
 import * as logger from '../utils/logger';
 
 const Signup = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [openSignupModal, setOpenSignupModal] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { login } = useAuth();
+
+  const googleSignup = useMutation(({ token }) => {
+    return axios.post('/api/auth/signup/google', { token });
+  });
 
   useEffect(() => {
     const loadGoogleSDK = async () => {
@@ -17,8 +30,30 @@ const Signup = () => {
         await loadScript('https://accounts.google.com/gsi/client');
         window.google.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
-          callback: async (response) => {
-            logger.info(response);
+          callback: (response) => {
+            googleSignup.mutate(
+              { token: response.credential },
+              {
+                onSuccess: (res) => {
+                  const { user, accessToken, expiresAt } = res.data;
+                  if (!user.newUser) {
+                    login(user, accessToken, expiresAt);
+                    navigate('/');
+                  } else {
+                    navigate('success', {
+                      state: {
+                        user,
+                        token: accessToken,
+                        expiresAt,
+                      },
+                    });
+                  }
+                },
+                onError: (error) => {
+                  logger.error(error);
+                },
+              }
+            );
           },
           ux_mode: 'popup',
           context: 'signup',
@@ -39,7 +74,7 @@ const Signup = () => {
       }
     };
     loadGoogleSDK();
-  }, []);
+  }, [googleSignup, navigate, login]);
 
   return (
     <div className="bg-background h-screen py-10 px-10 flex justify-center items-center">
@@ -58,13 +93,9 @@ const Signup = () => {
           <div className="bg-on-background h-px flex-1" />
         </div>
         <div className="mb-4">
-          <button
-            type="button"
-            className="font-raleway bg-primary text-on-primary rounded-full font-semibold block w-full py-4"
-            onClick={() => setModalOpen(true)}
-          >
+          <Button type="button" onClick={() => setOpenSignupModal(true)}>
             Sign up with phone or email
-          </button>
+          </Button>
         </div>
         <div>
           <h4 className="text-on-background font-bold text-base mb-2">
@@ -77,8 +108,11 @@ const Signup = () => {
             Sign in
           </Link>
         </div>
-        <Modal modalOpen={modalOpen} closeModal={() => setModalOpen(false)}>
-          <SignupForm closeModal={() => setModalOpen(false)} />
+        <Modal
+          modalOpen={openSignupModal}
+          closeModal={() => setOpenSignupModal(false)}
+        >
+          <SignupForm closeModal={() => setOpenSignupModal(false)} />
         </Modal>
       </div>
     </div>

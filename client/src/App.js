@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './contexts/auth-context';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Signin from './pages/Signin';
+import SignupSuccess from './pages/SignupSuccess';
 
 import Layout from './components/Layout';
 
@@ -40,6 +41,7 @@ const App = () => {
               </RedirectIfLoggedIn>
             }
           />
+          <Route path="/signup/success" element={<SignupSuccess />} />
         </Routes>
       </div>
     </AuthProvider>
@@ -48,7 +50,6 @@ const App = () => {
 
 const RequireAuth = ({ children, redirectTo }) => {
   const { isAuthenticated } = useAuth();
-  // const { isAuthenticated } = state;
   const location = useLocation();
 
   return isAuthenticated ? (
@@ -60,18 +61,10 @@ const RequireAuth = ({ children, redirectTo }) => {
 
 const RedirectIfLoggedIn = ({ children, redirectTo }) => {
   const { isAuthenticated } = useAuth();
-  // const { isAuthenticated } = state;
-
   const location = useLocation();
 
   return isAuthenticated ? (
-    <Navigate
-      to={
-        location.state?.from?.pathname
-          ? location.state.from.pathname
-          : redirectTo
-      }
-    />
+    <Navigate to={location.state?.from?.pathname || redirectTo} />
   ) : (
     children
   );

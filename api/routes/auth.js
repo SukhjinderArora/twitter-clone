@@ -7,17 +7,25 @@ const {
   validateRequest,
   isAuthenticated,
 } = require('../middlewares/auth');
-const { signupSchema } = require('../services/validators');
+const { signupSchema, loginSchema } = require('../services/validators');
 
 const router = express.Router();
 
-router.post('/login/password', authController.login, generateAuthTokens);
+router.post(
+  '/login/password',
+  checkSchema(loginSchema),
+  authController.loginPassword,
+  generateAuthTokens
+);
+
+router.post('/signup/google', authController.signupGoogle, generateAuthTokens);
+router.post('/signin/google', authController.signupGoogle, generateAuthTokens);
 
 router.post(
   '/signup/validate-email',
   checkSchema(signupSchema.validateEmail),
   validateRequest,
-  authController.signup.validateEmail
+  authController.signupPassword.validateEmail
 );
 router.post(
   '/signup/create-user',
@@ -26,15 +34,21 @@ router.post(
     ...signupSchema.validatePassword,
   }),
   validateRequest,
-  authController.signup.createUser,
+  authController.signupPassword.createUser,
   generateAuthTokens
+);
+router.patch(
+  '/signup/update-dob',
+  isAuthenticated,
+  checkSchema(signupSchema.validateDateOfBirth),
+  authController.signupPassword.updateDateOfBirth
 );
 router.patch(
   '/signup/update-username',
   isAuthenticated,
   checkSchema(signupSchema.validateUsername),
   validateRequest,
-  authController.signup.updateUsername
+  authController.signupPassword.updateUsername
 );
 
 module.exports = router;

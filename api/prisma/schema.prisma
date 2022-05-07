@@ -14,6 +14,7 @@ model User {
   id Int @id @default(autoincrement())
   email String @db.VarChar(255) @unique
   username String? @db.VarChar(30) @unique
+  newUser Boolean @default(true)
   hashedPassword String? @db.VarChar(64)
   profile Profile?
   tweets Tweet[]

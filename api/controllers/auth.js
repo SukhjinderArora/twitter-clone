@@ -1,12 +1,16 @@
 const bcrypt = require('bcrypt');
 const createError = require('http-errors');
 const { customAlphabet } = require('nanoid');
+const { OAuth2Client } = require('google-auth-library');
 
 const prisma = require('../services/connect-db');
+const { GOOGLE_CLIENT_ID } = require('../utils/config');
 
 const nanoid = customAlphabet('1234567890', 10);
 
-const login = async (req, res, next) => {
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+const loginPassword = async (req, res, next) => {
   const { username, password } = req.body;
   let user;
   try {
@@ -39,11 +43,11 @@ const login = async (req, res, next) => {
   }
 };
 
-const signup = {
+const signupPassword = {
   validateEmail: async (req, res) =>
     res.status(200).json({ message: 'validation success' }),
   createUser: async (req, res, next) => {
-    const { email, name, dateOfBirth, password } = req.body;
+    const { email, name, password } = req.body;
     try {
       const saltRounds = 12;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -53,16 +57,47 @@ const signup = {
           email,
           hashedPassword,
           username,
+          provider: 'email',
           profile: {
             create: {
               name,
-              dob: dateOfBirth,
             },
           },
         },
       });
       req.userId = user.id;
       return next();
+    } catch (error) {
+      return next(error);
+    }
+  },
+  updateDateOfBirth: async (req, res, next) => {
+    const { userId } = req;
+    const { dateOfBirth } = req.body;
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      if (!user) {
+        throw createError.NotFound();
+      }
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          newUser: false,
+          profile: {
+            update: {
+              dob: dateOfBirth,
+            },
+          },
+        },
+      });
+      delete updatedUser.hashedPassword;
+      return res.status(201).json({ user: updatedUser });
     } catch (error) {
       return next(error);
     }
@@ -84,6 +119,7 @@ const signup = {
           id: user.id,
         },
         data: {
+          newUser: false,
           username,
         },
       });
@@ -93,35 +129,44 @@ const signup = {
       return next(error);
     }
   },
-  // phaseFour: async (req, res, next) => {
-  //   const { userId, bio } = req.body;
-  //   try {
-  //     const user = await prisma.user.findUnique({
-  //       where: {
-  //         id: userId,
-  //       },
-  //     });
-  //     if (!user) {
-  //       throw createError.NotFound();
-  //     }
-  //     const updatedUser = await prisma.user.update({
-  //       where: {
-  //         id: user.id,
-  //       },
-  //       data: {
-  //         profile: {
-  //           update: {
-  //             bio,
-  //           },
-  //         },
-  //       },
-  //     });
-  //     delete updatedUser.hashedPassword;
-  //     return res.status(201).json({ user: updatedUser });
-  //   } catch (error) {
-  //     return next(error);
-  //   }
-  // },
 };
 
-module.exports = { login, signup };
+const signupGoogle = async (req, res, next) => {
+  const { token } = req.body;
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: payload.email,
+      },
+    });
+    if (existingUser) {
+      req.userId = existingUser.id;
+      return next();
+    }
+    const { name, email, sub: googleId } = payload;
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        username: name.split(' ')[0] + nanoid(),
+        googleId,
+        provider: 'google',
+        profile: {
+          create: {
+            name,
+          },
+        },
+      },
+    });
+    req.userId = newUser.id;
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+};
+
+module.exports = { loginPassword, signupPassword, signupGoogle };
