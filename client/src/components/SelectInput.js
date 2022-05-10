@@ -23,7 +23,7 @@ const SelectInput = ({
           onChange={onChange}
           onBlur={onBlur}
           onFocus={onFocus}
-          className="text-on-surface border border-solid border-primary bg-surface px-4 pt-6 pb-2 w-full rounded-md appearance-none peer focus:outline focus:outline-1 focus:outline-primary cursor-pointer"
+          className="text-on-surface border border-solid border-on-surface/25 bg-surface px-4 pt-6 pb-2 w-full rounded-md appearance-none peer outline-none focus:border-primary cursor-pointer"
         >
           <option value="" disabled>
             {' '}
@@ -54,7 +54,7 @@ const SelectInput = ({
           </IconContext.Provider>
         </div>
       </div>
-      <span className="text-error text-xs inline-block w-full">{error}</span>
+      <span className="text-on-error text-xs inline-block w-full">{error}</span>
     </div>
   );
 };

@@ -10,11 +10,11 @@ import { IconContext } from 'react-icons';
 
 const BottomNav = () => {
   return (
-    <div className="flex bg-surface justify-between items-center px-3 h-14">
+    <div className="flex bg-surface justify-between items-center px-8 h-14">
       <div className="text-on-surface">
         <IconContext.Provider
           value={{
-            size: '32px',
+            size: '24px',
             style: {
               color: 'inherit',
             },
@@ -26,7 +26,7 @@ const BottomNav = () => {
       <div className="text-on-surface">
         <IconContext.Provider
           value={{
-            size: '32px',
+            size: '24px',
             style: {
               color: 'inherit',
             },
@@ -38,7 +38,7 @@ const BottomNav = () => {
       <div className="text-on-surface">
         <IconContext.Provider
           value={{
-            size: '32px',
+            size: '24px',
             style: {
               color: 'inherit',
             },
@@ -50,7 +50,7 @@ const BottomNav = () => {
       <div className="text-on-surface">
         <IconContext.Provider
           value={{
-            size: '32px',
+            size: '24px',
             style: {
               color: 'inherit',
             },

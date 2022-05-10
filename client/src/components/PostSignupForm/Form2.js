@@ -10,7 +10,7 @@ const Form2 = ({ formData, isLoading }) => {
         <h1 className="text-on-surface text-3xl font-bold mb-1">
           What should we call you?
         </h1>
-        <h4 className="text-on-surface text-sm">
+        <h4 className="text-on-surface/75 text-sm">
           Your @username is unique. You can always change is later.
         </h4>
       </div>

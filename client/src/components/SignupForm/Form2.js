@@ -10,7 +10,7 @@ const Form2 = ({ formData, isLoading }) => {
         <h1 className="text-on-surface text-3xl font-bold mb-1">
           You&apos;ll need a password
         </h1>
-        <h4 className="text-on-surface text-sm">
+        <h4 className="text-on-surface/75 text-sm">
           Make sure it&apos;s 8 characters or more.
         </h4>
       </div>

@@ -58,7 +58,6 @@ const AuthProvider = ({ children }) => {
     });
   };
   const value = React.useMemo(() => ({ ...state, login, logout }), [state]);
-  // const value = React.useMemo(() => ({ state, dispatch }), [state, dispatch]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

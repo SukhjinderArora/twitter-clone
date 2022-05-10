@@ -47,7 +47,7 @@ const Form1 = ({ formData, isLoading }) => {
         <h1 className="text-on-surface text-3xl font-bold mb-1">
           What&apos;s your birth date?
         </h1>
-        <h4 className="text-on-surface text-sm">
+        <h4 className="text-on-surface/75 text-sm">
           Don&apos;t worry, this won&apos;t be public
         </h4>
       </div>

@@ -29,7 +29,7 @@ const TextInput = ({
         type={inputTypes.includes(type) ? type : 'text'}
         id={id}
         name={name}
-        className={`text-on-surface font-lato border border-solid border-primary bg-background px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-primary-dark ${
+        className={`text-on-surface font-source-sans-pro border border-solid border-on-surface/25 bg-background px-4 pt-6 pb-2 w-full rounded-md peer outline-none focus:border-primary-dark ${
           type === 'password' ? 'font-verdana text-2xl tracking-tighter' : ''
         } ${type === 'username' ? 'pl-8 pr-8' : ''}`}
         placeholder="   "
@@ -45,7 +45,7 @@ const TextInput = ({
         {label}
       </label>
       {type === 'username' && (
-        <span className="font-lato text-xl text-on-surface peer-placeholder-shown:hidden peer-focus:text-primary absolute left-3 top-5 peer-focus:inline-block inline-block">
+        <span className="font-source-sans-pro text-xl text-on-surface peer-placeholder-shown:hidden peer-focus:text-primary absolute left-3 top-5 peer-focus:inline-block inline-block">
           @
         </span>
       )}
@@ -63,7 +63,7 @@ const TextInput = ({
           </IconContext.Provider>
         </span>
       )}
-      <span className="text-error text-xs inline-block w-full">{error}</span>
+      <span className="text-on-error text-xs inline-block w-full">{error}</span>
     </div>
   );
 };

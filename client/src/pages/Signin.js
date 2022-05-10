@@ -115,7 +115,12 @@ const Signin = () => {
       }
     };
     loadGoogleSDK();
-  }, [navigate, login, googleSignin]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    navigate,
+    login,
+    // exclude mutations - linter prevents listing only mutation function
+  ]);
 
   return (
     <div className="bg-background h-screen py-10 px-10 flex justify-center items-center">
@@ -172,7 +177,7 @@ const Signin = () => {
             </span>
             <Link
               to="/signup"
-              className="font-raleway text-primary inline-block ml-1 font-semibold"
+              className="font-source-sans-pro text-primary inline-block ml-1 font-semibold"
             >
               Sign up
             </Link>

@@ -4,33 +4,77 @@
 
 @layer base {
   :root {
-    --primary-light: #bae6fd;
-    --primary: #0284c7;
-    --primary-dark: #075985;
-    --background: #000;
-    --surface: #000;
-    --error: #ef4444;
-    --on-primary: #fff;
-    --on-background: #fff;
-    --on-surface: #fff;
-    --on-error: #fff;
+    --primary-light: 186 230 253;
+    --primary: 29 155 240;
+    --primary-dark: 26 140 216;
+    --background: 0 0 0;
+    --surface: 0 0 0;
+    --error: 0 0 0;
+    --on-primary: 255 255 255;
+    --on-background: 231 233 234;
+    --on-surface: 231 233 234;
+    --on-error: 239 68 68;
   }
   body {
-    font-family: 'Raleway', sans-serif;
+    /* font-family: 'Raleway', sans-serif; */
+    font-family: 'Source Sans Pro', sans-serif;
   }
   [data-theme='dark'] {
-    --primary-light: #bae6fd;
-    --primary: #0284c7;
-    --primary-dark: #075985;
-    --background: #000;
-    --surface: #000;
-    --error: #ef4444;
-    --on-primary: #fff;
-    --on-background: #fff;
-    --on-surface: #fff;
-    --on-error: #fff;
+    --primary-light: 186 230 253;
+    --primary: 29 155 240;
+    --primary-dark: 26 140 216;
+    --background: 0 0 0;
+    --surface: 0 0 0;
+    --error: 0 0 0;
+    --on-primary: 255 255 255;
+    --on-background: 231 233 234;
+    --on-surface: 231 233 234;
+    --on-error: 239 68 68;
   }
   [data-theme='light'] {
-    --primary: #fff;
+    --background: 255 255 255;
+    --surface: 255 255 255;
+    --error: 255 255 255;
+    --on-background: 15 20 25;
+    --on-surface: 15 20 25;
+    --on-error: 239 68 68;
+  }
+  [data-theme='dim'] {
+    --background: 22 32 42;
+    --surface: 22 32 42;
+    --error: 22 32 42;
+    --on-background: 231 233 234;
+    --on-surface: 231 233 234;
+    --on-error: 239 68 68;
+  }
+  [data-primary-color='sky-blue'] {
+    --primary-light: 186 230 253;
+    --primary: 29 155 240;
+    --primary-dark: 26 140 216;
+  }
+  [data-primary-color='yellow'] {
+    --primary-light: 255 221 51;
+    --primary: 255 212 0;
+    --primary-dark: 230 191 0;
+  }
+  [data-primary-color='pink'] {
+    --primary-light: 250 56 147;
+    --primary: 249 24 128;
+    --primary-dark: 224 22 115;
+  }
+  [data-primary-color='violet'] {
+    --primary-light: 133 102 255;
+    --primary: 120 86 255;
+    --primary-dark: 108 77 230;
+  }
+  [data-primary-color='orange'] {
+    --primary-light: 255 150 51;
+    --primary: 255 122 0;
+    --primary-dark: 230 110 0;
+  }
+  [data-primary-color='emerald'] {
+    --primary-light: 0 230 153;
+    --primary: 0 186 124;
+    --primary-dark: 0 167 112;
   }
 }

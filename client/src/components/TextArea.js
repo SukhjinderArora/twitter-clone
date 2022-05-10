@@ -15,7 +15,7 @@ const TextArea = ({
       <textarea
         id={id}
         name={name}
-        className="text-on-surface font-lato border border-solid border-primary bg-surface px-4 pt-6 pb-2 w-full rounded-md peer focus:outline focus:outline-1 focus:outline-primary"
+        className="text-on-surface font-lato border border-solid border-on-surface/25 bg-surface px-4 pt-6 pb-2 w-full rounded-md peer outline-none focus:border-primary"
         placeholder="   "
         onFocus={onFocus}
         onBlur={onBlur}
@@ -28,7 +28,7 @@ const TextArea = ({
       >
         {label}
       </label>
-      <span className="text-error text-xs inline-block w-full">{error}</span>
+      <span className="text-on-error text-xs inline-block w-full">{error}</span>
     </div>
   );
 };

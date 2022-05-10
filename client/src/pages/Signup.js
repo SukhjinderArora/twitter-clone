@@ -66,7 +66,12 @@ const Signup = () => {
       }
     };
     loadGoogleSDK();
-  }, [googleSignup, navigate, login]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    navigate,
+    login,
+    // exclude mutations - linter prevents listing only mutation function
+  ]);
 
   return (
     <div className="bg-background h-screen py-10 px-10 flex justify-center items-center">
@@ -80,9 +85,9 @@ const Signup = () => {
           <div id="google" className="flex justify-center" />
         </div>
         <div className="flex items-center gap-4 mb-4">
-          <div className="bg-on-background h-px flex-1" />
+          <div className="bg-on-background/60 h-px flex-1" />
           <div className="text-on-background">or</div>
-          <div className="bg-on-background h-px flex-1" />
+          <div className="bg-on-background/60 h-px flex-1" />
         </div>
         <div className="mb-4">
           <Button type="button" onClick={() => setOpenSignupModal(true)}>
@@ -95,7 +100,7 @@ const Signup = () => {
           </h4>
           <Link
             to="/signin"
-            className="font-raleway bg-transparent border border-solid border-primary rounded-full font-semibold  w-full py-4 inline-block text-center text-primary"
+            className="font-source-sans-pro bg-transparent border border-solid border-primary rounded-full font-semibold  w-full py-4 inline-block text-center text-primary"
           >
             Sign in
           </Link>
