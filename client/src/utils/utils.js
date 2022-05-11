@@ -33,4 +33,11 @@ const loadScript = (src) => {
   });
 };
 
-export { checkIfEmpty, setAllObjectProperties, loadScript };
+const STATUS = {
+  IDLE: 'idle',
+  PENDING: 'pending',
+  SUCCEEDED: 'succeeded',
+  FAILED: 'failed',
+};
+
+export { checkIfEmpty, setAllObjectProperties, loadScript, STATUS };

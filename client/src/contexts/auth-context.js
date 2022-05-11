@@ -1,14 +1,22 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-const AuthContext = React.createContext({
+import { STATUS } from '../utils/utils';
+
+const initialState = {
   user: null,
   token: null,
   expiresAt: null,
   isAuthenticated: false,
+  status: STATUS.PENDING,
+};
+
+const AuthContext = React.createContext({
+  ...initialState,
   // eslint-disable-next-line no-unused-vars
-  login: (user = {}, token = '') => {},
+  login: (user = {}, token = '', expiresAt = '') => {},
   logout: () => {},
+  setAuthenticationStatus: () => {},
 });
 
 const authReducer = (state, action) => {
@@ -19,14 +27,20 @@ const authReducer = (state, action) => {
         token: action.payload.token,
         expiresAt: action.payload.expiresAt,
         isAuthenticated: true,
+        verifyingToken: false,
+        status: STATUS.SUCCEEDED,
       };
     }
     case 'logout': {
       return {
-        user: null,
-        token: null,
-        expiresAt: null,
-        isAuthenticated: false,
+        ...initialState,
+        status: STATUS.IDLE,
+      };
+    }
+    case 'status': {
+      return {
+        ...state,
+        status: action.payload.status,
       };
     }
     default: {
@@ -36,13 +50,8 @@ const authReducer = (state, action) => {
 };
 
 const AuthProvider = ({ children }) => {
-  const [state, dispatch] = React.useReducer(authReducer, {
-    user: null,
-    token: null,
-    expiresAt: null,
-    isAuthenticated: false,
-  });
-  const login = (user, token, expiresAt) => {
+  const [state, dispatch] = React.useReducer(authReducer, initialState);
+  const login = React.useCallback((user, token, expiresAt) => {
     dispatch({
       type: 'login',
       payload: {
@@ -51,13 +60,24 @@ const AuthProvider = ({ children }) => {
         expiresAt,
       },
     });
-  };
-  const logout = () => {
+  }, []);
+  const logout = React.useCallback(() => {
     dispatch({
       type: 'logout',
     });
-  };
-  const value = React.useMemo(() => ({ ...state, login, logout }), [state]);
+  }, []);
+  const setAuthenticationStatus = React.useCallback((status) => {
+    dispatch({
+      type: 'status',
+      payload: {
+        status,
+      },
+    });
+  }, []);
+  const value = React.useMemo(
+    () => ({ ...state, login, logout, setAuthenticationStatus }),
+    [state, setAuthenticationStatus, login, logout]
+  );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

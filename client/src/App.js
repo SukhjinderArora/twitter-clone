@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { useMutation } from 'react-query';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
-import { AuthProvider, useAuth } from './contexts/auth-context';
+import { useAuth } from './contexts/auth-context';
+
+import { STATUS } from './utils/utils';
 
 import Home from './pages/Home';
 import Signup from './pages/Signup';
@@ -9,55 +14,117 @@ import Signin from './pages/Signin';
 import SignupSuccess from './pages/SignupSuccess';
 
 import Layout from './components/Layout';
+import SplashScreen from './components/SplashScreen';
 
 const App = () => {
+  const { login, isAuthenticated, expiresAt, logout } = useAuth();
+  const verifyToken = useMutation(
+    () => {
+      return axios.post(
+        '/api/auth/verify-token',
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    },
+    {
+      onSuccess: (response) => {
+        // eslint-disable-next-line no-shadow
+        const { user, accessToken: token, expiresAt } = response.data;
+        if (response.status === 204) {
+          logout();
+        } else {
+          login(user, token, expiresAt);
+        }
+      },
+      onError: () => {
+        logout();
+      },
+    }
+  );
+  useEffect(() => {
+    verifyToken.mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    login,
+    // exclude mutations - linter prevents listing only mutation function
+  ]);
+
+  useEffect(() => {
+    let verifyTokenTimer;
+    if (isAuthenticated) {
+      verifyTokenTimer = setTimeout(() => {
+        verifyToken.mutate();
+      }, new Date(expiresAt).getTime() - Date.now() - 10 * 1000);
+    }
+    return () => {
+      if (isAuthenticated && verifyTokenTimer) {
+        clearTimeout(verifyTokenTimer);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    isAuthenticated,
+    expiresAt,
+    // exclude mutations - linter prevents listing only mutation function
+  ]);
+
   return (
-    <AuthProvider>
-      <div>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route
-              index
-              element={
-                <RequireAuth redirectTo="/signup">
-                  <Home />
-                </RequireAuth>
-              }
-            />
-          </Route>
+    <div>
+      <Routes>
+        <Route path="/" element={<Layout />}>
           <Route
-            path="/signup"
-            element={
-              <RedirectIfLoggedIn redirectTo="/">
-                <Signup />
-              </RedirectIfLoggedIn>
-            }
-          />
-          <Route
-            path="/signin"
-            element={
-              <RedirectIfLoggedIn redirectTo="/">
-                <Signin />
-              </RedirectIfLoggedIn>
-            }
-          />
-          <Route
-            path="/signup/success"
+            index
             element={
               <RequireAuth redirectTo="/signup">
-                <SignupSuccess />
+                <Navigate to="home" />
               </RequireAuth>
             }
           />
-        </Routes>
-      </div>
-    </AuthProvider>
+          <Route
+            path="home"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Home />
+              </RequireAuth>
+            }
+          />
+        </Route>
+        <Route
+          path="/signup"
+          element={
+            <RedirectIfLoggedIn redirectTo="/">
+              <Signup />
+            </RedirectIfLoggedIn>
+          }
+        />
+        <Route
+          path="/signin"
+          element={
+            <RedirectIfLoggedIn redirectTo="/">
+              <Signin />
+            </RedirectIfLoggedIn>
+          }
+        />
+        <Route
+          path="/signup/success"
+          element={
+            <RequireAuth redirectTo="/signup">
+              <SignupSuccess />
+            </RequireAuth>
+          }
+        />
+      </Routes>
+    </div>
   );
 };
 
 const RequireAuth = ({ children, redirectTo }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, status } = useAuth();
   const location = useLocation();
+
+  if (status === STATUS.PENDING) return <SplashScreen />;
 
   return isAuthenticated ? (
     children
@@ -67,8 +134,10 @@ const RequireAuth = ({ children, redirectTo }) => {
 };
 
 const RedirectIfLoggedIn = ({ children, redirectTo }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, status } = useAuth();
   const location = useLocation();
+
+  if (status === STATUS.PENDING) return <SplashScreen />;
 
   return isAuthenticated ? (
     <Navigate to={location.state?.from?.pathname || redirectTo} />
