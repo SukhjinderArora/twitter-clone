@@ -9,10 +9,10 @@ const errorResponder = (error, req, res, next) => {
   if (res.headersSent) {
     return next(error);
   }
-  return res.status(error.status).json({
+  return res.status(error.status || 500).json({
     error: {
-      status: error.status,
-      message: error.message,
+      status: error.status || 500,
+      message: error.status ? error.message : 'Internal Server Error',
     },
   });
 };

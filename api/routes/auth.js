@@ -51,4 +51,7 @@ router.patch(
   authController.signupPassword.updateUsername
 );
 
+router.post('/verify-token', authController.verifyAndGenerateAccessToken);
+router.post('/logout', isAuthenticated, authController.logout);
+
 module.exports = router;

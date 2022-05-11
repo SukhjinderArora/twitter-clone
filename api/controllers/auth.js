@@ -2,9 +2,12 @@ const bcrypt = require('bcrypt');
 const createError = require('http-errors');
 const { customAlphabet } = require('nanoid');
 const { OAuth2Client } = require('google-auth-library');
+const jwt = require('jsonwebtoken');
+const ms = require('ms');
 
 const prisma = require('../services/connect-db');
 const { GOOGLE_CLIENT_ID } = require('../utils/config');
+const { clearTokens, generateJWT } = require('../utils/auth');
 
 const nanoid = customAlphabet('1234567890', 10);
 
@@ -169,4 +172,66 @@ const signupGoogle = async (req, res, next) => {
   }
 };
 
-module.exports = { loginPassword, signupPassword, signupGoogle };
+const verifyAndGenerateAccessToken = async (req, res, next) => {
+  const { signedCookies } = req;
+  const { refreshToken } = signedCookies;
+  if (!refreshToken) {
+    return res.sendStatus(204);
+  }
+  try {
+    const refreshTokenInDB = await prisma.session.findFirst({
+      where: {
+        refreshToken,
+      },
+    });
+    if (!refreshTokenInDB) {
+      await clearTokens(req, res, next);
+      const error = createError.Unauthorized();
+      throw error;
+    }
+    try {
+      const decodedToken = jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+      );
+      const { userId } = decodedToken;
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      if (!user) {
+        await clearTokens(req, res);
+        const error = createError('Invalid credentials', 401);
+        throw error;
+      }
+      const accessToken = generateJWT(
+        user.id,
+        process.env.ACCESS_TOKEN_SECRET,
+        process.env.ACCESS_TOKEN_LIFE
+      );
+      return res.status(200).json({
+        user,
+        accessToken,
+        expiresAt: new Date(Date.now() + ms(process.env.ACCESS_TOKEN_LIFE)),
+      });
+    } catch (error) {
+      return next(error);
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const logout = async (req, res, next) => {
+  await clearTokens(req, res, next);
+  return res.sendStatus(204);
+};
+
+module.exports = {
+  loginPassword,
+  signupPassword,
+  signupGoogle,
+  verifyAndGenerateAccessToken,
+  logout,
+};
