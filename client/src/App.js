@@ -22,7 +22,7 @@ import SignupSuccess from './pages/SignupSuccess';
 import Layout from './components/Layout';
 import SplashScreen from './components/SplashScreen';
 import Modal from './components/Modal';
-import ComposeTweet from './components/Tweets/ComposeTweet';
+import ComposePost from './components/Posts/ComposePost';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -156,7 +156,7 @@ const App = () => {
                     })
                   }
                 >
-                  <ComposeTweet />
+                  <ComposePost />
                 </Modal>
               </RequireAuth>
             }

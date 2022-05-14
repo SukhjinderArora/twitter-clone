@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import Fab from '../components/Fab';
 import Header from '../components/mobile/Header';
-import TweetsList from '../components/Tweets/TweetsList';
+import PostsList from '../components/Posts/PostsList';
 
 import usePageTitle from '../hooks/usePageTitle';
 
@@ -46,10 +46,10 @@ const Home = () => {
         <Header />
       </div>
       <div className="mt-14">
-        <TweetsList />
+        <PostsList />
       </div>
       <div className="fixed right-5 bottom-20 z-50">
-        <Fab label="new tweet" onClick={openModal} />
+        <Fab label="new post" onClick={openModal} />
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import usePageTitle from '../../hooks/usePageTitle';
 
-const ComposeTweet = () => {
+const ComposePost = () => {
   usePageTitle('New Post / Kookoo');
-  return <div>ComposeTweet</div>;
+  return <div>ComposePost</div>;
 };
 
-export default ComposeTweet;
+export default ComposePost;

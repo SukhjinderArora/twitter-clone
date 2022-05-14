@@ -7,7 +7,7 @@ import {
   RiShareLine,
 } from 'react-icons/ri';
 
-const Tweet = () => {
+const Post = () => {
   return (
     <article className="flex justify-between gap-3 bg-surface text-on-surface px-3 py-2 mb-4 border-b border-on-surface/30">
       <div className="h-10 w-10 overflow-hidden">
@@ -90,4 +90,4 @@ const Tweet = () => {
   );
 };
 
-export default Tweet;
+export default Post;
