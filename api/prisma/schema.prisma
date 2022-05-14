@@ -43,7 +43,7 @@ model Profile {
 model Tweet {
   id Int @id @default(autoincrement())
   content String @db.VarChar(255)
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
   retweets Retweet[]
   likes Like[]
@@ -55,7 +55,7 @@ model Retweet {
   id Int @id @default(autoincrement())
   tweet Tweet @relation(fields: [tweetId], references: [id])
   tweetId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }
 
@@ -63,7 +63,7 @@ model Like {
   id Int @id @default(autoincrement())
   tweet Tweet @relation(fields: [tweetId], references: [id])
   tweetId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }
 
@@ -72,7 +72,7 @@ model Reply {
   content String @db.VarChar(255)
   tweet Tweet @relation(fields: [tweetId], references: [id])
   tweetId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
   createdAt DateTime @default(now())
 }

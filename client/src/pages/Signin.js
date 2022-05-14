@@ -14,8 +14,10 @@ import { GOOGLE_CLIENT_ID } from '../utils/config';
 import * as logger from '../utils/logger';
 
 import { signinFormValidator } from '../utils/validator';
+import usePageTitle from '../hooks/usePageTitle';
 
 const Signin = () => {
+  usePageTitle('Sign-in / Kookoo');
   const navigate = useNavigate();
   const { login } = useAuth();
 

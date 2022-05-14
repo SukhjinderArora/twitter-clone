@@ -4,7 +4,7 @@ import PostSignupForm from '../components/PostSignupForm/PostSignupForm';
 const SignupSuccess = () => {
   return (
     <div>
-      <Modal modalOpen closeButtonVisible={false}>
+      <Modal isOpen closeButtonVisible={false}>
         <PostSignupForm />
       </Modal>
     </div>

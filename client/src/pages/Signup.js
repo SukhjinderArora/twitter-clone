@@ -8,12 +8,14 @@ import Button from '../components/Button';
 import SignupForm from '../components/SignupForm/SignupForm';
 
 import { useAuth } from '../contexts/auth-context';
+import usePageTitle from '../hooks/usePageTitle';
 
 import { GOOGLE_CLIENT_ID } from '../utils/config';
 import { loadScript } from '../utils/utils';
 import * as logger from '../utils/logger';
 
 const Signup = () => {
+  usePageTitle('Sign-up / Kookoo');
   const [openSignupModal, setOpenSignupModal] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -106,8 +108,8 @@ const Signup = () => {
           </Link>
         </div>
         <Modal
-          modalOpen={openSignupModal}
-          closeModal={() => setOpenSignupModal(false)}
+          isOpen={openSignupModal}
+          onDismiss={() => setOpenSignupModal(false)}
         >
           <SignupForm />
         </Modal>

@@ -1,5 +1,11 @@
 import { useEffect } from 'react';
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+  useNavigate,
+} from 'react-router-dom';
 import { useMutation } from 'react-query';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -15,9 +21,15 @@ import SignupSuccess from './pages/SignupSuccess';
 
 import Layout from './components/Layout';
 import SplashScreen from './components/SplashScreen';
+import Modal from './components/Modal';
+import ComposeTweet from './components/Tweets/ComposeTweet';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location;
+
   const verifyToken = useMutation(
     () => {
       return axios.post(
@@ -43,6 +55,7 @@ const App = () => {
       },
     }
   );
+
   useEffect(() => {
     verifyToken.mutate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,7 +85,7 @@ const App = () => {
 
   return (
     <div>
-      <Routes>
+      <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={<Layout />}>
           <Route
             index
@@ -87,6 +100,19 @@ const App = () => {
             element={
               <RequireAuth redirectTo="/signup">
                 <Home />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="compose/post"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Navigate
+                  to="/home"
+                  state={{
+                    from: location,
+                  }}
+                />
               </RequireAuth>
             }
           />
@@ -116,6 +142,27 @@ const App = () => {
           }
         />
       </Routes>
+      {state?.backgroundLocation && (
+        <Routes>
+          <Route
+            path="/compose/post"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Modal
+                  isOpen
+                  onDismiss={() =>
+                    navigate('/home', {
+                      replace: true,
+                    })
+                  }
+                >
+                  <ComposeTweet />
+                </Modal>
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 };
