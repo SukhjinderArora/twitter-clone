@@ -30,7 +30,7 @@ const loginPassword = async (req, res, next) => {
         },
       });
     }
-    if (!user) {
+    if (!user || !user.hashedPassword) {
       const error = createError.Unauthorized('Invalid username or password');
       throw error;
     }
@@ -205,6 +205,7 @@ const verifyAndGenerateAccessToken = async (req, res, next) => {
         const error = createError('Invalid credentials', 401);
         throw error;
       }
+      delete user.hashedPassword;
       const accessToken = generateJWT(
         user.id,
         process.env.ACCESS_TOKEN_SECRET,

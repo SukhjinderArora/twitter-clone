@@ -4,7 +4,7 @@ import { FiX } from 'react-icons/fi';
 
 import Backdrop from './Backdrop';
 
-const Modal = ({ children, isOpen, onDismiss, closeButtonVisible }) => {
+const Modal = ({ children, isOpen, onDismiss, closeButtonVisible, title }) => {
   return (
     <div className="relative">
       <Backdrop backdropVisible={isOpen} hideBackdrop={onDismiss} />
@@ -34,7 +34,7 @@ const Modal = ({ children, isOpen, onDismiss, closeButtonVisible }) => {
             </button>
           )}
           <h1 className="text-on-surface font-bold text-2xl text-center flex-1">
-            Kookoo
+            {title}
           </h1>
         </div>
         {children}
@@ -48,11 +48,13 @@ Modal.propTypes = {
   onDismiss: PropTypes.func,
   isOpen: PropTypes.bool.isRequired,
   closeButtonVisible: PropTypes.bool,
+  title: PropTypes.string,
 };
 
 Modal.defaultProps = {
   closeButtonVisible: true,
   onDismiss: () => {},
+  title: 'Kookoo',
 };
 
 export default Modal;

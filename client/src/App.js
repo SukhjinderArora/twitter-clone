@@ -155,6 +155,7 @@ const App = () => {
                       replace: true,
                     })
                   }
+                  title="Add new post"
                 >
                   <ComposePost />
                 </Modal>

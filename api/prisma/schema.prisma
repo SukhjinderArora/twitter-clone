@@ -17,8 +17,8 @@ model User {
   newUser Boolean @default(true)
   hashedPassword String? @db.VarChar(64)
   profile Profile?
-  tweets Tweet[]
-  retweets Retweet[]
+  posts Post[]
+  reposts Repost[]
   likes Like[]
   replies Reply[]
   followedBy User[]  @relation("UserFollows", references: [id])
@@ -40,29 +40,29 @@ model Profile {
   userId Int @unique
 }
 
-model Tweet {
+model Post {
   id Int @id @default(autoincrement())
   content String @db.VarChar(255)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
-  retweets Retweet[]
+  reposts Repost[]
   likes Like[]
   replies Reply[]
   createdAt DateTime @default(now())
 }
 
-model Retweet {
+model Repost {
   id Int @id @default(autoincrement())
-  tweet Tweet @relation(fields: [tweetId], references: [id])
-  tweetId Int
+  post Post @relation(fields: [postId], references: [id])
+  postId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }
 
 model Like {
   id Int @id @default(autoincrement())
-  tweet Tweet @relation(fields: [tweetId], references: [id])
-  tweetId Int
+  post Post @relation(fields: [postId], references: [id])
+  postId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }
@@ -70,8 +70,8 @@ model Like {
 model Reply {
   id Int @id @default(autoincrement())
   content String @db.VarChar(255)
-  tweet Tweet @relation(fields: [tweetId], references: [id])
-  tweetId Int
+  post Post @relation(fields: [postId], references: [id])
+  postId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
   createdAt DateTime @default(now())
