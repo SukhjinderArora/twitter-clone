@@ -9,7 +9,7 @@ const Modal = ({ children, isOpen, onDismiss, closeButtonVisible, title }) => {
     <div className="relative">
       <Backdrop backdropVisible={isOpen} hideBackdrop={onDismiss} />
       <div
-        className={`bg-surface fixed top-0 left-0 h-full w-full z-20 sm:w-[500px] sm:h-fit sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 ${
+        className={`bg-surface fixed top-0 left-0 h-full w-full z-20 sm:w-[500px] sm:h-fit sm:top-[20%] sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-[20%] ${
           !isOpen && 'hidden'
         }`}
       >

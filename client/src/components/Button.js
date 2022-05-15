@@ -8,7 +8,7 @@ const Button = ({ type, isLoading, onClick, children }) => {
       type={type}
       disabled={isLoading}
       onClick={onClick}
-      className="font-source-sans-pro bg-primary text-on-primary rounded-full font-semibold block w-full py-4 transition-colors hover:bg-primary-dark"
+      className="font-source-sans-pro bg-primary text-on-primary rounded-full font-semibold w-full py-4 transition-colors hover:bg-primary-dark flex items-center justify-center"
     >
       {isLoading ? <Spinner /> : children}
     </button>
@@ -19,8 +19,11 @@ Button.propTypes = {
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
   isLoading: PropTypes.bool,
   onClick: PropTypes.func,
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-    .isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]).isRequired,
 };
 
 Button.defaultProps = {

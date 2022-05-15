@@ -15,7 +15,7 @@ const TextArea = ({
       <textarea
         id={id}
         name={name}
-        className="text-on-surface font-lato border border-solid border-on-surface/25 bg-surface px-4 pt-6 pb-2 w-full rounded-md peer outline-none focus:border-primary"
+        className="text-on-surface font-source-sans-pro border border-solid border-on-surface/25 bg-surface px-4 pt-6 pb-2 w-full rounded-md peer outline-none focus:border-primary max-h-96"
         placeholder="   "
         onFocus={onFocus}
         onBlur={onBlur}

@@ -13,7 +13,6 @@ module.exports = {
     fontFamily: {
       verdana: ['verdana', 'sans-serif'],
       'source-sans-pro': ['Source Sans Pro', 'sans-serif'],
-      roboto: ['Roboto', 'sans-serif'],
     },
     extend: {
       colors: {
