@@ -14,6 +14,7 @@ const router = express.Router();
 router.post(
   '/login/password',
   checkSchema(loginSchema),
+  validateRequest,
   authController.loginPassword,
   generateAuthTokens
 );
@@ -41,6 +42,7 @@ router.patch(
   '/signup/update-dob',
   isAuthenticated,
   checkSchema(signupSchema.validateDateOfBirth),
+  validateRequest,
   authController.signupPassword.updateDateOfBirth
 );
 router.patch(

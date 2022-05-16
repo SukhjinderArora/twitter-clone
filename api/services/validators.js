@@ -3,10 +3,10 @@ const prisma = require('./connect-db');
 const signupSchema = {
   validateEmail: {
     name: {
+      trim: true,
       notEmpty: {
         errorMessage: 'This is a mandatory field',
       },
-      trim: true,
       isLength: {
         errorMessage:
           'Name must be minimum 1 character and maximum 20 characters long',
@@ -18,6 +18,7 @@ const signupSchema = {
       escape: true,
     },
     email: {
+      trim: true,
       notEmpty: {
         errorMessage: 'This is a mandatory field',
       },
@@ -42,6 +43,7 @@ const signupSchema = {
   },
   validatePassword: {
     password: {
+      trim: true,
       notEmpty: {
         errorMessage: 'This is a mandatory field',
       },
@@ -70,10 +72,10 @@ const signupSchema = {
   },
   validateUsername: {
     username: {
+      trim: true,
       notEmpty: {
         errorMessage: 'This is a mandatory field',
       },
-      trim: true,
       escape: true,
       isLength: {
         options: {
@@ -121,7 +123,25 @@ const loginSchema = {
   },
 };
 
+const newPostSchema = {
+  content: {
+    trim: true,
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+    escape: true,
+    isLength: {
+      options: {
+        min: 1,
+        max: 255,
+      },
+      errorMessage: 'Post length cannot be less than 1 and more than 255',
+    },
+  },
+};
+
 module.exports = {
   signupSchema,
   loginSchema,
+  newPostSchema,
 };
