@@ -8,7 +8,7 @@ const Button = ({ type, isLoading, onClick, children }) => {
       type={type}
       disabled={isLoading}
       onClick={onClick}
-      className="font-source-sans-pro bg-primary text-on-primary rounded-full font-semibold w-full py-4 transition-colors hover:bg-primary-dark flex items-center justify-center"
+      className="font-source-sans-pro bg-primary text-on-primary rounded-full font-semibold w-full py-4 transition-colors hover:bg-primary-dark flex items-center justify-center no-select"
     >
       {isLoading ? <Spinner /> : children}
     </button>
