@@ -1,3 +1,5 @@
+import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import { RiAddLine } from 'react-icons/ri';
 
@@ -8,30 +10,48 @@ import Button from '../Button';
 
 import useForm from '../../hooks/useForm';
 
-const autoExpandTextArea = (element) => {
-  element.style.height = 'inherit';
-  const computed = window.getComputedStyle(element);
-  const height =
-    parseInt(computed.getPropertyValue('border-top-width'), 10) +
-    parseInt(computed.getPropertyValue('padding-top'), 10) +
-    element.scrollHeight +
-    parseInt(computed.getPropertyValue('padding-bottom'), 10) +
-    parseInt(computed.getPropertyValue('border-bottom-width'), 10);
-  element.style.height = `${height}px`;
-};
+import axios from '../../utils/axios';
+import { newPostValidator } from '../../utils/validator';
 
 const ComposePost = () => {
   usePageTitle('New Post / Kookoo');
+  const navigate = useNavigate();
+  const createNewPost = useMutation(({ content }) => {
+    return axios.post('/api/post/create-post', {
+      content,
+    });
+  });
+  const { validateForm } = newPostValidator;
   const form = useForm({
     initialValues: {
       content: '',
     },
-    onSubmit: () => {},
+    validate: validateForm,
+    onSubmit: (values) => {
+      createNewPost.mutate(
+        {
+          content: values.content,
+        },
+        {
+          onSuccess: () => {
+            navigate('/home');
+          },
+          onError: (err) => {
+            const error = err.response.data.errors || err.response.data.error;
+            if (Array.isArray(error)) {
+              const errors = error.reduce((acc, cur) => {
+                acc[cur.param] = cur.msg;
+                return acc;
+              }, {});
+              form.setMultipleFieldsError(errors);
+            } else {
+              form.setFieldError('password', error.message);
+            }
+          },
+        }
+      );
+    },
   });
-  const onContentChange = (evt) => {
-    autoExpandTextArea(evt.target);
-    form.handleChange(evt);
-  };
   return (
     <div className="p-6">
       <form onSubmit={form.handleSubmit} className="flex flex-col">
@@ -40,11 +60,25 @@ const ComposePost = () => {
           name="content"
           label="What's happening?"
           value={form.values.content}
-          error={form.errors.content}
+          error={form.touched.content ? form.errors.content : ''}
+          autoExpand
           onBlur={form.handleBlur}
-          onChange={onContentChange}
+          onChange={form.handleChange}
           onFocus={form.handleFocus}
         />
+        <div className="text-right text-on-surface my-3">
+          <span
+            className={
+              form.values.content.length > 255
+                ? 'text-on-error'
+                : 'text-on-surface'
+            }
+          >
+            {form.values.content.length}
+          </span>
+          <span> / </span>
+          <span>255</span>
+        </div>
         <div className="w-1/2 self-end">
           <Button type="submit">
             <span>Add</span>

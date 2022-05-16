@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import { STATUS } from '../utils/utils';
+import { setToken, clearToken } from '../utils/auth';
 
 const initialState = {
   user: null,
@@ -60,6 +61,7 @@ const AuthProvider = ({ children }) => {
         expiresAt,
       },
     });
+    setToken(token);
   }, []);
   const logout = React.useCallback(() => {
     dispatch({
@@ -73,6 +75,7 @@ const AuthProvider = ({ children }) => {
         status,
       },
     });
+    clearToken();
   }, []);
   const value = React.useMemo(
     () => ({ ...state, login, logout, setAuthenticationStatus }),
