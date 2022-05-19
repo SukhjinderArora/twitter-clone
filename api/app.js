@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post');
+const usersRoutes = require('./routes/user');
 const { errorLogger, errorResponder } = require('./middlewares/error-handler');
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
+app.use('/api/users', usersRoutes);
 app.use((req, res, next) => {
   next(createError.NotFound());
 });
