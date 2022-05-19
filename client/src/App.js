@@ -18,11 +18,16 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Signin from './pages/Signin';
 import SignupSuccess from './pages/SignupSuccess';
+import UserProfile from './pages/UserProfile';
+import NoMatch from './pages/NoMatch';
 
 import Layout from './components/Layout';
 import SplashScreen from './components/SplashScreen';
 import Modal from './components/Modal';
 import ComposePost from './components/Posts/ComposePost';
+import Posts from './components/Posts/Posts';
+import PostsAndReplies from './components/Posts/PostsAndReplies';
+import Likes from './components/Posts/Likes';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -103,6 +108,12 @@ const App = () => {
               </RequireAuth>
             }
           />
+          <Route path="/:username" element={<UserProfile />}>
+            <Route index element={<Posts />} />
+            <Route path="posts" element={<Posts />} />
+            <Route path="with_replies" element={<PostsAndReplies />} />
+            <Route path="likes" element={<Likes />} />
+          </Route>
           <Route
             path="compose/post"
             element={
@@ -141,6 +152,7 @@ const App = () => {
             </RequireAuth>
           }
         />
+        <Route path="*" element={<NoMatch />} />
       </Routes>
       {state?.backgroundLocation && (
         <Routes>
