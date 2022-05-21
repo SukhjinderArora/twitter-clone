@@ -11,7 +11,7 @@ import NoMatch from './NoMatch';
 const UserProfile = () => {
   const { username } = useParams();
   const { data, isLoading, isError } = useQuery(
-    'user',
+    ['user', username],
     () => {
       return axios.get(`/api/users/${username}`);
     },
@@ -89,7 +89,8 @@ const UserProfile = () => {
       </div>
       <div className="px-3 flex justify-between text-on-surface/75 mt-6">
         <NavLink
-          to="posts"
+          to=""
+          end
           className={({ isActive }) =>
             `pb-1 ${
               isActive ? 'text-on-surface border-b-2 border-primary' : ''
@@ -120,8 +121,8 @@ const UserProfile = () => {
         </NavLink>
       </div>
       <div className="h-[1px] bg-on-surface/30 my-3" />
-      <div className="px-3">
-        <Outlet />
+      <div className="px-3 pb-14">
+        <Outlet context={{ userId: user.id }} />
       </div>
     </div>
   );

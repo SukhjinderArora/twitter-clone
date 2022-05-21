@@ -25,9 +25,9 @@ import Layout from './components/Layout';
 import SplashScreen from './components/SplashScreen';
 import Modal from './components/Modal';
 import ComposePost from './components/Posts/ComposePost';
-import Posts from './components/Posts/Posts';
+import PostsByUser from './components/Posts/PostsByUser';
 import PostsAndReplies from './components/Posts/PostsAndReplies';
-import Likes from './components/Posts/Likes';
+import LikedPosts from './components/Posts/LikedPosts';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -109,10 +109,10 @@ const App = () => {
             }
           />
           <Route path="/:username" element={<UserProfile />}>
-            <Route index element={<Posts />} />
-            <Route path="posts" element={<Posts />} />
+            <Route index element={<PostsByUser />} />
+            <Route path="posts" element={<PostsByUser />} />
             <Route path="with_replies" element={<PostsAndReplies />} />
-            <Route path="likes" element={<Likes />} />
+            <Route path="likes" element={<LikedPosts />} />
           </Route>
           <Route
             path="compose/post"
