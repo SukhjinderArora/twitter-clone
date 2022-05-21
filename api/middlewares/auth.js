@@ -114,8 +114,29 @@ const validateRequest = (req, res, next) => {
   return next();
 };
 
+const isValidUser = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!user) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    req.userId = user.id;
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   isAuthenticated,
   generateAuthTokens,
   validateRequest,
+  isValidUser,
 };
