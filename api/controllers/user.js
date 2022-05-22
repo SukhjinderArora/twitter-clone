@@ -14,14 +14,14 @@ const getUserByUsername = async (req, res, next) => {
         username: true,
         profile: true,
         createdAt: true,
+        followedBy: true,
+        following: true,
         _count: {
           select: {
             followedBy: true,
             following: true,
           },
         },
-        followedBy: true,
-        following: true,
       },
     });
     if (!user) {
@@ -134,6 +134,10 @@ const followUser = async (req, res, next) => {
       const error = createError.NotFound();
       throw error;
     }
+    if (followee.id === userId) {
+      const error = createError.Forbidden();
+      throw error;
+    }
     await prisma.user.update({
       where: {
         id: userId,
@@ -163,6 +167,10 @@ const unFollowUser = async (req, res, next) => {
     });
     if (!followee) {
       const error = createError.NotFound();
+      throw error;
+    }
+    if (followee.id === userId) {
+      const error = createError.Forbidden();
       throw error;
     }
     await prisma.user.update({
