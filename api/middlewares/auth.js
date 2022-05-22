@@ -116,7 +116,6 @@ const validateRequest = (req, res, next) => {
 
 const isValidUser = async (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const user = await prisma.user.findUnique({
       where: {
