@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useQuery, QueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useOutletContext } from 'react-router-dom';
 
 import axios from '../../utils/axios';
@@ -7,10 +7,9 @@ import axios from '../../utils/axios';
 import Spinner from '../Spinner';
 import Post from './Post';
 
-const queryClient = new QueryClient();
-
 const PostsByUser = () => {
   const { userId } = useOutletContext();
+  const queryClient = useQueryClient();
   const { data, isLoading, isError } = useQuery(['posts', userId], () => {
     return axios.get(`/api/users/${userId}/posts`);
   });
@@ -19,7 +18,7 @@ const PostsByUser = () => {
     return () => {
       queryClient.invalidateQueries('posts');
     };
-  }, []);
+  }, [queryClient]);
 
   if (isLoading)
     return (
@@ -34,6 +33,13 @@ const PostsByUser = () => {
 
   return (
     <div>
+      {posts.length === 0 && (
+        <div>
+          <h1 className="text-lg text-on-surface font-bold">
+            This user doesn&apos;t have any posts yet.
+          </h1>
+        </div>
+      )}
       {posts.map((post) => (
         <Post post={post} key={post.id} />
       ))}
