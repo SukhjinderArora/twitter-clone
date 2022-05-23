@@ -1,16 +1,14 @@
 const router = require('express').Router();
 
 const userController = require('../controllers/user');
-const { isValidUser, isAuthenticated } = require('../middlewares/auth');
+const { isAuthenticated } = require('../middlewares/auth');
 
 router.get('/:username', userController.getUserByUsername);
-router.get('/:id/posts', isValidUser, userController.getAllPostsByUser);
-router.get(
-  '/:id/posts/liked',
-  isValidUser,
-  userController.getAllLikedPostsByUser
-);
+router.get('/:id/posts', userController.getAllPostsByUser);
+router.get('/:id/posts/liked', userController.getAllLikedPostsByUser);
 router.patch('/follow', isAuthenticated, userController.followUser);
 router.patch('/unfollow', isAuthenticated, userController.unFollowUser);
+router.get('/:id/followers', isAuthenticated, userController.getFollowersList);
+router.get('/:id/followees', isAuthenticated, userController.getFolloweesList);
 
 module.exports = router;

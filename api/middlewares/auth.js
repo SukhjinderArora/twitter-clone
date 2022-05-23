@@ -126,7 +126,6 @@ const isValidUser = async (req, res, next) => {
       const error = createError.NotFound();
       throw error;
     }
-    req.userId = user.id;
     return next();
   } catch (error) {
     return next(error);

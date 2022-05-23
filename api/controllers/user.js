@@ -39,11 +39,20 @@ const getUserByUsername = async (req, res, next) => {
 };
 
 const getAllPostsByUser = async (req, res, next) => {
-  const { userId } = req;
+  const { id } = req.params;
   try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!user) {
+      const error = createError.NotFound();
+      throw error;
+    }
     const posts = await prisma.post.findMany({
       where: {
-        userId,
+        userId: Number(id),
       },
       orderBy: {
         createdAt: 'desc',
@@ -80,11 +89,20 @@ const getAllPostsByUser = async (req, res, next) => {
 };
 
 const getAllLikedPostsByUser = async (req, res, next) => {
-  const { userId } = req;
+  const { id } = req.params;
   try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!user) {
+      const error = createError.NotFound();
+      throw error;
+    }
     const likedPosts = await prisma.like.findMany({
       where: {
-        userId,
+        userId: Number(id),
       },
       include: {
         post: {
@@ -193,10 +211,92 @@ const unFollowUser = async (req, res, next) => {
   }
 };
 
+const getFollowersList = async (req, res, next) => {
+  const { id } = req.params;
+  const { skip = 0, take = 10 } = req.query;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!user) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    const followers = await prisma.user.findMany({
+      where: {
+        following: {
+          some: {
+            id: Number(id),
+          },
+        },
+      },
+      skip: Number(skip),
+      take: Number(take),
+      select: {
+        id: true,
+        username: true,
+        profile: {
+          select: {
+            name: true,
+            img: true,
+          },
+        },
+      },
+    });
+    return res.status(200).json({ followers });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getFolloweesList = async (req, res, next) => {
+  const { id } = req.params;
+  const { skip = 0, take = 10 } = req.query;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!user) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    const followers = await prisma.user.findMany({
+      where: {
+        followedBy: {
+          some: {
+            id: Number(id),
+          },
+        },
+      },
+      skip: Number(skip),
+      take: Number(take),
+      select: {
+        id: true,
+        username: true,
+        profile: {
+          select: {
+            name: true,
+            img: true,
+          },
+        },
+      },
+    });
+    return res.status(200).json({ followers });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getUserByUsername,
   getAllPostsByUser,
   getAllLikedPostsByUser,
   followUser,
   unFollowUser,
+  getFollowersList,
+  getFolloweesList,
 };
