@@ -213,7 +213,8 @@ const unFollowUser = async (req, res, next) => {
 
 const getFollowersList = async (req, res, next) => {
   const { id } = req.params;
-  const { skip = 0, take = 10 } = req.query;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -224,6 +225,15 @@ const getFollowersList = async (req, res, next) => {
       const error = createError.NotFound();
       throw error;
     }
+    const total = await prisma.user.count({
+      where: {
+        following: {
+          some: {
+            id: Number(id),
+          },
+        },
+      },
+    });
     const followers = await prisma.user.findMany({
       where: {
         following: {
@@ -232,8 +242,8 @@ const getFollowersList = async (req, res, next) => {
           },
         },
       },
-      skip: Number(skip),
-      take: Number(take),
+      skip: (page - 1) * limit,
+      take: limit,
       select: {
         id: true,
         username: true,
@@ -245,7 +255,15 @@ const getFollowersList = async (req, res, next) => {
         },
       },
     });
-    return res.status(200).json({ followers });
+    return res.status(200).json({
+      info: {
+        total,
+        nextPage:
+          total > (page - 1) * limit + followers.length ? page + 1 : null,
+        prevPage: page === 1 ? null : page,
+      },
+      results: followers,
+    });
   } catch (error) {
     return next(error);
   }
@@ -253,7 +271,8 @@ const getFollowersList = async (req, res, next) => {
 
 const getFolloweesList = async (req, res, next) => {
   const { id } = req.params;
-  const { skip = 0, take = 10 } = req.query;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -264,7 +283,7 @@ const getFolloweesList = async (req, res, next) => {
       const error = createError.NotFound();
       throw error;
     }
-    const followers = await prisma.user.findMany({
+    const total = await prisma.user.count({
       where: {
         followedBy: {
           some: {
@@ -272,8 +291,17 @@ const getFolloweesList = async (req, res, next) => {
           },
         },
       },
-      skip: Number(skip),
-      take: Number(take),
+    });
+    const followees = await prisma.user.findMany({
+      where: {
+        followedBy: {
+          some: {
+            id: Number(id),
+          },
+        },
+      },
+      skip: (page - 1) * limit,
+      take: limit,
       select: {
         id: true,
         username: true,
@@ -285,7 +313,15 @@ const getFolloweesList = async (req, res, next) => {
         },
       },
     });
-    return res.status(200).json({ followers });
+    return res.status(200).json({
+      info: {
+        total,
+        nextPage:
+          total > (page - 1) * limit + followees.length ? page + 1 : null,
+        prevPage: page === 1 ? null : page,
+      },
+      results: followees,
+    });
   } catch (error) {
     return next(error);
   }
