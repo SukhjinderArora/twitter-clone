@@ -38,8 +38,10 @@ const getUserByUsername = async (req, res, next) => {
   }
 };
 
-const getAllPostsByUser = async (req, res, next) => {
+const getPostsByUser = async (req, res, next) => {
   const { id } = req.params;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -50,6 +52,11 @@ const getAllPostsByUser = async (req, res, next) => {
       const error = createError.NotFound();
       throw error;
     }
+    const total = await prisma.post.count({
+      where: {
+        userId: Number(id),
+      },
+    });
     const posts = await prisma.post.findMany({
       where: {
         userId: Number(id),
@@ -57,6 +64,8 @@ const getAllPostsByUser = async (req, res, next) => {
       orderBy: {
         createdAt: 'desc',
       },
+      skip: (page - 1) * limit,
+      take: limit,
       include: {
         user: {
           select: {
@@ -82,14 +91,23 @@ const getAllPostsByUser = async (req, res, next) => {
         },
       },
     });
-    return res.status(200).json({ posts });
+    return res.status(200).json({
+      info: {
+        total,
+        nextPage: total > (page - 1) * limit + posts.length ? page + 1 : null,
+        prevPage: page === 1 ? null : page - 1,
+      },
+      results: posts,
+    });
   } catch (error) {
     return next(error);
   }
 };
 
-const getAllLikedPostsByUser = async (req, res, next) => {
+const getLikedPostsByUser = async (req, res, next) => {
   const { id } = req.params;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -100,10 +118,20 @@ const getAllLikedPostsByUser = async (req, res, next) => {
       const error = createError.NotFound();
       throw error;
     }
+    const total = await prisma.like.count({
+      where: {
+        userId: Number(id),
+      },
+    });
     const likedPosts = await prisma.like.findMany({
       where: {
         userId: Number(id),
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (page - 1) * limit,
+      take: limit,
       include: {
         post: {
           include: {
@@ -133,7 +161,15 @@ const getAllLikedPostsByUser = async (req, res, next) => {
         },
       },
     });
-    return res.status(200).json({ likedPosts });
+    return res.status(200).json({
+      info: {
+        total,
+        nextPage:
+          total > (page - 1) * limit + likedPosts.length ? page + 1 : null,
+        prevPage: page === 1 ? null : page - 1,
+      },
+      results: likedPosts,
+    });
   } catch (error) {
     return next(error);
   }
@@ -260,7 +296,7 @@ const getFollowersList = async (req, res, next) => {
         total,
         nextPage:
           total > (page - 1) * limit + followers.length ? page + 1 : null,
-        prevPage: page === 1 ? null : page,
+        prevPage: page === 1 ? null : page - 1,
       },
       results: followers,
     });
@@ -318,7 +354,7 @@ const getFolloweesList = async (req, res, next) => {
         total,
         nextPage:
           total > (page - 1) * limit + followees.length ? page + 1 : null,
-        prevPage: page === 1 ? null : page,
+        prevPage: page === 1 ? null : page - 1,
       },
       results: followees,
     });
@@ -329,8 +365,8 @@ const getFolloweesList = async (req, res, next) => {
 
 module.exports = {
   getUserByUsername,
-  getAllPostsByUser,
-  getAllLikedPostsByUser,
+  getPostsByUser,
+  getLikedPostsByUser,
   followUser,
   unFollowUser,
   getFollowersList,
