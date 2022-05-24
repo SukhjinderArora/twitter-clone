@@ -19,15 +19,18 @@ import Signup from './pages/Signup';
 import Signin from './pages/Signin';
 import SignupSuccess from './pages/SignupSuccess';
 import UserProfile from './pages/UserProfile';
+import Follow from './pages/Follow';
 import NoMatch from './pages/NoMatch';
 
 import Layout from './components/Layout';
 import SplashScreen from './components/SplashScreen';
 import Modal from './components/Modal';
 import ComposePost from './components/Posts/ComposePost';
-import PostsByUser from './components/Posts/PostsByUser';
+import UserPosts from './components/Posts/UserPosts';
 import PostsAndReplies from './components/Posts/PostsAndReplies';
 import LikedPosts from './components/Posts/LikedPosts';
+import FolloweesList from './components/FolloweesList';
+import FollowersList from './components/FollowersList';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -109,10 +112,14 @@ const App = () => {
             }
           />
           <Route path="/:username" element={<UserProfile />}>
-            <Route index element={<PostsByUser />} />
-            <Route path="posts" element={<PostsByUser />} />
+            <Route index element={<UserPosts />} />
+            <Route path="posts" element={<UserPosts />} />
             <Route path="with_replies" element={<PostsAndReplies />} />
             <Route path="likes" element={<LikedPosts />} />
+          </Route>
+          <Route path="/:username/list" element={<Follow />}>
+            <Route path="followers" element={<FollowersList />} />
+            <Route path="following" element={<FolloweesList />} />
           </Route>
           <Route
             path="compose/post"

@@ -21,7 +21,6 @@ const UserProfile = () => {
       return axios.get(`/api/users/${username}`);
     },
     {
-      refetchOnWindowFocus: false,
       retry: (failureCount, error) => {
         if (error.response?.data?.error?.status === 404) return false;
         return 3;
