@@ -117,7 +117,14 @@ const App = () => {
             <Route path="with_replies" element={<PostsAndReplies />} />
             <Route path="likes" element={<LikedPosts />} />
           </Route>
-          <Route path="/:username/list" element={<Follow />}>
+          <Route
+            path="/:username/list"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Follow />
+              </RequireAuth>
+            }
+          >
             <Route path="followers" element={<FollowersList />} />
             <Route path="following" element={<FolloweesList />} />
           </Route>

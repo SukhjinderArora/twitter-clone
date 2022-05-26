@@ -1,5 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { Outlet, NavLink, useParams } from 'react-router-dom';
+import { useMutation, useQueryClient } from 'react-query';
+import { Outlet, NavLink, useParams, Link } from 'react-router-dom';
 import { RiCalendar2Line } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 
@@ -9,26 +9,16 @@ import Spinner from '../components/Spinner';
 import NoMatch from './NoMatch';
 
 import { useAuth } from '../contexts/auth-context';
+import useUser from '../hooks/useUser';
 
 const UserProfile = () => {
   const { username } = useParams();
   const { isAuthenticated, user: authUser } = useAuth();
   const queryClient = useQueryClient();
 
-  const userData = useQuery(
-    ['user', username],
-    () => {
-      return axios.get(`/api/users/${username}`);
-    },
-    {
-      retry: (failureCount, error) => {
-        if (error.response?.data?.error?.status === 404) return false;
-        return 3;
-      },
-    }
-  );
+  const userData = useUser(username);
 
-  const user = userData.data?.data?.user;
+  const { user } = userData.data || {};
 
   const followUser = useMutation(
     ({ followeeId }) => {
@@ -145,11 +135,15 @@ const UserProfile = () => {
         <div className="flex text-on-surface gap-4">
           <div>
             {user.following.length}{' '}
-            <span className="text-on-surface/75">Following</span>
+            <Link to="list/following" className="text-on-surface/75">
+              Following
+            </Link>
           </div>
           <div>
             {user.followedBy.length}{' '}
-            <span className="text-on-surface/75">Followers</span>
+            <Link to="list/followers" className="text-on-surface/75">
+              Followers
+            </Link>
           </div>
         </div>
       </div>
