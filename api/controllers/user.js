@@ -79,7 +79,11 @@ const getPostsByUser = async (req, res, next) => {
             },
           },
         },
-        replies: true,
+        replies: {
+          include: {
+            replies: true,
+          },
+        },
         reposts: true,
         likes: true,
         _count: {

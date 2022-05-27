@@ -87,8 +87,43 @@ const repostPost = async (req, res, next) => {
   }
 };
 
+const postReply = async (req, res, next) => {
+  const { postId, content } = req.body;
+  const { userId } = req;
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: Number(postId),
+      },
+    });
+    if (!post) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    await prisma.post.create({
+      data: {
+        content,
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+        parentPost: {
+          connect: {
+            id: postId,
+          },
+        },
+      },
+    });
+    return res.status(201).json({ message: 'success' });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   createPost,
   likePost,
   repostPost,
+  postReply,
 };

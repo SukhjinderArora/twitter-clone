@@ -123,7 +123,7 @@ const loginSchema = {
   },
 };
 
-const newPostSchema = {
+const postSchema = {
   content: {
     trim: true,
     notEmpty: {
@@ -143,5 +143,5 @@ const newPostSchema = {
 module.exports = {
   signupSchema,
   loginSchema,
-  newPostSchema,
+  postSchema,
 };
