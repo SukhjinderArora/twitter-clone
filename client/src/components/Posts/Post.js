@@ -4,12 +4,63 @@ import {
   RiChat1Line,
   RiRepeatLine,
   RiHeartLine,
+  RiHeartFill,
   RiShareLine,
 } from 'react-icons/ri';
 import PropTypes from 'prop-types';
+import { useMutation, useQueryClient } from 'react-query';
+
 import dayjs from '../../utils/day';
+import axios from '../../utils/axios';
+
+import { useAuth } from '../../contexts/auth-context';
 
 const Post = ({ post }) => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const likePost = useMutation(async ({ postId }) => {
+    try {
+      const { data } = await axios.post('/api/post/like', {
+        postId,
+      });
+      return data;
+    } catch (error) {
+      return error;
+    }
+  });
+  const unLikePost = useMutation(async ({ postId }) => {
+    try {
+      const { data } = await axios.post('/api/post/unlike', {
+        postId,
+      });
+      return data;
+    } catch (error) {
+      return error;
+    }
+  });
+
+  const likePostHandler = () => {
+    likePost.mutate(
+      { postId: post.id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries('posts');
+        },
+      }
+    );
+  };
+
+  const postUnLikeHandler = () => {
+    unLikePost.mutate(
+      { postId: post.id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries('posts');
+        },
+      }
+    );
+  };
+
   return (
     <article className="flex justify-between gap-3 bg-surface text-on-surface px-3 py-2 mb-4 border-b border-on-surface/30 last:border-0">
       <div className="h-10 w-10 overflow-hidden">
@@ -67,18 +118,33 @@ const Post = ({ post }) => {
             </IconContext.Provider>
           </div>
           <div className="flex items-center gap-2">
-            <span>
-              <IconContext.Provider
-                value={{
-                  size: '14px',
-                  style: {
-                    color: 'inherit',
-                  },
-                }}
-              >
-                <RiHeartLine />
-              </IconContext.Provider>
-            </span>
+            {post.likes.some((like) => like.userId === user.id) ? (
+              <button type="button" onClick={postUnLikeHandler}>
+                <IconContext.Provider
+                  value={{
+                    size: '14px',
+                    style: {
+                      fill: '#b91c1c',
+                    },
+                  }}
+                >
+                  <RiHeartFill />
+                </IconContext.Provider>
+              </button>
+            ) : (
+              <button type="button" onClick={likePostHandler}>
+                <IconContext.Provider
+                  value={{
+                    size: '14px',
+                    style: {
+                      color: 'inherit',
+                    },
+                  }}
+                >
+                  <RiHeartLine />
+                </IconContext.Provider>
+              </button>
+            )}
             <span className="text-on-surface/70 text-xs">
               {post.likes.length > 0 && post.likes.length}
             </span>
@@ -103,6 +169,7 @@ const Post = ({ post }) => {
 
 Post.propTypes = {
   post: PropTypes.shape({
+    id: PropTypes.number,
     content: PropTypes.string,
     user: PropTypes.shape({
       username: PropTypes.string,
