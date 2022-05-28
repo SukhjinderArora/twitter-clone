@@ -13,6 +13,7 @@ router.post(
   postController.createPost
 );
 router.post('/like', isAuthenticated, postController.likePost);
+router.post('/unlike', isAuthenticated, postController.unLikePost);
 router.post('/repost', isAuthenticated, postController.repostPost);
 router.post(
   '/reply',

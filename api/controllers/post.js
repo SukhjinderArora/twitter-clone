@@ -34,6 +34,15 @@ const likePost = async (req, res, next) => {
       const error = createError.NotFound();
       throw error;
     }
+    const alreadyLiked = await prisma.like.findFirst({
+      where: {
+        postId: Number(postId),
+        userId,
+      },
+    });
+    if (alreadyLiked) {
+      return res.status(201).json({ message: 'success' });
+    }
     await prisma.like.create({
       data: {
         post: {
@@ -49,6 +58,30 @@ const likePost = async (req, res, next) => {
       },
     });
     return res.status(201).json({ message: 'success' });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const unLikePost = async (req, res, next) => {
+  const { postId } = req.body;
+  const { userId } = req;
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: Number(postId),
+      },
+    });
+    if (!post) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    await prisma.like.delete({
+      where: {
+        postId_userId: { postId: Number(postId), userId: Number(userId) },
+      },
+    });
+    return res.status(200).json({ message: 'success' });
   } catch (error) {
     return next(error);
   }
@@ -124,6 +157,7 @@ const postReply = async (req, res, next) => {
 module.exports = {
   createPost,
   likePost,
+  unLikePost,
   repostPost,
   postReply,
 };
