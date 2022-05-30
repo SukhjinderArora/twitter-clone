@@ -74,7 +74,7 @@ const LikedPosts = () => {
         return (
           // eslint-disable-next-line react/no-array-index-key
           <Fragment key={i}>
-            {group.results.map((post) => (
+            {group.results.map(({ post }) => (
               <Post post={post} key={post.id} />
             ))}
           </Fragment>

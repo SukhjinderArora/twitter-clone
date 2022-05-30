@@ -8,6 +8,7 @@ import Spinner from '../Spinner';
 import Post from './Post';
 
 import useInView from '../../hooks/useInView';
+import Repost from './Repost';
 
 const UserPosts = () => {
   const { userId } = useOutletContext();
@@ -74,9 +75,13 @@ const UserPosts = () => {
         return (
           // eslint-disable-next-line react/no-array-index-key
           <Fragment key={i}>
-            {group.results.map((post) => (
-              <Post post={post} key={post.id} />
-            ))}
+            {group.results.map((post) =>
+              post.post ? (
+                <Repost key={`${post.id}${post.post.id}`} repost={post} />
+              ) : (
+                <Post post={post} key={post.id} />
+              )
+            )}
           </Fragment>
         );
       })}
