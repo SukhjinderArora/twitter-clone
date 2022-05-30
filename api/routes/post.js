@@ -15,6 +15,7 @@ router.post(
 router.post('/like', isAuthenticated, postController.likePost);
 router.post('/unlike', isAuthenticated, postController.unLikePost);
 router.post('/repost', isAuthenticated, postController.repostPost);
+router.post('/repost/remove', isAuthenticated, postController.removeRepost);
 router.post(
   '/reply',
   isAuthenticated,

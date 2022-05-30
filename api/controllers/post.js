@@ -120,6 +120,30 @@ const repostPost = async (req, res, next) => {
   }
 };
 
+const removeRepost = async (req, res, next) => {
+  const { postId } = req.body;
+  const { userId } = req;
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: Number(postId),
+      },
+    });
+    if (!post) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    await prisma.repost.delete({
+      where: {
+        postId_userId: { postId: Number(postId), userId: Number(userId) },
+      },
+    });
+    return res.status(200).json({ message: 'success' });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const postReply = async (req, res, next) => {
   const { postId, content } = req.body;
   const { userId } = req;
@@ -159,5 +183,6 @@ module.exports = {
   likePost,
   unLikePost,
   repostPost,
+  removeRepost,
   postReply,
 };
