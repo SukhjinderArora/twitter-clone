@@ -41,22 +41,33 @@ const getUserByUsername = async (req, res, next) => {
 const getPostsByUser = async (req, res, next) => {
   const { id } = req.params;
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
+  const limit = 10;
   try {
     const user = await prisma.user.findUnique({
       where: {
         id: Number(id),
       },
     });
+
     if (!user) {
       const error = createError.NotFound();
       throw error;
     }
-    const total = await prisma.post.count({
+
+    const postCount = await prisma.post.count({
       where: {
         userId: Number(id),
       },
     });
+
+    const repostCount = await prisma.repost.count({
+      where: {
+        userId: Number(id),
+      },
+    });
+
+    const total = postCount + repostCount;
+
     const posts = await prisma.post.findMany({
       where: {
         userId: Number(id),
@@ -95,13 +106,62 @@ const getPostsByUser = async (req, res, next) => {
         },
       },
     });
+
+    const reposts = await prisma.repost.findMany({
+      where: {
+        userId: Number(id),
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+        post: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    name: true,
+                    img: true,
+                  },
+                },
+              },
+            },
+            replies: true,
+            reposts: true,
+            likes: true,
+          },
+        },
+      },
+    });
+
+    const combinedPosts = [...posts, ...reposts].sort(
+      (post1, post2) => new Date(post2.createdAt) - new Date(post1.createdAt)
+    );
+
     return res.status(200).json({
       info: {
         total,
         nextPage: total > (page - 1) * limit + posts.length ? page + 1 : null,
         prevPage: page === 1 ? null : page - 1,
       },
-      results: posts,
+      results: combinedPosts,
     });
   } catch (error) {
     return next(error);
