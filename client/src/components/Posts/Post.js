@@ -9,6 +9,7 @@ import {
 } from 'react-icons/ri';
 import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from 'react-query';
+import { Link } from 'react-router-dom';
 
 import dayjs from '../../utils/day';
 import axios from '../../utils/axios';
@@ -109,21 +110,29 @@ const Post = ({ post }) => {
 
   return (
     <article className="flex justify-between gap-3 bg-surface text-on-surface px-3 py-2 mb-4 border-b border-on-surface/30">
-      <div className="h-10 w-10 overflow-hidden">
-        <img
-          className="h-full w-full rounded-full object-cover"
-          src="https://i.pravatar.cc/300"
-          alt="avatar"
-        />
-      </div>
+      <Link to={`/${post.user.username}`}>
+        <div className="h-10 w-10 overflow-hidden">
+          <img
+            className="h-full w-full rounded-full object-cover"
+            src="https://i.pravatar.cc/300"
+            alt="avatar"
+          />
+        </div>
+      </Link>
       <div className="flex-1">
         <div className="flex">
-          <h3 className="font-semibold text-sm mr-2">
+          <Link
+            to={`/${post.user.username}`}
+            className="font-semibold text-sm mr-2"
+          >
             {post.user.profile.name}
-          </h3>
-          <span className="font-light text-sm text-on-surface/90 font-source-sans-pro to mr-2">
+          </Link>
+          <Link
+            to={`/${post.user.username}`}
+            className="font-light text-sm text-on-surface/90 font-source-sans-pro to mr-2"
+          >
             @{post.user.username}
-          </span>
+          </Link>
           <span className="font-light text-sm text-on-surface/90 font-lato">
             {dayjs(post.createdAt).fromNow(true)}
           </span>
