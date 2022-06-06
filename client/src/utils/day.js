@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
+dayjs.extend(customParseFormat);
 
 dayjs.updateLocale('en', {
   relativeTime: {

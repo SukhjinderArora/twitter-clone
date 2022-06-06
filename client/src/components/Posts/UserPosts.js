@@ -75,13 +75,15 @@ const UserPosts = () => {
         return (
           // eslint-disable-next-line react/no-array-index-key
           <Fragment key={i}>
-            {group.results.map((post) =>
-              post.post ? (
-                <Repost key={`${post.id}${post.post.id}`} repost={post} />
-              ) : (
-                <Post post={post} key={post.id} />
-              )
-            )}
+            {group.results
+              .filter((post) => !post.parentPost)
+              .map((post) =>
+                post.post ? (
+                  <Repost key={`${post.id}${post.post.id}`} repost={post} />
+                ) : (
+                  <Post post={post} key={post.id} />
+                )
+              )}
           </Fragment>
         );
       })}

@@ -1,4 +1,6 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import {
   RiChat1Line,
@@ -7,18 +9,14 @@ import {
   RiHeartFill,
   RiShareLine,
 } from 'react-icons/ri';
-import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
 
 import dayjs from '../../utils/day';
 import axios from '../../utils/axios';
-
 import { useAuth } from '../../contexts/auth-context';
 
-const Post = ({ post }) => {
-  const { user, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+const SelectedPost = ({ post }) => {
+  const { isAuthenticated, user } = useAuth();
   const queryClient = useQueryClient();
 
   const likePost = useMutation(async ({ postId }) => {
@@ -109,64 +107,74 @@ const Post = ({ post }) => {
     );
   };
 
-  const navigateToPostDetails = () => {
-    navigate(`post/${post.id}`);
-  };
-
   return (
-    <article className="flex justify-between gap-3 bg-surface text-on-surface px-3 py-2 mb-4 border-b border-on-surface/30">
-      <Link to={`/${post.user.username}`}>
-        <div className="h-10 w-10 overflow-hidden">
-          <img
-            className="h-full w-full rounded-full object-cover"
-            src="https://i.pravatar.cc/300"
-            alt="avatar"
-          />
-        </div>
-      </Link>
-      <div className="flex-1">
-        <div className="flex">
-          <Link
-            to={`/${post.user.username}`}
-            className="font-semibold text-sm mr-2"
-          >
-            {post.user.profile.name}
-          </Link>
-          <Link
-            to={`/${post.user.username}`}
-            className="font-light text-sm text-on-surface/90 font-source-sans-pro to mr-2"
-          >
-            @{post.user.username}
-          </Link>
-          <span className="font-light text-sm text-on-surface/90 font-lato">
-            {dayjs(post.createdAt).fromNow(true)}
-          </span>
-        </div>
-        {post.parentPost && (
-          <div className="text-sm text-on-surface/75 my-1">
-            Replying to{' '}
-            <Link to="/" className="text-primary text-base">
-              @{post.parentPost.user.username}
+    <article className="bg-surface text-on-surface py-3 px-2">
+      <div className="flex gap-3">
+        <Link to={`/${post.user.username}`}>
+          <div className="h-14 w-14 overflow-hidden">
+            <img
+              className="h-full w-full rounded-full object-cover"
+              src="https://i.pravatar.cc/300"
+              alt="avatar"
+            />
+          </div>
+        </Link>
+        <div>
+          <div>
+            <Link
+              to={`/${post.user.username}`}
+              className="font-semibold text-base mr-2"
+            >
+              {post.user.profile.name}
             </Link>
           </div>
-        )}
-        <div className="my-2">
-          <Link to={`/${post.user.username}/post/${post.id}`}>
-            <p className="text-sm text-semibold font-source-sans-pro break-all">
-              {post.content}
-            </p>
+          <div className=" -mt-2">
+            <Link
+              to={`/${post.user.username}`}
+              className="text-sm text-on-surface/75 font-source-sans-pro"
+            >
+              @{post.user.username}
+            </Link>
+          </div>
+        </div>
+      </div>
+      {post.parentPost && (
+        <div className="text-sm text-on-surface/75 my-3">
+          Replying to{' '}
+          <Link to="/" className="text-primary text-base">
+            @{post.parentPost.user.username}
           </Link>
         </div>
+      )}
+      <div className="my-3">
+        <p className="text-lg">{post.content}</p>
+      </div>
+      <div className="text-sm text-on-surface/75 flex gap-2">
+        <span>{dayjs(post.createdAt).format('h:mm A')}</span>
+        <div className="font-lg font-bold">
+          <span>-</span>
+        </div>
+        <span>{dayjs(post.createdAt).format('MMM D, YYYY')}</span>
+      </div>
+      <div className="h-[1px] bg-on-surface/30 mt-3" />
+      <div className="my-3 flex gap-3">
+        <div>
+          <span className="font-bold">1</span>{' '}
+          <span className="text-on-surface/75">Repost</span>
+        </div>
+        <div>
+          <span className="font-bold">1</span>{' '}
+          <span className="text-on-surface/75">Like</span>
+        </div>
+      </div>
+      <div className="h-[1px] bg-on-surface/30 mb-3" />
+      <div className="my-3">
         <div className="flex justify-between text-on-surface/50">
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={navigateToPostDetails}
-              className="cursor-pointer"
-            >
+            <button type="button" className="cursor-pointer">
               <IconContext.Provider
                 value={{
-                  size: '14px',
+                  size: '18px',
                   style: {
                     color: 'inherit',
                   },
@@ -185,7 +193,7 @@ const Post = ({ post }) => {
               <button type="button" onClick={removeRepostHandler}>
                 <IconContext.Provider
                   value={{
-                    size: '14px',
+                    size: '18px',
                     style: {
                       color: 'green',
                     },
@@ -198,7 +206,7 @@ const Post = ({ post }) => {
               <button type="button" onClick={repostHandler}>
                 <IconContext.Provider
                   value={{
-                    size: '14px',
+                    size: '18px',
                     style: {
                       color: 'inherit',
                     },
@@ -208,9 +216,6 @@ const Post = ({ post }) => {
                 </IconContext.Provider>
               </button>
             )}
-            <span className="text-on-surface/70 text-xs">
-              {post.reposts.length > 0 && post.reposts.length}
-            </span>
           </div>
           <div className="flex items-center gap-2">
             {isAuthenticated &&
@@ -218,7 +223,7 @@ const Post = ({ post }) => {
               <button type="button" onClick={postUnLikeHandler}>
                 <IconContext.Provider
                   value={{
-                    size: '14px',
+                    size: '18px',
                     style: {
                       fill: '#b91c1c',
                     },
@@ -231,7 +236,7 @@ const Post = ({ post }) => {
               <button type="button" onClick={likePostHandler}>
                 <IconContext.Provider
                   value={{
-                    size: '14px',
+                    size: '18px',
                     style: {
                       color: 'inherit',
                     },
@@ -241,14 +246,11 @@ const Post = ({ post }) => {
                 </IconContext.Provider>
               </button>
             )}
-            <span className="text-on-surface/70 text-xs">
-              {post.likes.length > 0 && post.likes.length}
-            </span>
           </div>
           <div>
             <IconContext.Provider
               value={{
-                size: '14px',
+                size: '18px',
                 style: {
                   color: 'inherit',
                 },
@@ -259,11 +261,12 @@ const Post = ({ post }) => {
           </div>
         </div>
       </div>
+      <div className="h-[1px] bg-on-surface/30 mb-3" />
     </article>
   );
 };
 
-Post.propTypes = {
+SelectedPost.propTypes = {
   post: PropTypes.shape({
     id: PropTypes.number,
     content: PropTypes.string,
@@ -288,4 +291,4 @@ Post.propTypes = {
   }).isRequired,
 };
 
-export default Post;
+export default SelectedPost;

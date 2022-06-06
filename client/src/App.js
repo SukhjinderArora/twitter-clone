@@ -31,6 +31,7 @@ import PostsAndReplies from './components/Posts/PostsAndReplies';
 import LikedPosts from './components/Posts/LikedPosts';
 import FolloweesList from './components/FolloweesList';
 import FollowersList from './components/FollowersList';
+import PostDetail from './components/Posts/PostDetail';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -117,6 +118,7 @@ const App = () => {
             <Route path="with_replies" element={<PostsAndReplies />} />
             <Route path="likes" element={<LikedPosts />} />
           </Route>
+          <Route path="/:username/post/:postId" element={<PostDetail />} />
           <Route
             path="/:username/list"
             element={
