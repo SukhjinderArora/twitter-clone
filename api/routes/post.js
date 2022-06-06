@@ -22,5 +22,6 @@ router.post(
   checkSchema(postSchema),
   postController.postReply
 );
+router.get('/:id', postController.getPostById);
 
 module.exports = router;

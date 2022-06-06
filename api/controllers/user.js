@@ -97,6 +97,22 @@ const getPostsByUser = async (req, res, next) => {
         },
         reposts: true,
         likes: true,
+        parentPost: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    name: true,
+                    img: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         _count: {
           select: {
             replies: true,

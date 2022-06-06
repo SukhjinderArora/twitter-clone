@@ -178,6 +178,91 @@ const postReply = async (req, res, next) => {
   }
 };
 
+const getPostById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: Number(id),
+      },
+      include: {
+        parentPost: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    name: true,
+                    img: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        reposts: true,
+        replies: {
+          include: {
+            parentPost: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    username: true,
+                    profile: {
+                      select: {
+                        name: true,
+                        img: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            replies: true,
+            reposts: true,
+            likes: true,
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    name: true,
+                    img: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        likes: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!post) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    return res.status(200).json(post);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   createPost,
   likePost,
@@ -185,4 +270,5 @@ module.exports = {
   repostPost,
   removeRepost,
   postReply,
+  getPostById,
 };
