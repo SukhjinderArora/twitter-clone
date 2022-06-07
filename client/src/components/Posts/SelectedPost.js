@@ -141,7 +141,10 @@ const SelectedPost = ({ post }) => {
       {post.parentPost && (
         <div className="text-sm text-on-surface/75 my-3">
           Replying to{' '}
-          <Link to="/" className="text-primary text-base">
+          <Link
+            to={`/${post.parentPost.user.username}`}
+            className="text-primary text-base"
+          >
             @{post.parentPost.user.username}
           </Link>
         </div>
