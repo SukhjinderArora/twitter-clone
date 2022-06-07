@@ -23,5 +23,7 @@ router.post(
   postController.postReply
 );
 router.get('/:id', postController.getPostById);
+router.get('/:id/ancestors', postController.getAncestorPosts);
+router.get('/:id/children', postController.getChildPosts);
 
 module.exports = router;

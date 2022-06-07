@@ -203,41 +203,7 @@ const getPostById = async (req, res, next) => {
           },
         },
         reposts: true,
-        replies: {
-          include: {
-            parentPost: {
-              include: {
-                user: {
-                  select: {
-                    id: true,
-                    username: true,
-                    profile: {
-                      select: {
-                        name: true,
-                        img: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-            replies: true,
-            reposts: true,
-            likes: true,
-            user: {
-              select: {
-                id: true,
-                username: true,
-                profile: {
-                  select: {
-                    name: true,
-                    img: true,
-                  },
-                },
-              },
-            },
-          },
-        },
+        replies: true,
         likes: true,
         user: {
           select: {
@@ -263,6 +229,136 @@ const getPostById = async (req, res, next) => {
   }
 };
 
+const getAncestorPosts = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!post) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    let { parentPostId } = post;
+    if (!parentPostId) return res.status(200).json(null);
+    const posts = {};
+    let HEAD = posts;
+    while (parentPostId) {
+      // eslint-disable-next-line no-await-in-loop
+      const parentPost = await prisma.post.findUnique({
+        where: {
+          id: parentPostId,
+        },
+        include: {
+          parentPost: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                  profile: {
+                    select: {
+                      name: true,
+                      img: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          reposts: true,
+          replies: true,
+          likes: true,
+          user: {
+            select: {
+              id: true,
+              username: true,
+              profile: {
+                select: {
+                  name: true,
+                  img: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      HEAD.post = parentPost;
+      parentPostId = parentPost.parentPostId;
+      if (parentPostId) {
+        HEAD.next = {};
+        HEAD = HEAD.next;
+      } else {
+        HEAD.next = null;
+      }
+    }
+    return res.status(200).json(posts);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getChildPosts = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!post) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    const posts = await prisma.post.findMany({
+      where: {
+        parentPostId: post.id,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+      include: {
+        parentPost: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    name: true,
+                    img: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        reposts: true,
+        replies: true,
+        likes: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return res.status(200).json(posts);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   createPost,
   likePost,
@@ -271,4 +367,6 @@ module.exports = {
   removeRepost,
   postReply,
   getPostById,
+  getAncestorPosts,
+  getChildPosts,
 };

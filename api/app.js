@@ -3,6 +3,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
 
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post');
@@ -13,6 +14,7 @@ const app = express();
 
 const isDev = process.env.NODE_ENV === 'development';
 
+app.use(morgan('dev'));
 app.use(helmet());
 
 if (isDev) {
