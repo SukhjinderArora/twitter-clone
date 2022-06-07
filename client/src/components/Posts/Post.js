@@ -110,7 +110,7 @@ const Post = ({ post }) => {
   };
 
   const navigateToPostDetails = () => {
-    navigate(`post/${post.id}`);
+    navigate(`/${post.user.username}/post/${post.id}`);
   };
 
   return (
