@@ -157,7 +157,7 @@ const postReply = async (req, res, next) => {
       const error = createError.NotFound();
       throw error;
     }
-    await prisma.post.create({
+    const reply = await prisma.post.create({
       data: {
         content,
         user: {
@@ -171,8 +171,22 @@ const postReply = async (req, res, next) => {
           },
         },
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+      },
     });
-    return res.status(201).json({ message: 'success' });
+    return res.status(201).json({ post: reply });
   } catch (error) {
     return next(error);
   }

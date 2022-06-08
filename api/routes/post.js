@@ -19,7 +19,15 @@ router.post('/repost/remove', isAuthenticated, postController.removeRepost);
 router.post(
   '/reply',
   isAuthenticated,
-  checkSchema(postSchema),
+  checkSchema({
+    ...postSchema,
+    postId: {
+      notEmpty: {
+        errorMessage: 'This is a mandatory field',
+      },
+    },
+  }),
+  validateRequest,
   postController.postReply
 );
 router.get('/:id', postController.getPostById);
