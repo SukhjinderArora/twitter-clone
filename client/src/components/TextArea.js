@@ -32,7 +32,7 @@ const TextArea = ({
       <textarea
         id={id}
         name={name}
-        className="text-on-surface font-source-sans-pro border border-solid border-on-surface/25 bg-surface px-4 pt-6 pb-2 w-full rounded-md peer outline-none focus:border-primary min-h-[12rem] max-h-96 sm:min-h-[7rem]"
+        className="text-on-surface font-source-sans-pro border border-solid border-on-surface/25 bg-surface px-4 pt-6 pb-2 w-full rounded-md peer outline-none focus:border-primary min-h-[7rem] max-h-96 sm:min-h-[7rem]"
         placeholder="   "
         onFocus={onFocus}
         onBlur={onBlur}

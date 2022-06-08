@@ -1,27 +1,37 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 
 import axios from '../utils/axios';
 
 import SelectedPost from '../components/Posts/SelectedPost';
+import ReplyToPost from '../components/Posts/ReplyToPost';
 import Post from '../components/Posts/Post';
 import Spinner from '../components/Spinner';
+
+import { useAuth } from '../contexts/auth-context';
 
 const PostDetail = () => {
   const { postId } = useParams();
   const selectedPostRef = useRef(null);
-  const post = useQuery(['post', postId], async () => {
-    try {
-      const response = await axios.get(`/api/post/${postId}`);
-      return response.data;
-    } catch (error) {
-      return error;
+  const { isAuthenticated } = useAuth();
+  const post = useQuery(
+    ['post', postId],
+    async () => {
+      try {
+        const response = await axios.get(`/api/post/${postId}`);
+        return response.data;
+      } catch (error) {
+        return error;
+      }
+    },
+    {
+      refetchOnWindowFocus: false,
     }
-  });
+  );
 
   const ancestorPosts = useQuery(
-    ['posts', 'ancestors', postId],
+    ['post', 'ancestors', postId],
     async () => {
       try {
         const response = await axios.get(`/api/post/${postId}/ancestors`);
@@ -33,13 +43,17 @@ const PostDetail = () => {
     {
       enabled: !!post.data?.id,
       onSuccess: () => {
-        selectedPostRef.current.scrollIntoView({ behavior: 'smooth' });
+        selectedPostRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
       },
+      refetchOnWindowFocus: false,
     }
   );
 
   const childPosts = useQuery(
-    ['posts', 'children', postId],
+    ['post', 'children', postId],
     async () => {
       try {
         const response = await axios.get(`/api/post/${postId}/children`);
@@ -50,8 +64,18 @@ const PostDetail = () => {
     },
     {
       enabled: !!post.data?.id,
+      refetchOnWindowFocus: false,
     }
   );
+
+  useEffect(() => {
+    if (ancestorPosts.isSuccess) {
+      selectedPostRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, [ancestorPosts.isSuccess]);
 
   const renderAncestorPosts = () => {
     let head = ancestorPosts.data;
@@ -86,6 +110,11 @@ const PostDetail = () => {
       <div ref={selectedPostRef}>
         <SelectedPost post={post.data} />
       </div>
+      {isAuthenticated && (
+        <div>
+          <ReplyToPost post={post.data} />
+        </div>
+      )}
       {childPosts.isSuccess && renderChildPosts()}
     </div>
   );

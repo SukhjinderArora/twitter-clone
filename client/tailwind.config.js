@@ -27,6 +27,20 @@ module.exports = {
         'on-surface': withOpacityValue('--on-surface'),
         'on-error': withOpacityValue('--on-error'),
       },
+      animation: {
+        enter: 'enter 200ms ease-out forwards',
+        leave: 'leave 200ms ease-out forwards',
+      },
+      keyframes: {
+        enter: {
+          '0%': { transform: 'translateY(100%)', opacity: 0 },
+          '100%': { transform: 'translateY(0)', opacity: 1 },
+        },
+        leave: {
+          '0%': { transform: 'translateY(0)', opacity: 1 },
+          '100%': { transform: 'translateY(100%)', opacity: 0 },
+        },
+      },
     },
   },
   plugins: [],
