@@ -21,6 +21,7 @@ import SignupSuccess from './pages/SignupSuccess';
 import UserProfile from './pages/UserProfile';
 import Follow from './pages/Follow';
 import NoMatch from './pages/NoMatch';
+import PostDetail from './pages/PostDetail';
 
 import Layout from './components/Layout';
 import SplashScreen from './components/SplashScreen';
@@ -31,7 +32,6 @@ import PostsAndReplies from './components/Posts/PostsAndReplies';
 import LikedPosts from './components/Posts/LikedPosts';
 import FolloweesList from './components/FolloweesList';
 import FollowersList from './components/FollowersList';
-import PostDetail from './components/Posts/PostDetail';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();

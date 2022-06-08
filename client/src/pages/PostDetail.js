@@ -1,16 +1,16 @@
+import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 
-import axios from '../../utils/axios';
+import axios from '../utils/axios';
 
-import SelectedPost from './SelectedPost';
-import Post from './Post';
-import Spinner from '../Spinner';
+import SelectedPost from '../components/Posts/SelectedPost';
+import Post from '../components/Posts/Post';
+import Spinner from '../components/Spinner';
 
 const PostDetail = () => {
   const { postId } = useParams();
-  const ancestorPostsArray = [];
-
+  const selectedPostRef = useRef(null);
   const post = useQuery(['post', postId], async () => {
     try {
       const response = await axios.get(`/api/post/${postId}`);
@@ -32,6 +32,9 @@ const PostDetail = () => {
     },
     {
       enabled: !!post.data?.id,
+      onSuccess: () => {
+        selectedPostRef.current.scrollIntoView({ behavior: 'smooth' });
+      },
     }
   );
 
@@ -52,6 +55,7 @@ const PostDetail = () => {
 
   const renderAncestorPosts = () => {
     let head = ancestorPosts.data;
+    const ancestorPostsArray = [];
     while (head !== null) {
       ancestorPostsArray.unshift(head.post);
       head = head.next;
@@ -79,7 +83,9 @@ const PostDetail = () => {
   return (
     <div className="pb-14">
       {ancestorPosts.isSuccess && renderAncestorPosts()}
-      <SelectedPost post={post.data} />
+      <div ref={selectedPostRef}>
+        <SelectedPost post={post.data} />
+      </div>
       {childPosts.isSuccess && renderChildPosts()}
     </div>
   );
