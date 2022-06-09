@@ -57,6 +57,7 @@ const getPostsByUser = async (req, res, next) => {
     const postCount = await prisma.post.count({
       where: {
         userId: Number(id),
+        parentPostId: null,
       },
     });
 
@@ -71,6 +72,7 @@ const getPostsByUser = async (req, res, next) => {
     const posts = await prisma.post.findMany({
       where: {
         userId: Number(id),
+        parentPostId: null,
       },
       orderBy: {
         createdAt: 'desc',
@@ -174,7 +176,10 @@ const getPostsByUser = async (req, res, next) => {
     return res.status(200).json({
       info: {
         total,
-        nextPage: total > (page - 1) * limit + posts.length ? page + 1 : null,
+        nextPage:
+          total > (page - 1) * limit * 2 + combinedPosts.length
+            ? page + 1
+            : null,
         prevPage: page === 1 ? null : page - 1,
       },
       results: combinedPosts,
@@ -443,6 +448,97 @@ const getFolloweesList = async (req, res, next) => {
   }
 };
 
+const getRepliesByUser = async (req, res, next) => {
+  const { id } = req.params;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!user) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    const total = await prisma.post.count({
+      where: {
+        userId: user.id,
+        NOT: {
+          parentPostId: null,
+        },
+        parentPost: {
+          NOT: {
+            userId: user.id,
+          },
+        },
+      },
+    });
+    const replies = await prisma.post.findMany({
+      where: {
+        userId: user.id,
+        NOT: {
+          parentPostId: null,
+        },
+        parentPost: {
+          NOT: {
+            userId: user.id,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+        replies: true,
+        reposts: true,
+        likes: true,
+        parentPost: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    name: true,
+                    img: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    return res.status(200).json({
+      info: {
+        total,
+        nextPage: total > (page - 1) * limit + replies.length ? page + 1 : null,
+        prevPage: page === 1 ? null : page - 1,
+      },
+      results: replies,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getUserByUsername,
   getPostsByUser,
@@ -451,4 +547,5 @@ module.exports = {
   unFollowUser,
   getFollowersList,
   getFolloweesList,
+  getRepliesByUser,
 };
