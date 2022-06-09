@@ -68,7 +68,11 @@ const SelectedPost = ({ post }) => {
       { postId: post.id },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              return query.queryKey[0].includes('post');
+            },
+          });
         },
       }
     );
@@ -79,7 +83,11 @@ const SelectedPost = ({ post }) => {
       { postId: post.id },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              return query.queryKey[0].includes('post');
+            },
+          });
         },
       }
     );
@@ -90,7 +98,11 @@ const SelectedPost = ({ post }) => {
       { postId: post.id },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              return query.queryKey[0].includes('post');
+            },
+          });
         },
       }
     );
@@ -101,7 +113,11 @@ const SelectedPost = ({ post }) => {
       { postId: post.id },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              return query.queryKey[0].includes('post');
+            },
+          });
         },
       }
     );
@@ -162,11 +178,11 @@ const SelectedPost = ({ post }) => {
       <div className="h-[1px] bg-on-surface/30 mt-3" />
       <div className="my-3 flex gap-3">
         <div>
-          <span className="font-bold">1</span>{' '}
+          <span className="font-bold">{post.reposts.length}</span>{' '}
           <span className="text-on-surface/75">Repost</span>
         </div>
         <div>
-          <span className="font-bold">1</span>{' '}
+          <span className="font-bold">{post.likes.length}</span>{' '}
           <span className="text-on-surface/75">Like</span>
         </div>
       </div>

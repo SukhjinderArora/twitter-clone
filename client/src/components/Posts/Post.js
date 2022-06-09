@@ -70,7 +70,11 @@ const Post = ({ post }) => {
       { postId: post.id },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              return query.queryKey[0].includes('post');
+            },
+          });
         },
       }
     );
@@ -81,7 +85,11 @@ const Post = ({ post }) => {
       { postId: post.id },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              return query.queryKey[0].includes('post');
+            },
+          });
         },
       }
     );
@@ -92,7 +100,11 @@ const Post = ({ post }) => {
       { postId: post.id },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              return query.queryKey[0].includes('post');
+            },
+          });
         },
       }
     );
@@ -103,7 +115,11 @@ const Post = ({ post }) => {
       { postId: post.id },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              return query.queryKey[0].includes('post');
+            },
+          });
         },
       }
     );
