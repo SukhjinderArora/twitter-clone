@@ -69,8 +69,8 @@ const PostDetail = () => {
         behavior: 'smooth',
         block: 'start',
       });
+      isInitialRender.current = false;
     }
-    isInitialRender.current = false;
   }, [ancestorPosts.isSuccess]);
 
   const renderAncestorPosts = () => {

@@ -118,7 +118,10 @@ const App = () => {
             <Route path="with_replies" element={<PostsAndReplies />} />
             <Route path="likes" element={<LikedPosts />} />
           </Route>
-          <Route path="/:username/post/:postId" element={<PostDetail />} />
+          <Route
+            path="/:username/post/:postId"
+            element={<PostDetail key={location.pathname} />}
+          />
           <Route
             path="/:username/list"
             element={
