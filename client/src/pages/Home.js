@@ -6,8 +6,10 @@ import Header from '../components/mobile/Header';
 import PostsList from '../components/Posts/PostsList';
 
 import usePageTitle from '../hooks/usePageTitle';
+import useScrollToTop from '../hooks/useScrollToTop';
 
 const Home = () => {
+  useScrollToTop();
   const { setPageTitle } = usePageTitle('Home / Kookoo');
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();

@@ -8,62 +8,26 @@ import {
   RiShareLine,
 } from 'react-icons/ri';
 import PropTypes from 'prop-types';
-import { useMutation, useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 
 import dayjs from '../../utils/day';
-import axios from '../../utils/axios';
 
 import { useAuth } from '../../contexts/auth-context';
+import useLikePost from '../../hooks/useLikePost';
+import useUnLikePost from '../../hooks/useUnLikePost';
+import useRepost from '../../hooks/useRepost';
+import useRemoveRepost from '../../hooks/useRemoveRepost';
 
 const Post = ({ post }) => {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const likePost = useMutation(async ({ postId }) => {
-    try {
-      const { data } = await axios.post('/api/post/like', {
-        postId,
-      });
-      return data;
-    } catch (error) {
-      return error;
-    }
-  });
-
-  const unLikePost = useMutation(async ({ postId }) => {
-    try {
-      const { data } = await axios.post('/api/post/unlike', {
-        postId,
-      });
-      return data;
-    } catch (error) {
-      return error;
-    }
-  });
-
-  const repost = useMutation(async ({ postId }) => {
-    try {
-      const { data } = await axios.post('/api/post/repost', {
-        postId,
-      });
-      return data;
-    } catch (error) {
-      return error;
-    }
-  });
-
-  const removeRepost = useMutation(async ({ postId }) => {
-    try {
-      const { data } = await axios.post('/api/post/repost/remove', {
-        postId,
-      });
-      return data;
-    } catch (error) {
-      return error;
-    }
-  });
+  const likePost = useLikePost();
+  const unLikePost = useUnLikePost();
+  const repost = useRepost();
+  const removeRepost = useRemoveRepost();
 
   const likePostHandler = () => {
     likePost.mutate(

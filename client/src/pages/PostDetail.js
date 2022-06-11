@@ -14,6 +14,7 @@ import { useAuth } from '../contexts/auth-context';
 const PostDetail = () => {
   const { postId } = useParams();
   const selectedPostRef = useRef(null);
+  const isInitialRender = useRef(true);
   const { isAuthenticated } = useAuth();
   const post = useQuery(
     ['post', postId],
@@ -42,12 +43,6 @@ const PostDetail = () => {
     },
     {
       enabled: !!post.data?.id,
-      onSuccess: () => {
-        selectedPostRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      },
       refetchOnWindowFocus: false,
     }
   );
@@ -69,12 +64,13 @@ const PostDetail = () => {
   );
 
   useEffect(() => {
-    if (ancestorPosts.isSuccess) {
+    if (ancestorPosts.isSuccess && isInitialRender.current) {
       selectedPostRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       });
     }
+    isInitialRender.current = false;
   }, [ancestorPosts.isSuccess]);
 
   const renderAncestorPosts = () => {

@@ -10,8 +10,10 @@ import NoMatch from './NoMatch';
 
 import { useAuth } from '../contexts/auth-context';
 import useUser from '../hooks/useUser';
+import useScrollToTop from '../hooks/useScrollToTop';
 
 const UserProfile = () => {
+  useScrollToTop();
   const { username } = useParams();
   const { isAuthenticated, user: authUser } = useAuth();
   const queryClient = useQueryClient();
