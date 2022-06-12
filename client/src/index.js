@@ -18,7 +18,7 @@ root.render(
         <AuthProvider>
           <App />
         </AuthProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        <ReactQueryDevtools initialIsOpen={false} position="top-right" />
       </QueryClientProvider>
     </Router>
   </React.StrictMode>

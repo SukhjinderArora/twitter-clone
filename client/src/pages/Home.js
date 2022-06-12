@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import Fab from '../components/Fab';
 import Header from '../components/mobile/Header';
-import PostsList from '../components/Posts/PostsList';
 
 import usePageTitle from '../hooks/usePageTitle';
 import useScrollToTop from '../hooks/useScrollToTop';
@@ -47,9 +46,7 @@ const Home = () => {
       <div className="fixed top-0 left-0 w-full">
         <Header />
       </div>
-      <div className="mt-14">
-        <PostsList />
-      </div>
+      <div className="mt-14" />
       <div className="fixed right-5 bottom-20 z-50">
         <Fab label="new post" onClick={openModal} />
       </div>

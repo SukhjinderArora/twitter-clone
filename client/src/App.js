@@ -22,6 +22,9 @@ import UserProfile from './pages/UserProfile';
 import Follow from './pages/Follow';
 import NoMatch from './pages/NoMatch';
 import PostDetail from './pages/PostDetail';
+import Notifications from './pages/Notifications';
+import Messages from './pages/Messages';
+import Explore from './pages/Explore';
 
 import Layout from './components/Layout';
 import SplashScreen from './components/SplashScreen';
@@ -109,6 +112,30 @@ const App = () => {
             element={
               <RequireAuth redirectTo="/signup">
                 <Home />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="explore"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Explore />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="notifications"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Notifications />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="messages"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Messages />
               </RequireAuth>
             }
           />

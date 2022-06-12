@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 
@@ -18,6 +18,7 @@ const Signup = () => {
   usePageTitle('Sign-up / Kookoo');
   const [openSignupModal, setOpenSignupModal] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
   const googleSignup = useMutation(({ token }) => {
@@ -103,6 +104,7 @@ const Signup = () => {
           <Link
             to="/signin"
             className="font-source-sans-pro bg-transparent border border-solid border-primary rounded-full font-semibold  w-full py-4 inline-block text-center text-primary"
+            state={{ from: location.state?.from }}
           >
             Sign in
           </Link>

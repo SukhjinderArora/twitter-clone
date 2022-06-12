@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 
@@ -19,6 +19,7 @@ import usePageTitle from '../hooks/usePageTitle';
 const Signin = () => {
   usePageTitle('Sign-in / Kookoo');
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
   const { validateForm } = signinFormValidator;
@@ -52,6 +53,8 @@ const Signin = () => {
             login(user, accessToken, expiresAt);
             if (user.newUser) {
               navigate('/signup/success');
+            } else if (location.state?.from?.pathname) {
+              navigate(location.state?.from?.pathname);
             } else {
               navigate('/');
             }
