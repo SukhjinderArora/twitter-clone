@@ -6,9 +6,9 @@ import axios from '../../utils/axios';
 
 import Spinner from '../Spinner';
 import Post from './Post';
+import Repost from './Repost';
 
 import useInView from '../../hooks/useInView';
-import Repost from './Repost';
 
 const UserPosts = () => {
   const { userId } = useOutletContext();
@@ -16,6 +16,7 @@ const UserPosts = () => {
   const { inView: lastPostInView, ref } = useInView({
     threshold: 0.2,
   });
+
   const { data, isLoading, isError, fetchNextPage, hasNextPage } =
     useInfiniteQuery(
       ['posts', userId],
