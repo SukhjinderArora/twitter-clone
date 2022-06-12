@@ -11,7 +11,7 @@ const getUserHomeFeed = async (req, res, next) => {
         parentPostId: null,
         user: {
           followedBy: {
-            every: {
+            some: {
               id: userId,
             },
           },
@@ -23,7 +23,7 @@ const getUserHomeFeed = async (req, res, next) => {
       where: {
         user: {
           followedBy: {
-            every: {
+            some: {
               id: userId,
             },
           },
@@ -38,7 +38,7 @@ const getUserHomeFeed = async (req, res, next) => {
         parentPostId: null,
         user: {
           followedBy: {
-            every: {
+            some: {
               id: userId,
             },
           },
@@ -72,7 +72,7 @@ const getUserHomeFeed = async (req, res, next) => {
       where: {
         user: {
           followedBy: {
-            every: {
+            some: {
               id: userId,
             },
           },
