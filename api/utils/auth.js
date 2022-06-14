@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 const prisma = require('../services/connect-db');
+const { NODE_ENV } = require('./config');
 
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = NODE_ENV === 'development';
 
 const generateJWT = (userId, secret, expiresIn) =>
   jwt.sign(

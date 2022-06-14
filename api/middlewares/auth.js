@@ -5,6 +5,12 @@ const { validationResult } = require('express-validator');
 
 const prisma = require('../services/connect-db');
 const { generateJWT, COOKIE_OPTIONS } = require('../utils/auth');
+const {
+  ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_LIFE,
+  REFRESH_TOKEN_SECRET,
+  REFRESH_TOKEN_LIFE,
+} = require('../utils/config');
 
 const isAuthenticated = async (req, res, next) => {
   try {
@@ -31,7 +37,7 @@ const isAuthenticated = async (req, res, next) => {
     }
     let decodedToken;
     try {
-      decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+      decodedToken = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
     } catch (err) {
       const error = createError.Unauthorized();
       return next(error);
@@ -67,13 +73,13 @@ const generateAuthTokens = async (req, res, next) => {
     }
     const refreshToken = generateJWT(
       req.userId,
-      process.env.REFRESH_TOKEN_SECRET,
-      process.env.REFRESH_TOKEN_LIFE
+      REFRESH_TOKEN_SECRET,
+      REFRESH_TOKEN_LIFE
     );
     const accessToken = generateJWT(
       req.userId,
-      process.env.ACCESS_TOKEN_SECRET,
-      process.env.ACCESS_TOKEN_LIFE
+      ACCESS_TOKEN_SECRET,
+      ACCESS_TOKEN_LIFE
     );
     await prisma.user.update({
       where: {
@@ -83,21 +89,19 @@ const generateAuthTokens = async (req, res, next) => {
         sessions: {
           create: {
             refreshToken,
-            expirationTime: new Date(
-              Date.now() + ms(process.env.REFRESH_TOKEN_LIFE)
-            ),
+            expirationTime: new Date(Date.now() + ms(REFRESH_TOKEN_LIFE)),
           },
         },
       },
     });
     res.cookie('refreshToken', refreshToken, {
       ...COOKIE_OPTIONS,
-      expires: new Date(Date.now() + ms(process.env.REFRESH_TOKEN_LIFE)),
+      expires: new Date(Date.now() + ms(REFRESH_TOKEN_LIFE)),
     });
     return res.status(200).json({
       user,
       accessToken,
-      expiresAt: new Date(Date.now() + ms(process.env.ACCESS_TOKEN_LIFE)),
+      expiresAt: new Date(Date.now() + ms(ACCESS_TOKEN_LIFE)),
     });
   } catch (error) {
     return next(error);

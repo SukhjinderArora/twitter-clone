@@ -10,10 +10,11 @@ const postRoutes = require('./routes/post');
 const usersRoutes = require('./routes/user');
 const feedRoutes = require('./routes/feed');
 const { errorLogger, errorResponder } = require('./middlewares/error-handler');
+const { NODE_ENV, COOKIE_SECRET } = require('./utils/config');
 
 const app = express();
 
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = NODE_ENV === 'development';
 
 app.use(morgan('dev'));
 app.use(helmet());
@@ -29,7 +30,7 @@ if (isDev) {
 }
 
 app.use(express.json({ type: 'application/json' }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(cookieParser(COOKIE_SECRET));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);

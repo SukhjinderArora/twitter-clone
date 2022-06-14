@@ -8,6 +8,11 @@ const ms = require('ms');
 const prisma = require('../services/connect-db');
 const { GOOGLE_CLIENT_ID } = require('../utils/config');
 const { clearTokens, generateJWT } = require('../utils/auth');
+const {
+  REFRESH_TOKEN_SECRET,
+  ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_LIFE,
+} = require('../utils/config');
 
 const nanoid = customAlphabet('1234567890', 10);
 
@@ -190,10 +195,7 @@ const verifyAndGenerateAccessToken = async (req, res, next) => {
       throw error;
     }
     try {
-      const decodedToken = jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET
-      );
+      const decodedToken = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
       const { userId } = decodedToken;
       const user = await prisma.user.findUnique({
         where: {
@@ -208,13 +210,13 @@ const verifyAndGenerateAccessToken = async (req, res, next) => {
       delete user.hashedPassword;
       const accessToken = generateJWT(
         user.id,
-        process.env.ACCESS_TOKEN_SECRET,
-        process.env.ACCESS_TOKEN_LIFE
+        ACCESS_TOKEN_SECRET,
+        ACCESS_TOKEN_LIFE
       );
       return res.status(200).json({
         user,
         accessToken,
-        expiresAt: new Date(Date.now() + ms(process.env.ACCESS_TOKEN_LIFE)),
+        expiresAt: new Date(Date.now() + ms(ACCESS_TOKEN_LIFE)),
       });
     } catch (error) {
       return next(error);
