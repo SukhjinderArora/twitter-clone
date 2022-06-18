@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { checkSchema } = require('express-validator');
 
 const { isAuthenticated, validateRequest } = require('../middlewares/auth');
+const { createNotification } = require('../middlewares/notification');
 const postController = require('../controllers/post');
 const { postSchema } = require('../services/validators');
 
@@ -12,9 +13,19 @@ router.post(
   validateRequest,
   postController.createPost
 );
-router.post('/like', isAuthenticated, postController.likePost);
+router.post(
+  '/like',
+  isAuthenticated,
+  postController.likePost,
+  createNotification
+);
 router.post('/unlike', isAuthenticated, postController.unLikePost);
-router.post('/repost', isAuthenticated, postController.repostPost);
+router.post(
+  '/repost',
+  isAuthenticated,
+  postController.repostPost,
+  createNotification
+);
 router.post('/repost/remove', isAuthenticated, postController.removeRepost);
 router.post(
   '/reply',
@@ -28,7 +39,8 @@ router.post(
     },
   }),
   validateRequest,
-  postController.postReply
+  postController.postReply,
+  createNotification
 );
 router.get('/:id', postController.getPostById);
 router.get('/:id/ancestors', postController.getAncestorPosts);

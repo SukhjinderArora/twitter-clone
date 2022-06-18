@@ -25,6 +25,8 @@ model User {
   sessions Session[]
   googleId String? @db.VarChar(100) @unique
   provider String? @db.VarChar(50)
+  sentNotifications Notification[] @relation("sentNotifications")
+  receivedNotifications Notification[] @relation("receivedNotifications")
   createdAt DateTime @default(now())
 }
 
@@ -78,5 +80,18 @@ model Session {
   expirationTime DateTime
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+  sender User @relation(name: "sentNotifications", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId Int
+  recipient User @relation(name: "receivedNotifications", fields: [ recipientId], references: [id], onDelete: Cascade)
+  recipientId Int
+  type String
+  objectType String
+  objectURI Int
+  read Boolean @default(false)
   createdAt DateTime @default(now())
 }

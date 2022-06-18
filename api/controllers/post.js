@@ -1,6 +1,11 @@
 const createError = require('http-errors');
 const prisma = require('../services/connect-db');
 
+const {
+  NOTIFICATION_OBJECT_TYPE,
+  NOTIFICATION_TYPE,
+} = require('../utils/enums');
+
 const createPost = async (req, res, next) => {
   const { userId } = req;
   const { content } = req.body;
@@ -57,7 +62,15 @@ const likePost = async (req, res, next) => {
         },
       },
     });
-    return res.status(201).json({ message: 'success' });
+    res.locals.notification = {
+      senderId: userId,
+      recipientId: post.userId,
+      type: NOTIFICATION_TYPE.LIKE,
+      objectType: NOTIFICATION_OBJECT_TYPE.POST,
+      objectURI: post.id,
+    };
+    res.status(201).json({ message: 'success' });
+    return next();
   } catch (error) {
     return next(error);
   }
@@ -114,7 +127,15 @@ const repostPost = async (req, res, next) => {
         },
       },
     });
-    return res.status(201).json({ message: 'success' });
+    res.locals.notification = {
+      senderId: userId,
+      recipientId: post.userId,
+      type: NOTIFICATION_TYPE.REPOST,
+      objectType: NOTIFICATION_OBJECT_TYPE.POST,
+      objectURI: post.id,
+    };
+    res.status(201).json({ message: 'success' });
+    return next();
   } catch (error) {
     return next(error);
   }
@@ -186,7 +207,15 @@ const postReply = async (req, res, next) => {
         },
       },
     });
-    return res.status(201).json({ post: reply });
+    res.locals.notification = {
+      senderId: userId,
+      recipientId: post.userId,
+      type: NOTIFICATION_TYPE.REPLY,
+      objectType: NOTIFICATION_OBJECT_TYPE.POST,
+      objectURI: reply.id,
+    };
+    res.status(201).json({ message: 'success' });
+    return next();
   } catch (error) {
     return next(error);
   }

@@ -1,6 +1,10 @@
 const createError = require('http-errors');
 
 const prisma = require('../services/connect-db');
+const {
+  NOTIFICATION_TYPE,
+  NOTIFICATION_OBJECT_TYPE,
+} = require('../utils/enums');
 
 const getUserByUsername = async (req, res, next) => {
   const { username } = req.params;
@@ -262,7 +266,15 @@ const followUser = async (req, res, next) => {
         },
       },
     });
-    return res.status(200).json({ message: 'Success' });
+    res.locals.notification = {
+      senderId: userId,
+      recipientId: followee.id,
+      type: NOTIFICATION_TYPE.FOLLOW,
+      objectType: NOTIFICATION_OBJECT_TYPE.USER,
+      objectURI: userId,
+    };
+    res.status(200).json({ message: 'Success' });
+    return next();
   } catch (error) {
     return next(error);
   }
