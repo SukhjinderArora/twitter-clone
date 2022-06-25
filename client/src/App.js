@@ -9,9 +9,9 @@ import {
 import { useMutation } from 'react-query';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { io } from 'socket.io-client';
 
 import { useAuth } from './contexts/auth-context';
+import { useSocket } from './contexts/socket-context';
 
 import { STATUS } from './utils/utils';
 
@@ -38,9 +38,10 @@ import FolloweesList from './components/FolloweesList';
 import FollowersList from './components/FollowersList';
 
 const App = () => {
-  const { login, isAuthenticated, token, expiresAt, logout } = useAuth();
+  const { login, isAuthenticated, expiresAt, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const socket = useSocket();
   const { state } = location;
 
   const verifyToken = useMutation(
@@ -97,22 +98,12 @@ const App = () => {
   ]);
 
   useEffect(() => {
-    let socket = null;
-    if (isAuthenticated) {
-      socket = io('http://localhost:5000', {
-        withCredentials: true,
-        extraHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
+    if (socket) {
+      socket.on('new_msg', (data) => {
+        console.log(data);
       });
     }
-    return () => {
-      if (socket) {
-        socket.disconnect();
-        socket.off();
-      }
-    };
-  }, [isAuthenticated, token]);
+  }, [socket]);
 
   return (
     <div>
