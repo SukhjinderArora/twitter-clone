@@ -9,6 +9,7 @@ import {
 import { useMutation } from 'react-query';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 import { useAuth } from './contexts/auth-context';
 
@@ -37,7 +38,7 @@ import FolloweesList from './components/FolloweesList';
 import FollowersList from './components/FollowersList';
 
 const App = () => {
-  const { login, isAuthenticated, expiresAt, logout } = useAuth();
+  const { login, isAuthenticated, token, expiresAt, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
@@ -94,6 +95,24 @@ const App = () => {
     expiresAt,
     // exclude mutations - linter prevents listing only mutation function
   ]);
+
+  useEffect(() => {
+    let socket = null;
+    if (isAuthenticated) {
+      socket = io('http://localhost:5000', {
+        withCredentials: true,
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+    return () => {
+      if (socket) {
+        socket.disconnect();
+        socket.off();
+      }
+    };
+  }, [isAuthenticated, token]);
 
   return (
     <div>
