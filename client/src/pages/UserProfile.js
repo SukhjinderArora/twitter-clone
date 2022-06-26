@@ -11,11 +11,13 @@ import NoMatch from './NoMatch';
 import { useAuth } from '../contexts/auth-context';
 import useUser from '../hooks/useUser';
 import useScrollToTop from '../hooks/useScrollToTop';
+import { useSocket } from '../contexts/socket-context';
 
 const UserProfile = () => {
   useScrollToTop();
   const { username } = useParams();
   const { isAuthenticated, user: authUser } = useAuth();
+  const socket = useSocket();
   const queryClient = useQueryClient();
 
   const userData = useUser(username);
@@ -29,8 +31,11 @@ const UserProfile = () => {
       });
     },
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         queryClient.invalidateQueries('user');
+        socket.emit('new notification', {
+          to: data.data.followeeId,
+        });
       },
     }
   );

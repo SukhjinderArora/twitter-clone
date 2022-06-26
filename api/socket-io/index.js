@@ -35,6 +35,10 @@ const setupSocketServer = (server) => {
   io.on('connection', (socket) => {
     logger.info(`New connection: ${socket.id}`);
     socket.join(socket.request.userId);
+    socket.on('new notification', ({ to }) => {
+      io.sockets.in(to).emit('new notification', { notification: true });
+    });
+
     socket.on('disconnect', () => {
       logger.info('user disconnected', socket.id);
     });

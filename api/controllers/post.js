@@ -62,15 +62,16 @@ const likePost = async (req, res, next) => {
         },
       },
     });
-    res.locals.notification = {
-      senderId: userId,
-      recipientId: post.userId,
-      type: NOTIFICATION_TYPE.LIKE,
-      objectType: NOTIFICATION_OBJECT_TYPE.POST,
-      objectURI: post.id,
-    };
-    res.status(201).json({ message: 'success' });
-    return next();
+    await prisma.notification.create({
+      data: {
+        senderId: userId,
+        recipientId: post.userId,
+        type: NOTIFICATION_TYPE.LIKE,
+        objectType: NOTIFICATION_OBJECT_TYPE.POST,
+        objectURI: post.id,
+      },
+    });
+    return res.status(201).json({ message: 'success' });
   } catch (error) {
     return next(error);
   }
@@ -127,15 +128,16 @@ const repostPost = async (req, res, next) => {
         },
       },
     });
-    res.locals.notification = {
-      senderId: userId,
-      recipientId: post.userId,
-      type: NOTIFICATION_TYPE.REPOST,
-      objectType: NOTIFICATION_OBJECT_TYPE.POST,
-      objectURI: post.id,
-    };
-    res.status(201).json({ message: 'success' });
-    return next();
+    await prisma.notification.create({
+      data: {
+        senderId: userId,
+        recipientId: post.userId,
+        type: NOTIFICATION_TYPE.REPOST,
+        objectType: NOTIFICATION_OBJECT_TYPE.POST,
+        objectURI: post.id,
+      },
+    });
+    return res.status(201).json({ message: 'success' });
   } catch (error) {
     return next(error);
   }
@@ -207,15 +209,16 @@ const postReply = async (req, res, next) => {
         },
       },
     });
-    res.locals.notification = {
-      senderId: userId,
-      recipientId: post.userId,
-      type: NOTIFICATION_TYPE.REPLY,
-      objectType: NOTIFICATION_OBJECT_TYPE.POST,
-      objectURI: reply.id,
-    };
-    res.status(201).json({ message: 'success' });
-    return next();
+    await prisma.notification.create({
+      data: {
+        senderId: userId,
+        recipientId: post.userId,
+        type: NOTIFICATION_TYPE.REPLY,
+        objectType: NOTIFICATION_OBJECT_TYPE.POST,
+        objectURI: reply.id,
+      },
+    });
+    return res.status(201).json({ message: 'success' });
   } catch (error) {
     return next(error);
   }

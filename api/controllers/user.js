@@ -266,15 +266,16 @@ const followUser = async (req, res, next) => {
         },
       },
     });
-    res.locals.notification = {
-      senderId: userId,
-      recipientId: followee.id,
-      type: NOTIFICATION_TYPE.FOLLOW,
-      objectType: NOTIFICATION_OBJECT_TYPE.USER,
-      objectURI: userId,
-    };
-    res.status(200).json({ message: 'Success' });
-    return next();
+    await prisma.notification.create({
+      data: {
+        senderId: userId,
+        recipientId: followee.id,
+        type: NOTIFICATION_TYPE.FOLLOW,
+        objectType: NOTIFICATION_OBJECT_TYPE.USER,
+        objectURI: userId,
+      },
+    });
+    return res.status(200).json({ followeeId: followee.id });
   } catch (error) {
     return next(error);
   }

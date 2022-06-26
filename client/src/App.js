@@ -99,7 +99,7 @@ const App = () => {
 
   useEffect(() => {
     if (socket) {
-      socket.on('new_msg', (data) => {
+      socket.on('new notification', (data) => {
         console.log(data);
       });
     }
