@@ -6,7 +6,7 @@ import {
   Navigate,
   useNavigate,
 } from 'react-router-dom';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -42,6 +42,7 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const socket = useSocket();
+  const queryClient = useQueryClient();
   const { state } = location;
 
   const verifyToken = useMutation(
@@ -99,11 +100,11 @@ const App = () => {
 
   useEffect(() => {
     if (socket) {
-      socket.on('new notification', (data) => {
-        console.log(data);
+      socket.on('new notification', () => {
+        queryClient.invalidateQueries('notifications');
       });
     }
-  }, [socket]);
+  }, [socket, queryClient]);
 
   return (
     <div>

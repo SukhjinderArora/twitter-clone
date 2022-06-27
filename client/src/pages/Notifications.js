@@ -1,5 +1,13 @@
+// import useNotifications from '../hooks/useNotifications';
+
 const Notifications = () => {
-  return <div>Notifications</div>;
+  // const notificationData = useNotifications();
+  // const renderNotification = (notification) => {};
+  return (
+    <div>
+      <div />
+    </div>
+  );
 };
 
 export default Notifications;

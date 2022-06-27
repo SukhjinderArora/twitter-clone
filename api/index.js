@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const app = require('./app');
 const { PORT } = require('./utils/config');
-const { setupSocketServer } = require('./socket-io/index');
+const { setupSocketServer } = require('./socket-io');
 
 const server = http.createServer(app);
 

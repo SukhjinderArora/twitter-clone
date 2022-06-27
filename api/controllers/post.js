@@ -218,7 +218,7 @@ const postReply = async (req, res, next) => {
         objectURI: reply.id,
       },
     });
-    return res.status(201).json({ message: 'success' });
+    return res.status(201).json({ post: reply });
   } catch (error) {
     return next(error);
   }
