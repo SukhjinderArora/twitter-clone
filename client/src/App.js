@@ -12,6 +12,7 @@ import axios from 'axios';
 
 import { useAuth } from './contexts/auth-context';
 import { useSocket } from './contexts/socket-context';
+import useScrollToTop from './hooks/useScrollToTop';
 
 import { STATUS } from './utils/utils';
 
@@ -45,6 +46,8 @@ const App = () => {
   const queryClient = useQueryClient();
   const { state } = location;
 
+  useScrollToTop();
+
   const verifyToken = useMutation(
     () => {
       return axios.post(
@@ -76,7 +79,7 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     login,
-    // exclude mutations - linter prevents listing only mutation function
+    // exclude mutations - because verifyToken is an unstable refrence and linter prevents listing only mutation function
   ]);
 
   useEffect(() => {
@@ -95,7 +98,7 @@ const App = () => {
   }, [
     isAuthenticated,
     expiresAt,
-    // exclude mutations - linter prevents listing only mutation function
+    // exclude mutations - because verifyToken is an unstable refrence and linter prevents listing only mutation function
   ]);
 
   useEffect(() => {

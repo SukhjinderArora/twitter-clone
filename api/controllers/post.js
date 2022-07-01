@@ -48,7 +48,7 @@ const likePost = async (req, res, next) => {
     if (alreadyLiked) {
       return res.status(201).json({ message: 'success' });
     }
-    await prisma.like.create({
+    const likedPost = await prisma.like.create({
       data: {
         post: {
           connect: {
@@ -61,6 +61,9 @@ const likePost = async (req, res, next) => {
           },
         },
       },
+      include: {
+        post: true,
+      },
     });
     await prisma.notification.create({
       data: {
@@ -71,7 +74,7 @@ const likePost = async (req, res, next) => {
         objectURI: post.id,
       },
     });
-    return res.status(201).json({ message: 'success' });
+    return res.status(201).json({ post: likedPost });
   } catch (error) {
     return next(error);
   }
@@ -114,7 +117,7 @@ const repostPost = async (req, res, next) => {
       const error = createError.NotFound();
       throw error;
     }
-    await prisma.repost.create({
+    const repost = await prisma.repost.create({
       data: {
         post: {
           connect: {
@@ -127,6 +130,9 @@ const repostPost = async (req, res, next) => {
           },
         },
       },
+      include: {
+        post: true,
+      },
     });
     await prisma.notification.create({
       data: {
@@ -137,7 +143,7 @@ const repostPost = async (req, res, next) => {
         objectURI: post.id,
       },
     });
-    return res.status(201).json({ message: 'success' });
+    return res.status(201).json({ post: repost });
   } catch (error) {
     return next(error);
   }
@@ -195,6 +201,15 @@ const postReply = async (req, res, next) => {
         },
       },
       include: {
+        parentPost: {
+          select: {
+            user: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
         user: {
           select: {
             id: true,
@@ -215,7 +230,7 @@ const postReply = async (req, res, next) => {
         recipientId: post.userId,
         type: NOTIFICATION_TYPE.REPLY,
         objectType: NOTIFICATION_OBJECT_TYPE.POST,
-        objectURI: reply.id,
+        objectURI: post.id,
       },
     });
     return res.status(201).json({ post: reply });

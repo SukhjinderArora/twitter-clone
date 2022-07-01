@@ -10,26 +10,15 @@ import Post from '../components/Posts/Post';
 import Spinner from '../components/Spinner';
 
 import { useAuth } from '../contexts/auth-context';
+import usePost from '../hooks/usePost';
 
 const PostDetail = () => {
   const { postId } = useParams();
   const selectedPostRef = useRef(null);
   const isInitialRender = useRef(true);
   const { isAuthenticated } = useAuth();
-  const post = useQuery(
-    ['post', postId],
-    async () => {
-      try {
-        const response = await axios.get(`/api/post/${postId}`);
-        return response.data;
-      } catch (error) {
-        return error;
-      }
-    },
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
+
+  const post = usePost(postId);
 
   const ancestorPosts = useQuery(
     ['post', 'ancestors', postId],

@@ -10,11 +10,15 @@ import { newPostValidator } from '../../utils/validator';
 import axios from '../../utils/axios';
 
 import useForm from '../../hooks/useForm';
+import { useSocket } from '../../contexts/socket-context';
 
 const ReplyToPost = ({ post }) => {
   const { validateForm } = newPostValidator;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const socket = useSocket();
+
   const postReply = useMutation(({ postId, content }) => {
     return axios.post('/api/post/reply', {
       content,
@@ -34,6 +38,9 @@ const ReplyToPost = ({ post }) => {
         },
         {
           onSuccess: ({ data }) => {
+            socket.emit('new notification', {
+              to: data.post.parentPost.user.id,
+            });
             queryClient.invalidateQueries(['post', 'children', `${post.id}`]);
             resetForm();
             toast.custom((t) => (

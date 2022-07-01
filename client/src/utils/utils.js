@@ -33,11 +33,25 @@ const loadScript = (src) => {
   });
 };
 
-const STATUS = {
+const STATUS = Object.freeze({
   IDLE: 'idle',
   PENDING: 'pending',
   SUCCEEDED: 'succeeded',
   FAILED: 'failed',
-};
+});
 
-export { checkIfEmpty, setAllObjectProperties, loadScript, STATUS };
+const NOTIFICATION_TYPE = Object.freeze({
+  POST: 'post',
+  REPOST: 'repost',
+  REPLY: 'reply',
+  LIKE: 'like',
+  FOLLOW: 'follow',
+});
+
+export {
+  checkIfEmpty,
+  setAllObjectProperties,
+  loadScript,
+  STATUS,
+  NOTIFICATION_TYPE,
+};

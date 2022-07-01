@@ -14,15 +14,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import dayjs from '../../utils/day';
 
 import { useAuth } from '../../contexts/auth-context';
+
 import useLikePost from '../../hooks/useLikePost';
 import useUnLikePost from '../../hooks/useUnLikePost';
 import useRepost from '../../hooks/useRepost';
 import useRemoveRepost from '../../hooks/useRemoveRepost';
+import { useSocket } from '../../contexts/socket-context';
 
 const Post = ({ post }) => {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const socket = useSocket();
 
   const likePost = useLikePost();
   const unLikePost = useUnLikePost();
@@ -33,11 +37,14 @@ const Post = ({ post }) => {
     likePost.mutate(
       { postId: post.id },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           queryClient.invalidateQueries({
             predicate: (query) => {
               return query.queryKey[0].includes('post');
             },
+          });
+          socket.emit('new notification', {
+            to: data.post.post.userId,
           });
         },
       }
@@ -63,11 +70,14 @@ const Post = ({ post }) => {
     repost.mutate(
       { postId: post.id },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           queryClient.invalidateQueries({
             predicate: (query) => {
               return query.queryKey[0].includes('post');
             },
+          });
+          socket.emit('new notification', {
+            to: data.post.post.userId,
           });
         },
       }

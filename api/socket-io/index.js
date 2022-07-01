@@ -8,15 +8,16 @@ const logger = require('../utils/logger');
 const setupSocketServer = (server) => {
   const isDev = NODE_ENV === 'development';
 
-  const io = new Server(server, {
-    cors: isDev
-      ? {
-          origin: 'http://localhost:3000',
-          optionsSuccessStatus: 200,
-          credentials: true,
-        }
-      : null,
-  });
+  const options = isDev && {
+    cors: {
+      origin: ['http://localhost:3000', /^http:\/\/::.*/],
+      // origin: 'http://localhost:3000',
+      optionsSuccessStatus: 200,
+      credentials: true,
+    },
+  };
+
+  const io = new Server(server, options);
 
   const wrap = (middleware) => (socket, next) =>
     middleware(socket.request, {}, next);

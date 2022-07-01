@@ -20,8 +20,8 @@ model User {
   posts Post[]
   reposts Repost[]
   likes Like[]
-  followedBy User[]  @relation("UserFollows", references: [id])
-  following  User[]  @relation("UserFollows", references: [id])
+  followedBy User[] @relation("UserFollows", references: [id])
+  following  User[] @relation("UserFollows", references: [id])
   sessions Session[]
   googleId String? @db.VarChar(100) @unique
   provider String? @db.VarChar(50)

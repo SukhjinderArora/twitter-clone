@@ -8,7 +8,6 @@ const getNotifications = async ({ pageParam = 1 }) => {
     const response = await axios.get(`/api/notification`, {
       params: {
         page: pageParam,
-        limit: 5,
       },
     });
     return response.data;

@@ -18,10 +18,13 @@ import useLikePost from '../../hooks/useLikePost';
 import useUnLikePost from '../../hooks/useUnLikePost';
 import useRepost from '../../hooks/useRepost';
 import useRemoveRepost from '../../hooks/useRemoveRepost';
+import { useSocket } from '../../contexts/socket-context';
 
 const SelectedPost = ({ post }) => {
   const { isAuthenticated, user } = useAuth();
   const queryClient = useQueryClient();
+
+  const socket = useSocket();
 
   const likePost = useLikePost();
   const unLikePost = useUnLikePost();
@@ -32,11 +35,14 @@ const SelectedPost = ({ post }) => {
     likePost.mutate(
       { postId: post.id },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           queryClient.invalidateQueries({
             predicate: (query) => {
               return query.queryKey[0].includes('post');
             },
+          });
+          socket.emit('new notification', {
+            to: data.post.post.userId,
           });
         },
       }
@@ -62,11 +68,14 @@ const SelectedPost = ({ post }) => {
     repost.mutate(
       { postId: post.id },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           queryClient.invalidateQueries({
             predicate: (query) => {
               return query.queryKey[0].includes('post');
             },
+          });
+          socket.emit('new notification', {
+            to: data.post.post.userId,
           });
         },
       }
