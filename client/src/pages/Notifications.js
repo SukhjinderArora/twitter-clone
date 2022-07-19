@@ -6,6 +6,7 @@ import axios from '../utils/axios';
 
 import { NOTIFICATION_TYPE } from '../utils/utils';
 
+import Header from '../components/mobile/Header';
 import Spinner from '../components/Spinner';
 import FollowNotification from '../components/Notifications/FollowNotification';
 import LikeNotification from '../components/Notifications/LikeNotification';
@@ -86,7 +87,10 @@ const Notifications = () => {
     );
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 mt-14">
+      <div className="fixed top-0 left-0 w-full">
+        <Header pageTitle="Notifications" />
+      </div>
       {data.pages.map((group, i) => {
         return (
           // eslint-disable-next-line react/no-array-index-key

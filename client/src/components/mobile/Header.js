@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import { RiSettings3Line } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 
-const Header = () => {
+const Header = ({ pageTitle }) => {
   return (
     <div className="bg-surface h-14 flex justify-between items-center px-3">
       <div className="h-10 w-10 overflow-hidden">
@@ -12,7 +13,7 @@ const Header = () => {
         />
       </div>
       <div className="flex-1 ml-3">
-        <h1 className="text-on-surface font-semibold">Home</h1>
+        <h1 className="text-on-surface font-semibold">{pageTitle}</h1>
       </div>
       <div className="text-on-surface">
         <IconContext.Provider
@@ -29,6 +30,10 @@ const Header = () => {
       </div>
     </div>
   );
+};
+
+Header.propTypes = {
+  pageTitle: PropTypes.string.isRequired,
 };
 
 export default Header;

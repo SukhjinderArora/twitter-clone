@@ -26,6 +26,7 @@ import NoMatch from './pages/NoMatch';
 import PostDetail from './pages/PostDetail';
 import Notifications from './pages/Notifications';
 import Messages from './pages/Messages';
+import Chat from './pages/Chat';
 import Explore from './pages/Explore';
 
 import Layout from './components/Layout';
@@ -38,12 +39,15 @@ import LikedPosts from './components/Posts/LikedPosts';
 import FolloweesList from './components/FolloweesList';
 import FollowersList from './components/FollowersList';
 
+import useMediaQuery from './hooks/useMediaQuery';
+
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const socket = useSocket();
   const queryClient = useQueryClient();
+  const isWidthGreaterThan640 = useMediaQuery('(min-width: 640px)');
   const { state } = location;
 
   useScrollToTop();
@@ -152,7 +156,11 @@ const App = () => {
                 <Messages />
               </RequireAuth>
             }
-          />
+          >
+            {isWidthGreaterThan640 && (
+              <Route path=":chatId" element={<Chat />} />
+            )}
+          </Route>
           <Route path="/:username" element={<UserProfile />}>
             <Route index element={<UserPosts />} />
             <Route path="posts" element={<UserPosts />} />
@@ -230,6 +238,28 @@ const App = () => {
                   title="Add new post"
                 >
                   <ComposePost />
+                </Modal>
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      )}
+      {!isWidthGreaterThan640 && (
+        <Routes>
+          <Route
+            path="/messages/:chatId"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Modal
+                  isOpen
+                  onDismiss={() =>
+                    navigate('/messages', {
+                      replace: true,
+                    })
+                  }
+                  title=""
+                >
+                  <Chat />
                 </Modal>
               </RequireAuth>
             }

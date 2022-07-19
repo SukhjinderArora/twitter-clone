@@ -96,7 +96,7 @@ const Home = () => {
       }`}
     >
       <div className="fixed top-0 left-0 w-full">
-        <Header />
+        <Header pageTitle="Home" />
       </div>
       <div className="mt-14 pb-8">
         {data.pages[0].info.total === 0 && (
