@@ -27,6 +27,8 @@ model User {
   provider String? @db.VarChar(50)
   sentNotifications Notification[] @relation("sentNotifications")
   receivedNotifications Notification[] @relation("receivedNotifications")
+  messages Message[] @relation("message")
+  chats Chat[]
   createdAt DateTime @default(now())
 }
 
@@ -89,9 +91,26 @@ model Notification {
   senderId Int
   recipient User @relation(name: "receivedNotifications", fields: [ recipientId], references: [id], onDelete: Cascade)
   recipientId Int
-  type String
-  objectType String
+  type String @db.VarChar(255)
+  objectType String @db.VarChar(255)
   objectURI Int
   read Boolean @default(false)
   createdAt DateTime @default(now())
+}
+
+model Chat {
+  id Int @id @default(autoincrement())
+  users User[]
+  messages Message[]
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+  user User @relation(name: "message", fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  chat Chat @relation(fields: [chatId], references: [id])
+  chatId Int
+  content String
+  createdAt DateTime @default(now())
+  read Boolean @default(false)
 }

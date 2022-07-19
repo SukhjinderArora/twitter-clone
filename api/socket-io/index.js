@@ -10,8 +10,7 @@ const setupSocketServer = (server) => {
 
   const options = isDev && {
     cors: {
-      origin: ['http://localhost:3000', /^http:\/\/::.*/],
-      // origin: 'http://localhost:3000',
+      origin: 'http://localhost:3000',
       optionsSuccessStatus: 200,
       credentials: true,
     },
