@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useMatch } from 'react-router-dom';
 
 const NoMatch = () => {
+  const match = useMatch('/messages/:chatId');
+  if (match) return null;
   return (
     <div className="text-center h-full flex flex-col justify-center items-center bg-background">
       <h1 className="text-4xl text-primary">Page not found</h1>

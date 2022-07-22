@@ -4,39 +4,48 @@ import { FiX } from 'react-icons/fi';
 
 import Backdrop from './Backdrop';
 
-const Modal = ({ children, isOpen, onDismiss, closeButtonVisible, title }) => {
+const Modal = ({
+  children,
+  isOpen,
+  onDismiss,
+  closeButtonVisible,
+  title,
+  customHeader,
+}) => {
   return (
     <div className="relative">
       <Backdrop backdropVisible={isOpen} hideBackdrop={onDismiss} />
       <div
-        className={`bg-surface fixed top-0 left-0 h-full w-full z-[999] sm:w-[500px] sm:h-fit sm:top-[20%] sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-[20%] ${
+        className={`bg-surface fixed top-0 left-0 h-full w-full z-[999] overflow-y-auto sm:w-[500px] sm:h-fit sm:top-[20%] sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-[20%] ${
           !isOpen && 'hidden'
         }`}
       >
-        <div className="p-4 flex items-center relative">
-          {closeButtonVisible && (
-            <button
-              type="button"
-              onClick={onDismiss}
-              className="absolute top-1/2 -translate-y-1/2 text-on-surface"
-            >
-              <IconContext.Provider
-                // eslint-disable-next-line react/jsx-no-constructed-context-values
-                value={{
-                  size: '32px',
-                  style: {
-                    color: 'inherit',
-                  },
-                }}
+        {customHeader || (
+          <div className="p-4 flex items-center relative">
+            {closeButtonVisible && (
+              <button
+                type="button"
+                onClick={onDismiss}
+                className="absolute top-1/2 -translate-y-1/2 text-on-surface"
               >
-                <FiX />
-              </IconContext.Provider>
-            </button>
-          )}
-          <h1 className="text-on-surface font-bold text-2xl text-center flex-1">
-            {title}
-          </h1>
-        </div>
+                <IconContext.Provider
+                  // eslint-disable-next-line react/jsx-no-constructed-context-values
+                  value={{
+                    size: '32px',
+                    style: {
+                      color: 'inherit',
+                    },
+                  }}
+                >
+                  <FiX />
+                </IconContext.Provider>
+              </button>
+            )}
+            <h1 className="text-on-surface font-bold text-2xl text-center flex-1">
+              {title}
+            </h1>
+          </div>
+        )}
         {children}
       </div>
     </div>
@@ -49,12 +58,14 @@ Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   closeButtonVisible: PropTypes.bool,
   title: PropTypes.string,
+  customHeader: PropTypes.element,
 };
 
 Modal.defaultProps = {
   closeButtonVisible: true,
   onDismiss: () => {},
   title: 'Kookoo',
+  customHeader: null,
 };
 
 export default Modal;

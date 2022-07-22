@@ -5,6 +5,7 @@ import {
   useLocation,
   Navigate,
   useNavigate,
+  matchPath,
 } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
@@ -40,6 +41,7 @@ import FolloweesList from './components/FolloweesList';
 import FollowersList from './components/FollowersList';
 
 import useMediaQuery from './hooks/useMediaQuery';
+import ChatHeader from './components/mobile/ChatHeader';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -222,50 +224,60 @@ const App = () => {
         />
         <Route path="*" element={<NoMatch />} />
       </Routes>
-      {state?.backgroundLocation && (
-        <Routes>
-          <Route
-            path="/compose/post"
-            element={
-              <RequireAuth redirectTo="/signup">
-                <Modal
-                  isOpen
-                  onDismiss={() =>
-                    navigate('/home', {
-                      replace: true,
-                    })
-                  }
-                  title="Add new post"
-                >
-                  <ComposePost />
-                </Modal>
-              </RequireAuth>
-            }
-          />
-        </Routes>
-      )}
-      {!isWidthGreaterThan640 && (
-        <Routes>
-          <Route
-            path="/messages/:chatId"
-            element={
-              <RequireAuth redirectTo="/signup">
-                <Modal
-                  isOpen
-                  onDismiss={() =>
-                    navigate('/messages', {
-                      replace: true,
-                    })
-                  }
-                  title=""
-                >
-                  <Chat />
-                </Modal>
-              </RequireAuth>
-            }
-          />
-        </Routes>
-      )}
+      {state?.backgroundLocation &&
+        matchPath('/compose/post', location.pathname) && (
+          <Routes>
+            <Route
+              path="/compose/post"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Modal
+                    isOpen
+                    onDismiss={() =>
+                      navigate('/home', {
+                        replace: true,
+                      })
+                    }
+                    title="Add new post"
+                  >
+                    <ComposePost />
+                  </Modal>
+                </RequireAuth>
+              }
+            />
+          </Routes>
+        )}
+      {!isWidthGreaterThan640 &&
+        matchPath('/messages/:chatId', location.pathname) && (
+          <Routes>
+            <Route
+              path="/messages/:chatId"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Modal
+                    isOpen
+                    onDismiss={() =>
+                      navigate('/messages', {
+                        replace: true,
+                      })
+                    }
+                    customHeader={
+                      <ChatHeader
+                        onClose={() =>
+                          navigate('/messages', {
+                            replace: true,
+                          })
+                        }
+                      />
+                    }
+                  >
+                    <Chat />
+                  </Modal>
+                </RequireAuth>
+              }
+            />
+          </Routes>
+        )}
     </div>
   );
 };
