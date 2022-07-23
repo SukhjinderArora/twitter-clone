@@ -11,106 +11,109 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @db.VarChar(255) @unique
-  username String? @db.VarChar(30) @unique
-  newUser Boolean @default(true)
-  hashedPassword String? @db.VarChar(64)
-  profile Profile?
-  posts Post[]
-  reposts Repost[]
-  likes Like[]
-  followedBy User[] @relation("UserFollows", references: [id])
-  following  User[] @relation("UserFollows", references: [id])
-  sessions Session[]
-  googleId String? @db.VarChar(100) @unique
-  provider String? @db.VarChar(50)
-  sentNotifications Notification[] @relation("sentNotifications")
+  id                    Int            @id @default(autoincrement())
+  email                 String         @unique @db.VarChar(255)
+  username              String?        @unique @db.VarChar(30)
+  newUser               Boolean        @default(true)
+  hashedPassword        String?        @db.VarChar(64)
+  profile               Profile?
+  posts                 Post[]
+  reposts               Repost[]
+  likes                 Like[]
+  followedBy            User[]         @relation("UserFollows", references: [id])
+  following             User[]         @relation("UserFollows", references: [id])
+  sessions              Session[]
+  googleId              String?        @unique @db.VarChar(100)
+  provider              String?        @db.VarChar(50)
+  sentNotifications     Notification[] @relation("sentNotifications")
   receivedNotifications Notification[] @relation("receivedNotifications")
-  messages Message[] @relation("message")
-  chats Chat[]
-  createdAt DateTime @default(now())
+  messages              Message[]      @relation("message")
+  chats                 Chat[]         @relation("chat")
+  createdAt             DateTime       @default(now())
 }
 
 model Profile {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(100)
-  bio String? @db.VarChar(255)
-  img String? @db.VarChar(4000)
-  website String? @db.VarChar(100)
-  dob DateTime?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int @unique
+  id      Int       @id @default(autoincrement())
+  name    String    @db.VarChar(100)
+  bio     String?   @db.VarChar(255)
+  img     String?   @db.VarChar(4000)
+  website String?   @db.VarChar(100)
+  dob     DateTime?
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int       @unique
 }
 
 model Post {
-  id Int @id @default(autoincrement())
-  content String @db.VarChar(255)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
-  reposts Repost[]
-  likes Like[]
+  id           Int      @id @default(autoincrement())
+  content      String   @db.VarChar(255)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int
+  reposts      Repost[]
+  likes        Like[]
   parentPostId Int?
-  parentPost Post? @relation("PostReplies", fields: [parentPostId], references: [id])
-  replies Post[] @relation("PostReplies")
-  createdAt DateTime @default(now())
+  parentPost   Post?    @relation("PostReplies", fields: [parentPostId], references: [id])
+  replies      Post[]   @relation("PostReplies")
+  createdAt    DateTime @default(now())
 }
 
 model Repost {
-  id Int @id @default(autoincrement())
-  post Post @relation(fields: [postId], references: [id])
-  postId Int
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
+  id        Int      @id @default(autoincrement())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
   createdAt DateTime @default(now())
+
   @@unique([postId, userId])
 }
 
 model Like {
-  id Int @id @default(autoincrement())
-  post Post @relation(fields: [postId], references: [id])
-  postId Int
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
+  id        Int      @id @default(autoincrement())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
   createdAt DateTime @default(now())
+
   @@unique([postId, userId])
 }
 
 model Session {
-  id Int @id @default(autoincrement())
-  refreshToken String @unique
+  id             Int      @id @default(autoincrement())
+  refreshToken   String   @unique
   expirationTime DateTime
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
-  createdAt DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int
+  createdAt      DateTime @default(now())
 }
 
 model Notification {
-  id Int @id @default(autoincrement())
-  sender User @relation(name: "sentNotifications", fields: [senderId], references: [id], onDelete: Cascade)
-  senderId Int
-  recipient User @relation(name: "receivedNotifications", fields: [ recipientId], references: [id], onDelete: Cascade)
+  id          Int      @id @default(autoincrement())
+  sender      User     @relation(name: "sentNotifications", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId    Int
+  recipient   User     @relation(name: "receivedNotifications", fields: [recipientId], references: [id], onDelete: Cascade)
   recipientId Int
-  type String @db.VarChar(255)
-  objectType String @db.VarChar(255)
-  objectURI Int
-  read Boolean @default(false)
-  createdAt DateTime @default(now())
+  type        String   @db.VarChar(255)
+  objectType  String   @db.VarChar(255)
+  objectURI   Int
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
 }
 
 model Chat {
-  id Int @id @default(autoincrement())
-  users User[]
-  messages Message[]
+  id            Int       @id @default(autoincrement())
+  user          User      @relation(name: "chat", fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int
+  participantId Int
+  messages      Message[]
 }
 
 model Message {
-  id Int @id @default(autoincrement())
-  user User @relation(name: "message", fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
-  chat Chat @relation(fields: [chatId], references: [id])
-  chatId Int
-  content String
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(name: "message", fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  chats     Chat[]
+  content   String
   createdAt DateTime @default(now())
-  read Boolean @default(false)
+  read      Boolean  @default(false)
 }
