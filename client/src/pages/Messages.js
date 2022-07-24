@@ -87,7 +87,7 @@ const Messages = () => {
           </div>
         </div>
       </div>
-      <div className="flex-1 empty:hidden">
+      <div className="flex-1 empty:hidden static top-0 overflow-y-auto overflow-x-hidden h-[calc(100vh_-_56px)]">
         <Outlet />
       </div>
     </div>
