@@ -1,6 +1,12 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { Outlet, NavLink, useParams, Link } from 'react-router-dom';
-import { RiCalendar2Line } from 'react-icons/ri';
+import {
+  Outlet,
+  NavLink,
+  useParams,
+  Link,
+  useNavigate,
+} from 'react-router-dom';
+import { RiCalendar2Line, RiMailLine } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 
 import axios from '../utils/axios';
@@ -19,6 +25,7 @@ const UserProfile = () => {
   const { isAuthenticated, user: authUser } = useAuth();
   const socket = useSocket();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const userData = useUser(username);
 
@@ -49,6 +56,19 @@ const UserProfile = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user');
+      },
+    }
+  );
+
+  const getChat = useMutation(
+    ({ participantId }) => {
+      return axios.post('/api/chat/new', {
+        participantId,
+      });
+    },
+    {
+      onSuccess: (data) => {
+        navigate(`/messages/${data.data.id}`);
       },
     }
   );
@@ -86,30 +106,57 @@ const UserProfile = () => {
               className="w-full h-full object-cover"
             />
           </div>
-          {isAuthenticated &&
-            user.id !== authUser.id &&
-            user.followedBy.every(
-              (follower) => follower.id !== authUser.id
-            ) && (
+          <div className="flex items-center gap-1">
+            {isAuthenticated && user.id !== authUser.id && (
               <button
                 type="button"
-                className="bg-on-surface text-surface font-source-sans-pro text-sm font-bold px-4 rounded-full w-24"
-                onClick={onFollowUser}
+                className="text-on-surface border border-on-surface/30 p-1 rounded-full"
+                onClick={() => {
+                  getChat.mutate({
+                    participantId: user.id,
+                  });
+                }}
               >
-                Follow
+                <IconContext.Provider
+                  // eslint-disable-next-line react/jsx-no-constructed-context-values
+                  value={{
+                    size: '18px',
+                    style: {
+                      color: 'inherit',
+                    },
+                  }}
+                >
+                  <RiMailLine />
+                </IconContext.Provider>
               </button>
             )}
-          {isAuthenticated &&
-            user.id !== authUser.id &&
-            user.followedBy.some((follower) => follower.id === authUser.id) && (
-              <button
-                type="button"
-                className="bg-on-surface text-surface font-source-sans-pro text-sm font-bold px-4 rounded-full w-24"
-                onClick={onUnFollowUser}
-              >
-                Unfollow
-              </button>
-            )}
+            {isAuthenticated &&
+              user.id !== authUser.id &&
+              user.followedBy.every(
+                (follower) => follower.id !== authUser.id
+              ) && (
+                <button
+                  type="button"
+                  className="bg-on-surface text-surface font-source-sans-pro text-sm font-bold px-4 py-2 rounded-full w-24"
+                  onClick={onFollowUser}
+                >
+                  Follow
+                </button>
+              )}
+            {isAuthenticated &&
+              user.id !== authUser.id &&
+              user.followedBy.some(
+                (follower) => follower.id === authUser.id
+              ) && (
+                <button
+                  type="button"
+                  className="bg-on-surface text-surface font-source-sans-pro text-sm font-bold px-4 py-2 rounded-full w-24"
+                  onClick={onUnFollowUser}
+                >
+                  Unfollow
+                </button>
+              )}
+          </div>
         </div>
         <div className="mt-5">
           <h2 className="text-on-surface text-lg font-bold">

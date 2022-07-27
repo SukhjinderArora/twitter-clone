@@ -256,20 +256,8 @@ const App = () => {
                 <RequireAuth redirectTo="/signup">
                   <Modal
                     isOpen
-                    onDismiss={() =>
-                      navigate('/messages', {
-                        replace: true,
-                      })
-                    }
-                    customHeader={
-                      <ChatHeader
-                        onClose={() =>
-                          navigate('/messages', {
-                            replace: true,
-                          })
-                        }
-                      />
-                    }
+                    onDismiss={() => navigate(-1)}
+                    customHeader={<ChatHeader onClose={() => navigate(-1)} />}
                   >
                     <Chat />
                   </Modal>

@@ -10,7 +10,7 @@ const Chat = () => {
           <p className="bg-primary text-on-primary text-base p-3 rounded-t-xl rounded-bl-xl max-w-[80%]">
             Lorem ipsum dolor?
           </p>
-          <span className="text-on-surface/40 font-light text-xs">
+          <span className="text-on-surface/80 font-light text-xs">
             Jul 26, 2020, 11:37 AM
           </span>
         </div>
@@ -18,7 +18,7 @@ const Chat = () => {
           <p className="bg-primary text-on-primary text-base p-3 rounded-t-xl rounded-bl-xl max-w-[80%]">
             Lorem ipsum dolor sit amet
           </p>
-          <span className="text-on-surface/40 font-light text-xs">
+          <span className="text-on-surface/80 font-light text-xs">
             Jul 26, 2020, 11:37 AM
           </span>
         </div>
@@ -27,7 +27,7 @@ const Chat = () => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
             sapiente?
           </p>
-          <span className="text-on-surface/40 font-light text-xs">
+          <span className="text-on-surface/80 font-light text-xs">
             Jul 26, 2020, 11:37 AM
           </span>
         </div>
@@ -36,7 +36,7 @@ const Chat = () => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
             sapiente?
           </p>
-          <span className="text-on-surface/40 font-light text-xs">
+          <span className="text-on-surface/80 font-light text-xs">
             Jul 26, 2020, 11:37 AM
           </span>
         </div>
@@ -45,7 +45,7 @@ const Chat = () => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
             sapiente?
           </p>
-          <span className="text-on-surface/40 font-light text-xs">
+          <span className="text-on-surface/80 font-light text-xs">
             Jul 26, 2020, 11:37 AM
           </span>
         </div>
@@ -56,7 +56,7 @@ const Chat = () => {
             Illum, nostrum! Cupiditate et sapiente alias illum commodi expedita
             doloremque nobis adipisci?
           </p>
-          <span className="text-on-surface/40 font-light text-xs">
+          <span className="text-on-surface/80 font-light text-xs">
             Jul 26, 2020, 11:37 AM
           </span>
         </div>

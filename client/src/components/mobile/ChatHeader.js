@@ -7,12 +7,14 @@ const ChatHeader = ({ onClose }) => {
     <div className="px-4 py-2 sticky top-0 backdrop-blur-sm">
       <div className="flex justify-between items-center gap-3">
         <div>
-          <button type="button" onClick={onClose}>
+          <button type="button" onClick={onClose} className="text-on-surface">
             <IconContext.Provider
               // eslint-disable-next-line react/jsx-no-constructed-context-values
               value={{
-                color: 'white',
                 size: '18px',
+                style: {
+                  color: 'inherit',
+                },
               }}
             >
               <RiArrowLeftLine />
