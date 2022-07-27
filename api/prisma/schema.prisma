@@ -106,6 +106,7 @@ model Chat {
   userId        Int
   participantId Int
   messages      Message[]
+  @@unique([userId, participantId])
 }
 
 model Message {
