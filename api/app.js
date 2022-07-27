@@ -10,6 +10,7 @@ const postRoutes = require('./routes/post');
 const usersRoutes = require('./routes/user');
 const feedRoutes = require('./routes/feed');
 const notificationRoutes = require('./routes/notification');
+const chatRoutes = require('./routes/chat');
 const { errorLogger, errorResponder } = require('./middlewares/error-handler');
 const { NODE_ENV, COOKIE_SECRET } = require('./utils/config');
 
@@ -38,6 +39,7 @@ app.use('/api/post', postRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/feed', feedRoutes);
 app.use('/api/notification', notificationRoutes);
+app.use('/api/chat', chatRoutes);
 app.use((req, res, next) => {
   next(createError.NotFound());
 });
