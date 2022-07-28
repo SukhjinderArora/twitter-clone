@@ -29,6 +29,7 @@ model User {
   receivedNotifications Notification[] @relation("receivedNotifications")
   messages              Message[]      @relation("message")
   chats                 Chat[]         @relation("chat")
+  chatsParticipatedIn   Chat[]         @relation("chat participant")
   createdAt             DateTime       @default(now())
 }
 
@@ -104,8 +105,10 @@ model Chat {
   id            Int       @id @default(autoincrement())
   user          User      @relation(name: "chat", fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
+  participant   User      @relation(name: "chat participant", fields: [participantId], references: [id], onDelete: Cascade)
   participantId Int
   messages      Message[]
+
   @@unique([userId, participantId])
 }
 
