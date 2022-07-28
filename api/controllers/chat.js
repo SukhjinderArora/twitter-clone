@@ -2,6 +2,20 @@ const createError = require('http-errors');
 
 const prisma = require('../services/connect-db');
 
+const getAllChatsOfUser = async (req, res, next) => {
+  const { userId } = req;
+  try {
+    const chats = await prisma.chat.findMany({
+      where: {
+        userId,
+      },
+    });
+    return res.status(200).json({ chats });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const findOrCreateNewChat = async (req, res, next) => {
   const { userId } = req;
   const { participantId } = req.body;
@@ -34,5 +48,6 @@ const findOrCreateNewChat = async (req, res, next) => {
 };
 
 module.exports = {
+  getAllChatsOfUser,
   findOrCreateNewChat,
 };

@@ -4,6 +4,8 @@ const { checkSchema } = require('express-validator');
 const chatController = require('../controllers/chat');
 const { isAuthenticated, validateRequest } = require('../middlewares/auth');
 
+router.get('/all', isAuthenticated, chatController.getAllChatsOfUser);
+
 router.post(
   '/new',
   isAuthenticated,
