@@ -106,7 +106,7 @@ const UserProfile = () => {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             {isAuthenticated && user.id !== authUser.id && (
               <button
                 type="button"

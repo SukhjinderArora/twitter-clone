@@ -1,65 +1,62 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
+import { useParams } from 'react-router-dom';
 import { RiSendPlane2Line } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 
+import dayjs from '../utils/day';
+
+import useChat from '../hooks/useChat';
+import { useAuth } from '../contexts/auth-context';
+
+import Spinner from '../components/Spinner';
+
 const Chat = () => {
+  const { chatId } = useParams();
+  const { user } = useAuth();
+  const { data, isLoading, isError } = useChat(chatId);
+
+  if (isLoading)
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+
+  if (isError) return <div>Something went wrong.</div>;
+
   return (
-    <div>
+    <div className="h-full flex flex-col justify-between">
       <div className="messages p-4">
-        <div className="sentMessage flex flex-col items-end gap-1 mb-5">
-          <p className="bg-primary text-on-primary text-base p-3 rounded-t-xl rounded-bl-xl max-w-[80%]">
-            Lorem ipsum dolor?
-          </p>
-          <span className="text-on-surface/80 font-light text-xs">
-            Jul 26, 2020, 11:37 AM
-          </span>
-        </div>
-        <div className="sentMessage flex flex-col items-end gap-1 mb-5">
-          <p className="bg-primary text-on-primary text-base p-3 rounded-t-xl rounded-bl-xl max-w-[80%]">
-            Lorem ipsum dolor sit amet
-          </p>
-          <span className="text-on-surface/80 font-light text-xs">
-            Jul 26, 2020, 11:37 AM
-          </span>
-        </div>
-        <div className="receivedMessage flex flex-col items-start gap-1 mb-5">
-          <p className="bg-on-surface/30 text-on-surface text-base p-3 rounded-t-xl rounded-br-xl max-w-[80%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
-            sapiente?
-          </p>
-          <span className="text-on-surface/80 font-light text-xs">
-            Jul 26, 2020, 11:37 AM
-          </span>
-        </div>
-        <div className="receivedMessage flex flex-col items-start gap-1 mb-5">
-          <p className="bg-on-surface/30 text-on-surface text-base p-3 rounded-t-xl rounded-br-xl max-w-[80%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
-            sapiente?
-          </p>
-          <span className="text-on-surface/80 font-light text-xs">
-            Jul 26, 2020, 11:37 AM
-          </span>
-        </div>
-        <div className="sentMessage flex flex-col items-end gap-1 mb-5">
-          <p className="bg-primary text-on-primary text-base p-3 rounded-t-xl rounded-bl-xl max-w-[80%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
-            sapiente?
-          </p>
-          <span className="text-on-surface/80 font-light text-xs">
-            Jul 26, 2020, 11:37 AM
-          </span>
-        </div>
-        <div className="receivedMessage flex flex-col items-start gap-1 mb-5">
-          <p className="bg-on-surface/30 text-on-surface text-base p-3 rounded-t-xl rounded-br-xl max-w-[80%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
-            sapiente? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Illum, nostrum! Cupiditate et sapiente alias illum commodi expedita
-            doloremque nobis adipisci?
-          </p>
-          <span className="text-on-surface/80 font-light text-xs">
-            Jul 26, 2020, 11:37 AM
-          </span>
-        </div>
+        {data.chat.messages.map((message) => {
+          if (message.userId === user.id) {
+            return (
+              <div
+                className="sentMessage flex flex-col items-end gap-1 mb-5"
+                key={message.id}
+              >
+                <p className="bg-primary text-on-primary text-base p-3 rounded-t-xl rounded-bl-xl max-w-[80%]">
+                  {message.content}
+                </p>
+                <span className="text-on-surface/80 font-light text-xs">
+                  {dayjs(message.createdAt).format('MMM D, YYYY, hh:mm A')}
+                </span>
+              </div>
+            );
+          }
+          return (
+            <div
+              className="receivedMessage flex flex-col items-start gap-1 mb-5"
+              key={message.id}
+            >
+              <p className="bg-on-surface/30 text-on-surface text-base p-3 rounded-t-xl rounded-br-xl max-w-[80%]">
+                {message.content}
+              </p>
+              <span className="text-on-surface/80 font-light text-xs">
+                {dayjs(message.createdAt).format('MMM D, YYYY, hh:mm A')}
+              </span>
+            </div>
+          );
+        })}
       </div>
       <div className="sticky bottom-0 left-0 w-full">
         <form className="flex justify-evenly items-center border-t border-on-surface/30 pt-2 bg-surface">
