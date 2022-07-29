@@ -9,6 +9,20 @@ const getAllChatsOfUser = async (req, res, next) => {
       where: {
         userId,
       },
+      include: {
+        participant: {
+          select: {
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+        messages: true,
+      },
     });
     return res.status(200).json({ chats });
   } catch (error) {
@@ -29,6 +43,19 @@ const findOrCreateNewChat = async (req, res, next) => {
         userId,
         participantId: Number(participantId),
       },
+      include: {
+        participant: {
+          select: {
+            username: true,
+            profile: {
+              select: {
+                name: true,
+                img: true,
+              },
+            },
+          },
+        },
+      },
     });
     if (existingChat) {
       return res.status(200).json(existingChat);
@@ -38,7 +65,11 @@ const findOrCreateNewChat = async (req, res, next) => {
         user: {
           connect: { id: userId },
         },
-        participantId: Number(participantId),
+        participant: {
+          connect: {
+            id: Number(participantId),
+          },
+        },
       },
     });
     return res.status(201).json(chat);
@@ -47,7 +78,10 @@ const findOrCreateNewChat = async (req, res, next) => {
   }
 };
 
+const getChatById = () => {};
+
 module.exports = {
   getAllChatsOfUser,
   findOrCreateNewChat,
+  getChatById,
 };

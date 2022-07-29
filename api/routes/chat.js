@@ -23,4 +23,6 @@ router.post(
   chatController.findOrCreateNewChat
 );
 
+router.get('/:id', isAuthenticated, chatController.getChatById);
+
 module.exports = router;
