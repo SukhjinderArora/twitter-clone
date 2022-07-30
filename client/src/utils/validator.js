@@ -86,3 +86,15 @@ export const newPostValidator = {
     return errors;
   },
 };
+
+export const messageValidator = {
+  validateForm: (values) => {
+    const errors = {};
+    if (!values.content.trim()) {
+      errors.content = 'This is a mandatory field';
+    } else if (values.content.length > 255) {
+      errors.content = 'Post cannot contain more than 255 characters';
+    }
+    return errors;
+  },
+};
