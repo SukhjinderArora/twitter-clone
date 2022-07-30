@@ -25,4 +25,10 @@ router.post(
 
 router.get('/:id', isAuthenticated, chatController.getChatById);
 
+router.post(
+  '/:id/message',
+  isAuthenticated,
+  chatController.addNewMessageToChat
+);
+
 module.exports = router;

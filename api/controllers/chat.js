@@ -123,8 +123,62 @@ const getChatById = async (req, res, next) => {
   }
 };
 
+const addNewMessageToChat = async (req, res, next) => {
+  const { userId } = req;
+  const { id } = req.params;
+  const { content } = req.body;
+  try {
+    const chat = await prisma.chat.findFirst({
+      where: {
+        id: Number(id),
+        userId,
+      },
+    });
+    if (!chat) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    const { participantId } = chat;
+    let chatParticipatedIn = await prisma.chat.findFirst({
+      where: {
+        userId: participantId,
+        participantId: userId,
+      },
+    });
+    if (!chatParticipatedIn) {
+      chatParticipatedIn = await prisma.chat.create({
+        data: {
+          user: {
+            connect: { id: participantId },
+          },
+          participant: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      });
+    }
+    const message = await prisma.message.create({
+      data: {
+        content,
+        user: {
+          connect: { id: userId },
+        },
+        chats: {
+          connect: [{ id: chat.id }, { id: chatParticipatedIn.id }],
+        },
+      },
+    });
+    return res.status(201).json({ message });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getAllChatsOfUser,
   findOrCreateNewChat,
   getChatById,
+  addNewMessageToChat,
 };
