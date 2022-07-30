@@ -140,8 +140,38 @@ const postSchema = {
   },
 };
 
+const chatSchema = {
+  participantId: {
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+    isInt: {
+      errorMessage: 'Participant Id should be an integer',
+    },
+  },
+};
+
+const messageSchema = {
+  content: {
+    trim: true,
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+    escape: true,
+    isLength: {
+      options: {
+        min: 1,
+        max: 1000,
+      },
+      errorMessage: 'Message length cannot be less than 1 and more than 1000',
+    },
+  },
+};
+
 module.exports = {
   signupSchema,
   loginSchema,
   postSchema,
+  chatSchema,
+  messageSchema,
 };
