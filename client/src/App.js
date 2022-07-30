@@ -112,6 +112,10 @@ const App = () => {
       socket.on('new notification', () => {
         queryClient.invalidateQueries('notifications');
       });
+      socket.on('new message', ({ chatId }) => {
+        queryClient.invalidateQueries(['chat', chatId]);
+        queryClient.invalidateQueries('messages');
+      });
     }
   }, [socket, queryClient]);
 

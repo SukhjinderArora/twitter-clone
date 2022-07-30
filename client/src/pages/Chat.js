@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
+import { useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { RiSendPlane2Line } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
@@ -7,8 +8,10 @@ import { useMutation, useQueryClient } from 'react-query';
 import dayjs from '../utils/day';
 
 import useChat from '../hooks/useChat';
-import { useAuth } from '../contexts/auth-context';
 import useForm from '../hooks/useForm';
+
+import { useAuth } from '../contexts/auth-context';
+import { useSocket } from '../contexts/socket-context';
 
 import Spinner from '../components/Spinner';
 
@@ -20,6 +23,8 @@ const Chat = () => {
   const { user } = useAuth();
   const { data, isLoading, isError } = useChat(chatId);
   const queryClient = useQueryClient();
+  const socket = useSocket();
+  const messagesRef = useRef(null);
 
   const sendMessage = useMutation(async ({ content }) => {
     return axios.post(`/api/chat/${chatId}/message`, {
@@ -34,7 +39,7 @@ const Chat = () => {
       content: '',
     },
     validate: validateForm,
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       sendMessage.mutate(
         {
           content: values.content,
@@ -42,11 +47,26 @@ const Chat = () => {
         {
           onSuccess: () => {
             queryClient.invalidateQueries(['chat', chatId]);
+            queryClient.invalidateQueries('messages');
+            socket.emit('new message', {
+              to: data.chat.participantId,
+              participantId: data.chat.userId,
+            });
+            resetForm();
           },
         }
       );
     },
   });
+
+  useEffect(() => {
+    if (messagesRef.current) {
+      messagesRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      });
+    }
+  }, [data]);
 
   if (isLoading)
     return (
@@ -59,12 +79,12 @@ const Chat = () => {
 
   return (
     <div className="h-full flex flex-col justify-between">
-      <div className="messages p-4">
+      <div className="p-4">
         {data.chat.messages.map((message) => {
           if (message.userId === user.id) {
             return (
               <div
-                className="sentMessage flex flex-col items-end gap-1 mb-5"
+                className="flex flex-col items-end gap-1 mb-5"
                 key={message.id}
               >
                 <p className="bg-primary text-on-primary text-base p-3 rounded-t-xl rounded-bl-xl max-w-[80%]">
@@ -78,7 +98,7 @@ const Chat = () => {
           }
           return (
             <div
-              className="receivedMessage flex flex-col items-start gap-1 mb-5"
+              className="flex flex-col items-start gap-1 mb-5"
               key={message.id}
             >
               <p className="bg-on-surface/30 text-on-surface text-base p-3 rounded-t-xl rounded-br-xl max-w-[80%]">
@@ -91,6 +111,7 @@ const Chat = () => {
           );
         })}
       </div>
+      <div ref={messagesRef} className="min-h-16" />
       <div className="sticky bottom-0 left-0 w-full">
         <form
           onSubmit={form.handleSubmit}
@@ -100,7 +121,7 @@ const Chat = () => {
             <textarea
               name="content"
               id="content"
-              className="bg-surface text-on-surface border border-on-surface/30 w-[100%] rounded-3xl px-4 py-3 text-sm peer outline-none focus:border-primary"
+              className="bg-surface text-on-surface border border-on-surface/30 w-[100%] rounded-3xl px-4 py-3 text-sm peer outline-none focus:border-primary h-12"
               placeholder="Send new message"
               rows="1"
               value={form.values.content}

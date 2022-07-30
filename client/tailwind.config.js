@@ -15,6 +15,7 @@ module.exports = {
       'source-sans-pro': ['Source Sans Pro', 'sans-serif'],
     },
     extend: {
+      minHeight: (theme) => ({ ...theme('spacing') }),
       colors: {
         primary: withOpacityValue('--primary'),
         'primary-light': withOpacityValue('--primary-light'),

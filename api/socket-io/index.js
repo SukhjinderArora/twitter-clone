@@ -1,6 +1,7 @@
 const { Server } = require('socket.io');
 const cookieParser = require('cookie-parser');
 
+const prisma = require('../services/connect-db');
 const { NODE_ENV, COOKIE_SECRET } = require('../utils/config');
 const { isAuthenticated } = require('../middlewares/auth');
 const logger = require('../utils/logger');
@@ -37,6 +38,15 @@ const setupSocketServer = (server) => {
     socket.join(socket.request.userId);
     socket.on('new notification', ({ to }) => {
       io.sockets.in(to).emit('new notification', { notification: true });
+    });
+    socket.on('new message', async ({ to: userId, participantId }) => {
+      const chat = await prisma.chat.findFirst({
+        where: {
+          userId,
+          participantId,
+        },
+      });
+      io.sockets.in(userId).emit('new message', { chatId: String(chat.id) });
     });
 
     socket.on('disconnect', () => {
