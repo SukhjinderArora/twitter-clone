@@ -16,9 +16,11 @@
     --on-error: 239 68 68;
   }
   body {
-    /* font-family: 'Raleway', sans-serif; */
     font-family: 'Source Sans Pro', sans-serif;
-    background: rgb(var(--background));
+    /* rgb() function with opactiy -- seperated by '/' 
+      because rgba() does not seem to work with custom properties
+    */
+    background: rgb(var(--background) / 1);
   }
   [data-theme='dark'] {
     --primary-light: 186 230 253;
@@ -31,6 +33,7 @@
     --on-background: 231 233 234;
     --on-surface: 231 233 234;
     --on-error: 239 68 68;
+    color-scheme: dark;
   }
   [data-theme='light'] {
     --background: 255 255 255;
@@ -39,6 +42,7 @@
     --on-background: 15 20 25;
     --on-surface: 15 20 25;
     --on-error: 239 68 68;
+    color-scheme: light;
   }
   [data-theme='dim'] {
     --background: 22 32 42;
@@ -47,6 +51,7 @@
     --on-background: 231 233 234;
     --on-surface: 231 233 234;
     --on-error: 239 68 68;
+    color-scheme: dark;
   }
   [data-primary-color='sky-blue'] {
     --primary-light: 186 230 253;
