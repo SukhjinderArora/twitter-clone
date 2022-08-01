@@ -42,6 +42,11 @@ const Messages = () => {
         <div>
           {messagesQuery.data.chats.map((chat) => {
             const latestMessage = chat.messages[chat.messages.length - 1];
+            const unReadMessages = chat.messages.reduce(
+              (acc, cur) =>
+                cur.userId !== user.id && !cur.read ? acc + 1 : acc,
+              0
+            );
             return (
               <NavLink
                 to={`${chat.id}`}
@@ -86,11 +91,13 @@ const Messages = () => {
                         {latestMessage?.content}
                       </p>
                     )}
-                    {/* <div className="bg-primary w-5 h-5 flex items-center justify-center p-3 rounded-full">
-                      <span className="text-on-primary text-xs font-semibold">
-                        5
-                      </span>
-                    </div> */}
+                    {unReadMessages > 0 && (
+                      <div className="bg-primary w-5 h-5 flex items-center justify-center p-3 rounded-full">
+                        <span className="text-on-primary text-xs font-semibold">
+                          {unReadMessages}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </NavLink>
