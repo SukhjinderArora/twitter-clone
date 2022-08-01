@@ -39,16 +39,22 @@ const setupSocketServer = (server) => {
     socket.on('new notification', ({ to }) => {
       io.sockets.in(to).emit('new notification', { notification: true });
     });
-    socket.on('new message', async ({ to: userId, participantId }) => {
-      const chat = await prisma.chat.findFirst({
+    socket.on('new message', async ({ chatId }) => {
+      const chatParticipatedIn = await prisma.chat.findUnique({
         where: {
-          userId,
-          participantId,
+          id: chatId,
         },
       });
-      io.sockets.in(userId).emit('new message', { chatId: String(chat.id) });
+      const chat = await prisma.chat.findFirst({
+        where: {
+          userId: chatParticipatedIn.participantId,
+          participantId: chatParticipatedIn.userId,
+        },
+      });
+      io.sockets
+        .in(chat.userId)
+        .emit('new message', { chatId: String(chat.id) });
     });
-
     socket.on('disconnect', () => {
       logger.info('user disconnected', socket.id);
     });

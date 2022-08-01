@@ -49,8 +49,7 @@ const Chat = () => {
             queryClient.invalidateQueries(['chat', chatId]);
             queryClient.invalidateQueries('messages');
             socket.emit('new message', {
-              to: data.chat.participantId,
-              participantId: data.chat.userId,
+              chatId: data.chat.id,
             });
             resetForm();
           },
