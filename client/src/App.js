@@ -164,7 +164,10 @@ const App = () => {
             }
           >
             {isWidthGreaterThan640 && (
-              <Route path=":chatId" element={<Chat />} />
+              <Route
+                path=":chatId"
+                element={<Chat key={location.pathname} />}
+              />
             )}
           </Route>
           <Route path="/:username" element={<UserProfile />}>
@@ -263,7 +266,7 @@ const App = () => {
                     onDismiss={() => navigate(-1)}
                     customHeader={<ChatHeader onClose={() => navigate(-1)} />}
                   >
-                    <Chat />
+                    <Chat key={location.pathname} />
                   </Modal>
                 </RequireAuth>
               }
