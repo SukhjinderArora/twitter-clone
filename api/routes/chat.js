@@ -25,4 +25,10 @@ router.post(
   chatController.addNewMessageToChat
 );
 
+router.patch(
+  '/:id/messages/read',
+  isAuthenticated,
+  chatController.markMessagesAsRead
+);
+
 module.exports = router;

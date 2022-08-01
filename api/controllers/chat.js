@@ -184,9 +184,38 @@ const addNewMessageToChat = async (req, res, next) => {
   }
 };
 
+const markMessagesAsRead = async (req, res, next) => {
+  const { userId } = req;
+  const { id } = req.params;
+  try {
+    const chat = await prisma.chat.findFirst({
+      where: {
+        id: Number(id),
+        userId,
+      },
+    });
+    if (!chat) {
+      const error = createError.NotFound();
+      throw error;
+    }
+    await prisma.message.updateMany({
+      where: {
+        userId: chat.participantId,
+      },
+      data: {
+        read: true,
+      },
+    });
+    return res.status(200).json({ message: 'success' });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getAllChatsOfUser,
   findOrCreateNewChat,
   getChatById,
   addNewMessageToChat,
+  markMessagesAsRead,
 };
