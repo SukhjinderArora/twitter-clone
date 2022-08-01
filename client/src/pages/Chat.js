@@ -32,6 +32,18 @@ const Chat = () => {
     });
   });
 
+  const markMessagesAsRead = useMutation(
+    async () => {
+      return axios.patch(`/api/chat/${chatId}/messages/read`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['chat', chatId]);
+        queryClient.invalidateQueries('messages');
+      },
+    }
+  );
+
   const { validateForm } = messageValidator;
 
   const form = useForm({
@@ -62,10 +74,22 @@ const Chat = () => {
     if (messagesRef.current) {
       messagesRef.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'end',
+        block: 'nearest',
+        inline: 'start',
       });
     }
-  }, [data]);
+  }, [data, chatId]);
+
+  useEffect(() => {
+    if (data) {
+      markMessagesAsRead.mutate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    data,
+    chatId,
+    // exclude mutations - because markMessagesAsRead is an unstable refrence and linter prevents listing only mutation function
+  ]);
 
   if (isLoading)
     return (
@@ -86,7 +110,7 @@ const Chat = () => {
                 className="flex flex-col items-end gap-1 mb-5"
                 key={message.id}
               >
-                <p className="bg-primary text-on-primary text-base p-3 rounded-t-xl rounded-bl-xl max-w-[80%]">
+                <p className="bg-primary text-on-primary text-base p-3 rounded-t-xl rounded-bl-xl max-w-[80%] break-words">
                   {message.content}
                 </p>
                 <span className="text-on-surface/80 font-light text-xs">
@@ -100,7 +124,7 @@ const Chat = () => {
               className="flex flex-col items-start gap-1 mb-5"
               key={message.id}
             >
-              <p className="bg-on-surface/30 text-on-surface text-base p-3 rounded-t-xl rounded-br-xl max-w-[80%]">
+              <p className="bg-on-surface/30 text-on-surface text-base p-3 rounded-t-xl rounded-br-xl max-w-[80%] break-words">
                 {message.content}
               </p>
               <span className="text-on-surface/80 font-light text-xs">
