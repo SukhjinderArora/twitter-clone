@@ -21,7 +21,11 @@ const getAllChatsOfUser = async (req, res, next) => {
             },
           },
         },
-        messages: true,
+        messages: {
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
       },
     });
     return res.status(200).json({ chats });
@@ -88,7 +92,11 @@ const getChatById = async (req, res, next) => {
         userId,
       },
       include: {
-        messages: true,
+        messages: {
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
         participant: {
           select: {
             username: true,
