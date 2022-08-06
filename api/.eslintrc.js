@@ -3,12 +3,18 @@ module.exports = {
     node: true,
     es2021: true,
   },
-  extends: ["airbnb-base", "prettier"],
+  extends: ['airbnb-base', 'prettier'],
   parserOptions: {
     ecmaVersion: 2021,
-    sourceType: "module",
+    sourceType: 'module',
     ecmaFeatures: {
       impliedStrict: true,
     },
+  },
+  rules: {
+    'import/no-extraneous-dependencies': [
+      'error',
+      { devDependencies: ['**/*.test.js', '**/seed.js'] },
+    ],
   },
 };
