@@ -30,7 +30,7 @@ const signupSchema = {
         options: async (value) => {
           const user = await prisma.user.findUnique({
             where: {
-              email: value,
+              email: value.toLowerCase(),
             },
           });
           if (user) {
@@ -97,7 +97,7 @@ const signupSchema = {
         options: async (value) => {
           const user = await prisma.user.findUnique({
             where: {
-              username: value,
+              username: value.toLowerCase(),
             },
           });
           if (user) {

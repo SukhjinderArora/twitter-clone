@@ -25,13 +25,13 @@ const loginPassword = async (req, res, next) => {
     if (username.includes('@')) {
       user = await prisma.user.findUnique({
         where: {
-          email: username,
+          email: username.toLowerCase(),
         },
       });
     } else {
       user = await prisma.user.findUnique({
         where: {
-          username,
+          username: username.toLowerCase(),
         },
       });
     }
@@ -59,10 +59,10 @@ const signupPassword = {
     try {
       const saltRounds = 12;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
-      const username = name.split(' ')[0] + nanoid();
+      const username = name.toLowerCase().split(' ')[0] + nanoid();
       const user = await prisma.user.create({
         data: {
-          email,
+          email: email.toLowerCase(),
           hashedPassword,
           username,
           provider: 'email',
@@ -128,7 +128,7 @@ const signupPassword = {
         },
         data: {
           newUser: false,
-          username,
+          username: username.toLowerCase(),
         },
       });
       delete updatedUser.hashedPassword;
@@ -160,7 +160,7 @@ const signupGoogle = async (req, res, next) => {
     const newUser = await prisma.user.create({
       data: {
         email,
-        username: name.split(' ')[0] + nanoid(),
+        username: name.toLowerCase().split(' ')[0] + nanoid(),
         googleId,
         provider: 'google',
         profile: {
