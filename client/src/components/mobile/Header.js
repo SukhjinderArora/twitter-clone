@@ -5,7 +5,7 @@ import { IconContext } from 'react-icons';
 const Header = ({ pageTitle }) => {
   return (
     <div className="bg-surface h-14 flex justify-between items-center px-3">
-      <div className="h-10 w-10 overflow-hidden">
+      <div className="h-6 w-6 overflow-hidden">
         <img
           className="h-full w-full rounded-full object-cover"
           src="https://i.pravatar.cc/300"
