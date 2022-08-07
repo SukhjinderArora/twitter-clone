@@ -28,7 +28,7 @@ import PostDetail from './pages/PostDetail';
 import Notifications from './pages/Notifications';
 import Messages from './pages/Messages';
 import Chat from './pages/Chat';
-import Explore from './pages/Explore';
+import Search from './pages/Search';
 
 import Layout from './components/Layout';
 import SplashScreen from './components/SplashScreen';
@@ -140,10 +140,10 @@ const App = () => {
             }
           />
           <Route
-            path="explore"
+            path="search"
             element={
               <RequireAuth redirectTo="/signup">
-                <Explore />
+                <Search />
               </RequireAuth>
             }
           />

@@ -36,7 +36,7 @@ const BottomNav = () => {
         </NavLink>
       </div>
       <div className="text-on-surface">
-        <NavLink to="/explore">
+        <NavLink to="/search">
           {({ isActive }) => (
             <IconContext.Provider
               value={{
