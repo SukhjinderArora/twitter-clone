@@ -22,6 +22,7 @@ const searchUsersByUsername = async (req, res, next) => {
         },
       },
       select: {
+        id: true,
         username: true,
         profile: {
           select: {
@@ -72,6 +73,7 @@ const searchUsersByName = async (req, res, next) => {
         },
       },
       select: {
+        id: true,
         username: true,
         profile: {
           select: {
