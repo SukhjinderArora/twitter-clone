@@ -19,7 +19,7 @@ const User = ({ user }) => {
             </h2>
           </div>
           <div>
-            <h4 className="font-light text-sm text-on-surface/90 font-source-sans-pro to mr-2">
+            <h4 className="font-light text-sm text-on-surface/70 font-source-sans-pro to mr-2">
               @{user.username}
             </h4>
           </div>

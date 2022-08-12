@@ -1,5 +1,6 @@
 import { useState, Fragment } from 'react';
 import { useInfiniteQuery } from 'react-query';
+import { Link } from 'react-router-dom';
 import { RiSearchLine } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 
@@ -111,6 +112,22 @@ const Search = () => {
                 </Fragment>
               );
             })}
+            {!hasNextPage && (
+              <div className="mt-2">
+                <Link
+                  to={`/${
+                    debouncedSearchTerm.startsWith('@')
+                      ? debouncedSearchTerm.substring(1)
+                      : debouncedSearchTerm
+                  }`}
+                >
+                  Go to @
+                  {debouncedSearchTerm.startsWith('@')
+                    ? debouncedSearchTerm.substring(1)
+                    : debouncedSearchTerm}
+                </Link>
+              </div>
+            )}
           </div>
         )}
         {hasNextPage && !isFetchingNextPage && (
