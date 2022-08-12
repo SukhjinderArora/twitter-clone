@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import BottomNav from './mobile/BottomNav';
+import BottomNav from './Navigation/BottomNav';
 
 const Layout = () => {
   return (
@@ -14,8 +14,10 @@ const Layout = () => {
           inset: '0',
         }}
       />
-      <div className="fixed bottom-0 left-0 w-full">
-        <BottomNav />
+      <div className="sm:hidden">
+        <div className="fixed bottom-0 left-0 w-full">
+          <BottomNav />
+        </div>
       </div>
     </div>
   );
