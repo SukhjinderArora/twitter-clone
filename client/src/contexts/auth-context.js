@@ -5,7 +5,9 @@ import { STATUS } from '../utils/utils';
 import { setToken, clearToken } from '../utils/auth';
 
 const initialState = {
-  user: {},
+  user: {
+    profile: {},
+  },
   token: null,
   expiresAt: null,
   isAuthenticated: false,
