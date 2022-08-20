@@ -241,7 +241,7 @@ const App = () => {
                   <Modal
                     isOpen
                     onDismiss={() =>
-                      navigate('/home', {
+                      navigate(`${state.backgroundLocation.pathname}`, {
                         replace: true,
                       })
                     }
