@@ -34,8 +34,8 @@ const Messages = () => {
   if (messagesQuery.isError) return <div>Something went wrong.</div>;
 
   return (
-    <div className="flex">
-      <div className="static top-0 overflow-y-auto overflow-x-hidden h-[calc(100vh_-_56px)] flex-1">
+    <div className="flex sm:h-full">
+      <div className="static top-0 overflow-y-auto overflow-x-hidden h-[calc(100vh_-_56px)] flex-1 sm:h-full">
         <div className="sticky top-0 left-0 w-full">
           <Header pageTitle="Messages" />
         </div>
@@ -105,7 +105,7 @@ const Messages = () => {
           })}
         </div>
       </div>
-      <div className="flex-1 empty:hidden static top-0 overflow-y-auto overflow-x-hidden h-[calc(100vh_-_56px)]">
+      <div className="flex-1 empty:hidden static top-0 overflow-y-auto overflow-x-hidden h-[calc(100vh_-_56px)] sm:h-full">
         <Outlet />
       </div>
     </div>

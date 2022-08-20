@@ -91,14 +91,14 @@ const Home = () => {
 
   return (
     <div
-      className={`bg-background relative ${
+      className={`bg-background relative h-fit ${
         modalOpen ? 'pointer-events-none' : ''
       }`}
     >
-      <div className="fixed top-0 left-0 w-full">
+      <div className="sticky top-0 left-0 w-full">
         <Header pageTitle="Home" />
       </div>
-      <div className="mt-14 pb-8">
+      <div className="mt-1 mb-14">
         {data.pages[0].info.total === 0 && (
           <div className="h-[calc(100vh_-_7rem)] flex items-center">
             <h1 className="text-lg text-on-surface font-bold px-20 text-center">
@@ -126,7 +126,7 @@ const Home = () => {
           </div>
         )}
       </div>
-      <div className="fixed right-5 bottom-20 z-50">
+      <div className="fixed right-10 bottom-20 z-50">
         <Fab label="new post" onClick={openModal} />
       </div>
     </div>

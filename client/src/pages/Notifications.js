@@ -87,8 +87,8 @@ const Notifications = () => {
     );
 
   return (
-    <div className="pb-24 mt-14">
-      <div className="fixed top-0 left-0 w-full">
+    <div className="pb-24">
+      <div className="sticky top-0 left-0 w-full">
         <Header pageTitle="Notifications" />
       </div>
       {data.pages.map((group, i) => {
