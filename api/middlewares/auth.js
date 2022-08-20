@@ -65,8 +65,17 @@ const generateAuthTokens = async (req, res, next) => {
       where: {
         id: req.userId,
       },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        newUser: true,
+        googleId: true,
+        provider: true,
+        createdAt: true,
+        profile: true,
+      },
     });
-    delete user.hashedPassword;
     if (!user) {
       const error = createError.Unauthorized();
       throw error;

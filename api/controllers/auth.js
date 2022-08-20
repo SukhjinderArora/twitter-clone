@@ -201,13 +201,22 @@ const verifyAndGenerateAccessToken = async (req, res, next) => {
         where: {
           id: userId,
         },
+        select: {
+          id: true,
+          email: true,
+          username: true,
+          newUser: true,
+          googleId: true,
+          provider: true,
+          createdAt: true,
+          profile: true,
+        },
       });
       if (!user) {
         await clearTokens(req, res);
         const error = createError('Invalid credentials', 401);
         throw error;
       }
-      delete user.hashedPassword;
       const accessToken = generateJWT(
         user.id,
         ACCESS_TOKEN_SECRET,
