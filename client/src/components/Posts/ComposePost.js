@@ -1,13 +1,11 @@
+import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { IconContext } from 'react-icons';
-import { RiAddLine } from 'react-icons/ri';
-
-import usePageTitle from '../../hooks/usePageTitle';
 
 import TextArea from '../TextArea';
-import Button from '../Button';
+import CircularProgressBar from '../CircularProgressBar';
 
+import usePageTitle from '../../hooks/usePageTitle';
 import useForm from '../../hooks/useForm';
 
 import axios from '../../utils/axios';
@@ -15,6 +13,7 @@ import { newPostValidator } from '../../utils/validator';
 
 const ComposePost = () => {
   usePageTitle('New Post / Kookoo');
+  const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
   const createNewPost = useMutation(({ content }) => {
     return axios.post('/api/post/create-post', {
@@ -52,52 +51,66 @@ const ComposePost = () => {
       );
     },
   });
+  const onTextChange = (e) => {
+    form.handleChange(e);
+    const progressPercentage = (e.target.value.length / 255) * 100;
+    setProgress(progressPercentage > 100 ? 100 : progressPercentage);
+  };
   return (
-    <div className="p-6">
-      <form onSubmit={form.handleSubmit} className="flex flex-col">
-        <TextArea
-          id="content"
-          name="content"
-          label="What's happening?"
-          value={form.values.content}
-          error={form.touched.content ? form.errors.content : ''}
-          autoExpand
-          onBlur={form.handleBlur}
-          onChange={form.handleChange}
-          onFocus={form.handleFocus}
-        />
-        <div className="text-right text-on-surface my-3">
-          <span
-            className={
-              form.values.content.length > 255
-                ? 'text-on-error'
-                : 'text-on-surface'
-            }
-          >
-            {form.values.content.length}
-          </span>
-          <span> / </span>
-          <span>255</span>
+    <div className="px-4 py-3">
+      <div className="flex">
+        <div className="h-10 w-10 overflow-hidden">
+          <img
+            className="h-full w-full rounded-full object-cover"
+            src="https://i.pravatar.cc/300"
+            alt="user avatar"
+          />
         </div>
-        <div className="w-1/2 self-end">
-          <Button type="submit">
-            <span>Add</span>
-            <div className="text-on-primary ml-1">
-              <IconContext.Provider
-                // eslint-disable-next-line react/jsx-no-constructed-context-values
-                value={{
-                  size: '16px',
-                  style: {
-                    color: 'inherit',
-                  },
-                }}
+        <form onSubmit={form.handleSubmit} className="flex flex-col flex-1">
+          <div className="border-b-2 border-on-surface/10 mb-2">
+            <TextArea
+              id="content"
+              name="content"
+              label="What's happening?"
+              value={form.values.content}
+              error={form.touched.content ? form.errors.content : ''}
+              autoExpand
+              onBlur={form.handleBlur}
+              onChange={onTextChange}
+              onFocus={form.handleFocus}
+            />
+          </div>
+          <div className="self-end flex gap-2">
+            <div className="relative">
+              <div
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs ${
+                  form.values.content.length > 255
+                    ? 'text-on-error'
+                    : 'text-on-surface'
+                } ${form.values.content.length === 0 && 'hidden'}`}
               >
-                <RiAddLine />
-              </IconContext.Provider>
+                {form.values.content.length}
+              </div>
+              <CircularProgressBar
+                progress={progress}
+                indicatorWidth={4}
+                trackWidth={4}
+                size={40}
+              />
             </div>
-          </Button>
-        </div>
-      </form>
+            <button
+              type="submit"
+              className={`font-source-sans-pro bg-primary text-on-primary font-semibold px-4 py-2 rounded-3xl transition-colors hover:bg-primary-dark ${
+                (!form.values.content.trim() || form.errors.content) &&
+                'bg-primary/50 text-on-primary/50 hover:bg-primary/50 cursor-not-allowed'
+              }`}
+              disabled={!form.values.content.trim() || form.errors.content}
+            >
+              Post
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

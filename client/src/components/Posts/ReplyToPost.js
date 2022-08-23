@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import TextArea from '../TextArea';
-import Button from '../Button';
+import CircularProgressBar from '../CircularProgressBar';
 
 import { newPostValidator } from '../../utils/validator';
 import axios from '../../utils/axios';
@@ -13,6 +14,7 @@ import useForm from '../../hooks/useForm';
 import { useSocket } from '../../contexts/socket-context';
 
 const ReplyToPost = ({ post }) => {
+  const [progress, setProgress] = useState(0);
   const { validateForm } = newPostValidator;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -25,6 +27,7 @@ const ReplyToPost = ({ post }) => {
       postId,
     });
   });
+
   const replyForm = useForm({
     initialValues: {
       content: '',
@@ -80,6 +83,13 @@ const ReplyToPost = ({ post }) => {
       );
     },
   });
+
+  const onTextChange = (e) => {
+    replyForm.handleChange(e);
+    const progressPercentage = (e.target.value.length / 255) * 100;
+    setProgress(progressPercentage > 100 ? 100 : progressPercentage);
+  };
+
   return (
     <div className="px-2 pb-2">
       <div className="flex gap-3">
@@ -95,7 +105,7 @@ const ReplyToPost = ({ post }) => {
             <span className="text-on-surface/75">Replying to </span>
             <span className="text-primary">@{post.user.username}</span>
           </div>
-          <form onSubmit={replyForm.handleSubmit}>
+          <form onSubmit={replyForm.handleSubmit} className="flex flex-col">
             <div>
               <TextArea
                 name="content"
@@ -103,17 +113,44 @@ const ReplyToPost = ({ post }) => {
                 label="Post your reply"
                 onFocus={replyForm.handleFocus}
                 onBlur={replyForm.handleBlur}
-                onChange={replyForm.handleChange}
+                onChange={onTextChange}
                 value={replyForm.values.content}
                 error={
                   replyForm.touched.content ? replyForm.errors.content : ''
                 }
               />
             </div>
-            <div>
-              <Button type="submit" isLoading={postReply.isLoading}>
+            <div className="self-end flex gap-2">
+              <div className="relative">
+                <div
+                  className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs ${
+                    replyForm.values.content.length > 255
+                      ? 'text-on-error'
+                      : 'text-on-surface'
+                  } ${replyForm.values.content.length === 0 && 'hidden'}`}
+                >
+                  {replyForm.values.content.length}
+                </div>
+                <CircularProgressBar
+                  progress={progress}
+                  indicatorWidth={4}
+                  trackWidth={4}
+                  size={40}
+                />
+              </div>
+              <button
+                type="submit"
+                className={`font-source-sans-pro bg-primary text-on-primary font-semibold px-4 py-2 rounded-3xl transition-colors hover:bg-primary-dark ${
+                  (!replyForm.values.content.trim() ||
+                    replyForm.errors.content) &&
+                  'bg-primary/50 text-on-primary/50 hover:bg-primary/50 cursor-not-allowed'
+                }`}
+                disabled={
+                  !replyForm.values.content.trim() || replyForm.errors.content
+                }
+              >
                 Post
-              </Button>
+              </button>
             </div>
           </form>
         </div>
