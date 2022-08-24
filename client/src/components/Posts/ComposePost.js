@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import TextArea from '../TextArea';
 import CircularProgressBar from '../CircularProgressBar';
@@ -15,6 +16,7 @@ const ComposePost = () => {
   usePageTitle('New Post / Kookoo');
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
+  const { state } = useLocation();
   const createNewPost = useMutation(({ content }) => {
     return axios.post('/api/post/create-post', {
       content,
@@ -26,14 +28,35 @@ const ComposePost = () => {
       content: '',
     },
     validate: validateForm,
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       createNewPost.mutate(
         {
           content: values.content,
         },
         {
-          onSuccess: () => {
-            navigate('/home');
+          onSuccess: ({ data }) => {
+            resetForm();
+            navigate(state?.backgroundLocation?.pathname || '/home');
+            toast.custom((t) => (
+              <div
+                className={`${
+                  t.visible ? 'animate-enter' : 'animate-leave'
+                } max-w-md w-full bg-primary text-on-primary flex justify-between px-2 py-2`}
+              >
+                <p>Your post was sent.</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    toast.dismiss(t.id);
+                    navigate(
+                      `/${data.post.user.username}/post/${data.post.id}`
+                    );
+                  }}
+                >
+                  View
+                </button>
+              </div>
+            ));
           },
           onError: (err) => {
             const error = err.response.data.errors || err.response.data.error;
@@ -81,13 +104,17 @@ const ComposePost = () => {
             />
           </div>
           <div className="self-end flex gap-2">
-            <div className="relative">
+            <div
+              className={`relative ${
+                form.values.content.length === 0 && 'hidden'
+              }`}
+            >
               <div
                 className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs ${
                   form.values.content.length > 255
                     ? 'text-on-error'
                     : 'text-on-surface'
-                } ${form.values.content.length === 0 && 'hidden'}`}
+                }`}
               >
                 {form.values.content.length}
               </div>

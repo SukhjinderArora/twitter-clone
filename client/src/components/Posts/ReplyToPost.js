@@ -121,13 +121,17 @@ const ReplyToPost = ({ post }) => {
               />
             </div>
             <div className="self-end flex gap-2">
-              <div className="relative">
+              <div
+                className={`relative ${
+                  replyForm.values.content.length === 0 && 'hidden'
+                }`}
+              >
                 <div
                   className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs ${
                     replyForm.values.content.length > 255
                       ? 'text-on-error'
                       : 'text-on-surface'
-                  } ${replyForm.values.content.length === 0 && 'hidden'}`}
+                  }`}
                 >
                   {replyForm.values.content.length}
                 </div>
