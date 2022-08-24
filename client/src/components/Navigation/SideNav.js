@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import {
   RiShareLine,
@@ -231,7 +231,7 @@ const SideNav = () => {
           </div>
         </nav>
       </div>
-      <div className="flex gap-2">
+      <Link to={`/${user.username}`} className="flex gap-2">
         <div className="h-10 w-10 overflow-hidden">
           <img
             className="h-full w-full rounded-full object-cover"
@@ -246,7 +246,7 @@ const SideNav = () => {
           </div>
           <div className="font-bold">...</div>
         </div>
-      </div>
+      </Link>
     </div>
   );
 };
