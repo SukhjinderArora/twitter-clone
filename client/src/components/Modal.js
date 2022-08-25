@@ -11,6 +11,7 @@ const Modal = ({
   closeButtonVisible,
   title,
   customHeader,
+  rounded,
 }) => {
   return (
     <div className="relative">
@@ -18,7 +19,7 @@ const Modal = ({
       <div
         className={`bg-surface fixed top-0 left-0 h-full w-full z-[999] overflow-y-auto sm:w-[500px] sm:h-fit sm:top-[20%] sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-[20%] ${
           !isOpen && 'hidden'
-        }`}
+        } ${rounded && 'rounded-3xl'}`}
       >
         {customHeader || (
           <div className="p-4 flex items-center relative">
@@ -59,6 +60,7 @@ Modal.propTypes = {
   closeButtonVisible: PropTypes.bool,
   title: PropTypes.string,
   customHeader: PropTypes.element,
+  rounded: PropTypes.bool,
 };
 
 Modal.defaultProps = {
@@ -66,6 +68,7 @@ Modal.defaultProps = {
   onDismiss: () => {},
   title: 'Kookoo',
   customHeader: null,
+  rounded: false,
 };
 
 export default Modal;

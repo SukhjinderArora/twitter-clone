@@ -41,7 +41,9 @@ import FolloweesList from './components/FolloweesList';
 import FollowersList from './components/FollowersList';
 
 import useMediaQuery from './hooks/useMediaQuery';
+
 import ChatHeader from './components/mobile/ChatHeader';
+import AddPostHeader from './components/AddPostHeader';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -245,7 +247,16 @@ const App = () => {
                         replace: true,
                       })
                     }
-                    title="Add new post"
+                    rounded={isWidthGreaterThan640}
+                    customHeader={
+                      <AddPostHeader
+                        onDismiss={() =>
+                          navigate(`${state.backgroundLocation.pathname}`, {
+                            replace: true,
+                          })
+                        }
+                      />
+                    }
                   >
                     <ComposePost />
                   </Modal>

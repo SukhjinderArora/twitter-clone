@@ -19,6 +19,13 @@ const createPost = async (req, res, next) => {
           },
         },
       },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
     });
     return res.status(201).json({ post });
   } catch (error) {

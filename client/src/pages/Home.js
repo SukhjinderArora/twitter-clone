@@ -7,6 +7,7 @@ import Header from '../components/mobile/Header';
 import Spinner from '../components/Spinner';
 import Post from '../components/Posts/Post';
 import Repost from '../components/Posts/Repost';
+import ComposePost from '../components/Posts/ComposePost';
 
 import usePageTitle from '../hooks/usePageTitle';
 import useScrollToTop from '../hooks/useScrollToTop';
@@ -95,8 +96,11 @@ const Home = () => {
         modalOpen ? 'pointer-events-none' : ''
       }`}
     >
-      <div className="sticky top-0 left-0 w-full">
+      <div className="sticky top-0 left-0 w-full z-[100]">
         <Header pageTitle="Home" />
+      </div>
+      <div className="border-b border-on-surface/30">
+        <ComposePost />
       </div>
       <div className="mt-1 mb-14">
         {data.pages[0].info.total === 0 && (
