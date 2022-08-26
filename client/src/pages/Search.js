@@ -101,7 +101,7 @@ const Search = () => {
           </div>
         )}
         {isSuccess && (
-          <div className="px-5">
+          <div className="max-w-[80%] mx-auto">
             {data.pages.map((group, i) => {
               return (
                 // eslint-disable-next-line react/no-array-index-key
