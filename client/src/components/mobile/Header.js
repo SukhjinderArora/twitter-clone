@@ -5,7 +5,7 @@ import { IconContext } from 'react-icons';
 const Header = ({ pageTitle }) => {
   return (
     <div className="bg-surface h-14 flex justify-between items-center px-3">
-      <div className="h-6 w-6 overflow-hidden">
+      <div className="h-6 w-6 overflow-hidden sm:h-8 sm:w-8">
         <img
           className="h-full w-full rounded-full object-cover"
           src="https://i.pravatar.cc/300"
@@ -13,7 +13,9 @@ const Header = ({ pageTitle }) => {
         />
       </div>
       <div className="flex-1 ml-3">
-        <h1 className="text-on-surface font-semibold">{pageTitle}</h1>
+        <h1 className="text-on-surface font-semibold sm:text-lg">
+          {pageTitle}
+        </h1>
       </div>
       <div className="text-on-surface">
         <IconContext.Provider

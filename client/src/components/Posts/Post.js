@@ -104,7 +104,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <article className="flex justify-between gap-3 bg-surface text-on-surface px-3 py-2 mb-4 border-b border-on-surface/30">
+    <article className="flex justify-between gap-3 bg-surface text-on-surface px-3 py-2 mb-4 border-b border-on-surface/30 sm:py-4">
       <Link to={`/${post.user.username}`}>
         <div className="h-10 w-10 overflow-hidden">
           <img
@@ -118,22 +118,22 @@ const Post = ({ post }) => {
         <div className="flex">
           <Link
             to={`/${post.user.username}`}
-            className="font-semibold text-sm mr-2"
+            className="font-semibold text-sm mr-2 sm:text-base"
           >
             {post.user.profile.name}
           </Link>
           <Link
             to={`/${post.user.username}`}
-            className="font-light text-sm text-on-surface/90 font-source-sans-pro to mr-2"
+            className="font-light text-sm text-on-surface/90 font-source-sans-pro to mr-2 sm:text-base"
           >
             @{post.user.username}
           </Link>
-          <span className="font-light text-sm text-on-surface/90 font-lato">
+          <span className="font-light text-sm text-on-surface/90 sm:text-base">
             {dayjs(post.createdAt).fromNow(true)}
           </span>
         </div>
         {post.parentPost && (
-          <div className="text-sm text-on-surface/75 my-1">
+          <div className="text-sm text-on-surface/75 my-1 sm:text-base">
             Replying to{' '}
             <Link
               to={`/${post.parentPost.user.username}`}
@@ -143,9 +143,9 @@ const Post = ({ post }) => {
             </Link>
           </div>
         )}
-        <div className="my-2">
+        <div className="my-2 sm:my-3">
           <Link to={`/${post.user.username}/post/${post.id}`}>
-            <p className="text-sm text-semibold font-source-sans-pro break-all">
+            <p className="text-sm text-semibold font-source-sans-pro break-all sm:text-base">
               {post.content}
             </p>
           </Link>
@@ -163,6 +163,7 @@ const Post = ({ post }) => {
                   style: {
                     color: 'inherit',
                   },
+                  className: 'sm:w-5 sm:h-5',
                 }}
               >
                 <RiChat1Line />
@@ -182,6 +183,7 @@ const Post = ({ post }) => {
                     style: {
                       color: 'green',
                     },
+                    className: 'sm:w-5 sm:h-5',
                   }}
                 >
                   <RiRepeatLine />
@@ -195,6 +197,7 @@ const Post = ({ post }) => {
                     style: {
                       color: 'inherit',
                     },
+                    className: 'sm:w-5 sm:h-5',
                   }}
                 >
                   <RiRepeatLine />
@@ -215,6 +218,7 @@ const Post = ({ post }) => {
                     style: {
                       fill: '#b91c1c',
                     },
+                    className: 'sm:w-5 sm:h-5',
                   }}
                 >
                   <RiHeartFill />
@@ -228,6 +232,7 @@ const Post = ({ post }) => {
                     style: {
                       color: 'inherit',
                     },
+                    className: 'sm:w-5 sm:h-5',
                   }}
                 >
                   <RiHeartLine />
@@ -245,6 +250,7 @@ const Post = ({ post }) => {
                 style: {
                   color: 'inherit',
                 },
+                className: 'sm:w-5 sm:h-5',
               }}
             >
               <RiShareLine />
