@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { RiSearchLine } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 
-import Header from '../components/mobile/Header';
+import PageHeader from '../components/PageHeader';
 import Spinner from '../components/Spinner';
 import User from '../components/User';
 
@@ -61,7 +61,7 @@ const Search = () => {
   return (
     <div>
       <div className="sticky top-0 left-0 w-full z-50">
-        <Header pageTitle="Search" />
+        <PageHeader title="Search" />
       </div>
       <div className="mt-4 pb-20">
         <form>

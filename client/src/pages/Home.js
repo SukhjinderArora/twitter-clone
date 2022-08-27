@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useInfiniteQuery } from 'react-query';
 
 import Fab from '../components/Fab';
-import Header from '../components/mobile/Header';
+import PageHeader from '../components/PageHeader';
 import Spinner from '../components/Spinner';
 import Post from '../components/Posts/Post';
 import Repost from '../components/Posts/Repost';
@@ -97,7 +97,7 @@ const Home = () => {
       }`}
     >
       <div className="sticky top-0 left-0 w-full z-[100]">
-        <Header pageTitle="Home" />
+        <PageHeader title="Home" />
       </div>
       <div className="border-b border-on-surface/30">
         <ComposePost />
