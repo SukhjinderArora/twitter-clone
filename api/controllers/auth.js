@@ -103,8 +103,17 @@ const signupPassword = {
             },
           },
         },
+        select: {
+          id: true,
+          email: true,
+          username: true,
+          newUser: true,
+          googleId: true,
+          provider: true,
+          createdAt: true,
+          profile: true,
+        },
       });
-      delete updatedUser.hashedPassword;
       return res.status(201).json({ user: updatedUser });
     } catch (error) {
       return next(error);
@@ -130,8 +139,17 @@ const signupPassword = {
           newUser: false,
           username: username.toLowerCase(),
         },
+        select: {
+          id: true,
+          email: true,
+          username: true,
+          newUser: true,
+          googleId: true,
+          provider: true,
+          createdAt: true,
+          profile: true,
+        },
       });
-      delete updatedUser.hashedPassword;
       return res.status(201).json({ user: updatedUser });
     } catch (error) {
       return next(error);
