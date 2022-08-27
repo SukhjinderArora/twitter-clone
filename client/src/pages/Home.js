@@ -104,8 +104,8 @@ const Home = () => {
       </div>
       <div className="mt-1 mb-14">
         {data.pages[0].info.total === 0 && (
-          <div className="h-[calc(100vh_-_7rem)] flex items-center">
-            <h1 className="text-lg text-on-surface font-bold px-20 text-center">
+          <div className="mt-2">
+            <h1 className="text-lg text-on-surface font-bold text-center px-20">
               Posts of people you follow will show up here.
             </h1>
           </div>
