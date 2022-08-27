@@ -47,8 +47,8 @@ const getUserHomeFeed = async (req, res, next) => {
       orderBy: {
         createdAt: 'desc',
       },
-      skip: (page - 1) * limit,
-      take: limit,
+      // skip: (page - 1) * limit,
+      // take: limit,
       include: {
         user: {
           select: {
@@ -81,8 +81,8 @@ const getUserHomeFeed = async (req, res, next) => {
       orderBy: {
         createdAt: 'desc',
       },
-      skip: (page - 1) * limit,
-      take: limit,
+      // skip: (page - 1) * limit,
+      // take: limit,
       include: {
         user: {
           select: {
@@ -122,16 +122,17 @@ const getUserHomeFeed = async (req, res, next) => {
       (post1, post2) => new Date(post2.createdAt) - new Date(post1.createdAt)
     );
 
+    const startIndex = (page - 1) * limit;
+    const endIndex = (page - 1) * limit + limit;
+    const slicedPosts = combinedPosts.slice(startIndex, endIndex);
+
     return res.status(200).json({
       info: {
         total,
-        nextPage:
-          total > (page - 1) * limit * 2 + combinedPosts.length
-            ? page + 1
-            : null,
+        nextPage: endIndex <= combinedPosts.length - 1 ? page + 1 : null,
         prevPage: page === 1 ? null : page - 1,
       },
-      results: combinedPosts,
+      results: slicedPosts,
     });
   } catch (error) {
     return next(error);
