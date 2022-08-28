@@ -10,7 +10,7 @@ const Repost = ({ repost }) => {
   const { user } = useAuth();
   return (
     <div>
-      <div className="flex items-center text-sm mr-4">
+      <div className="flex items-center text-sm ml-4 sm:text-base">
         <span className="text-on-surface mr-1">
           <IconContext.Provider
             // eslint-disable-next-line react/jsx-no-constructed-context-values

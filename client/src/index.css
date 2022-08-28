@@ -101,4 +101,7 @@
   .no-select:focus {
     outline: none !important;
   }
+  .color-scheme-normal {
+    color-scheme: normal;
+  }
 }

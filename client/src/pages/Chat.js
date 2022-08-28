@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { useRef, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { RiSendPlane2Line } from 'react-icons/ri';
+import { useParams, useNavigate } from 'react-router-dom';
+import { RiSendPlane2Line, RiArrowLeftLine } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 import { useMutation, useQueryClient } from 'react-query';
 
@@ -25,6 +25,8 @@ const Chat = () => {
   const queryClient = useQueryClient();
   const socket = useSocket();
   const messagesRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const sendMessage = useMutation(async ({ content }) => {
     return axios.post(`/api/chat/${chatId}/message`, {
@@ -101,7 +103,47 @@ const Chat = () => {
   if (isError) return <div>Something went wrong.</div>;
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="flex flex-col justify-between border-l border-on-surface/20 min-h-full h-fit relative">
+      <div className="px-4 py-2 sticky top-0 backdrop-blur-sm">
+        <div className="flex justify-between items-center gap-3">
+          <div>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="text-on-surface"
+            >
+              <IconContext.Provider
+                // eslint-disable-next-line react/jsx-no-constructed-context-values
+                value={{
+                  size: '18px',
+                  style: {
+                    color: 'inherit',
+                  },
+                }}
+              >
+                <RiArrowLeftLine />
+              </IconContext.Provider>
+            </button>
+          </div>
+          <div className="flex flex-1 items-center gap-2">
+            <div className="h-6 w-6 overflow-hidden">
+              <img
+                className="h-full w-full rounded-full object-cover"
+                src="https://i.pravatar.cc/300"
+                alt="avatar"
+              />
+            </div>
+            <div>
+              <h3 className="text-on-surface font-bold text-base">
+                {data.chat.participant.profile.name}
+              </h3>
+              <h5 className="text-on-surface/70 text-xs">
+                @{data.chat.participant.username}
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="p-4">
         {data.chat.messages.map((message) => {
           if (message.userId === user.id) {

@@ -2,7 +2,7 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { useQuery } from 'react-query';
 
 import Spinner from '../components/Spinner';
-import Header from '../components/mobile/Header';
+import PageHeader from '../components/PageHeader';
 import { useAuth } from '../contexts/auth-context';
 import axios from '../utils/axios';
 
@@ -37,7 +37,7 @@ const Messages = () => {
     <div className="flex sm:h-full">
       <div className="static top-0 overflow-y-auto overflow-x-hidden h-[calc(100vh_-_56px)] flex-1 sm:h-full">
         <div className="sticky top-0 left-0 w-full">
-          <Header pageTitle="Messages" />
+          <PageHeader title="Messages" />
         </div>
         <div>
           {messagesQuery.data.chats.map((chat) => {

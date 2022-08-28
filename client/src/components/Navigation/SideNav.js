@@ -19,6 +19,7 @@ import {
 } from 'react-icons/ri';
 
 import { useAuth } from '../../contexts/auth-context';
+import useNotifications from '../../hooks/useNotifications';
 
 const SideNav = () => {
   const [, setModalOpen] = useState(false);
@@ -26,6 +27,7 @@ const SideNav = () => {
   const navigate = useNavigate();
 
   const { user } = useAuth();
+  const notificationData = useNotifications();
 
   const openModal = () => {
     setModalOpen(true);
@@ -138,7 +140,7 @@ const SideNav = () => {
               <NavLink to="/notifications">
                 {({ isActive }) => (
                   <div
-                    className={`flex items-center gap-3 rounded-3xl px-4 py-2 w-fit ${
+                    className={`relative flex items-center gap-3 rounded-3xl px-4 py-2 w-fit ${
                       isActive && 'bg-on-surface/10'
                     }`}
                   >
@@ -161,6 +163,18 @@ const SideNav = () => {
                     <span className={`text-xl ${isActive && 'font-semibold'}`}>
                       Notifications
                     </span>
+                    {notificationData.isSuccess &&
+                      notificationData.data.pages[0].info.unReadNotifications >
+                        0 && (
+                        <span className="absolute top-1 left-8 w-5 h-5 rounded-full bg-primary flex items-center justify-center text-xs">
+                          <span>
+                            {
+                              notificationData.data.pages[0].info
+                                .unReadNotifications
+                            }
+                          </span>
+                        </span>
+                      )}
                   </div>
                 )}
               </NavLink>

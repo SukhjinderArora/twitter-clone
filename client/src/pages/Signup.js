@@ -85,7 +85,10 @@ const Signup = () => {
           </h3>
         </div>
         <div className="mb-4">
-          <div id="google" className="flex justify-center" />
+          <div
+            id="google"
+            className="flex justify-center color-scheme-normal"
+          />
         </div>
         <div className="flex items-center gap-4 mb-4">
           <div className="bg-on-background/60 h-px flex-1" />
