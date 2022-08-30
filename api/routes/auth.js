@@ -7,7 +7,11 @@ const {
   validateRequest,
   isAuthenticated,
 } = require('../middlewares/auth');
-const { signupSchema, loginSchema } = require('../services/validators');
+const {
+  signupSchema,
+  loginSchema,
+  passwordChangeSchema,
+} = require('../services/validators');
 
 const router = express.Router();
 
@@ -54,6 +58,13 @@ router.patch(
 );
 
 router.post('/verify-token', authController.verifyAndGenerateAccessToken);
+router.post(
+  '/change-password',
+  isAuthenticated,
+  checkSchema(passwordChangeSchema),
+  validateRequest,
+  authController.changePassword
+);
 router.post('/logout', isAuthenticated, authController.logout);
 
 module.exports = router;

@@ -168,10 +168,47 @@ const messageSchema = {
   },
 };
 
+const passwordChangeSchema = {
+  oldPassword: {
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+  },
+  newPassword: {
+    trim: true,
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+    isLength: {
+      options: {
+        min: 8,
+        max: 16,
+      },
+      errorMessage:
+        'Password must be at least 8 characters and at most 16 characters long',
+    },
+  },
+  confirmPassword: {
+    trim: true,
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+    custom: {
+      options: (value, { req }) => {
+        if (value !== req.body.newPassword) {
+          throw new Error('Confirm password does not match the password');
+        }
+        return true;
+      },
+    },
+  },
+};
+
 module.exports = {
   signupSchema,
   loginSchema,
   postSchema,
   chatSchema,
   messageSchema,
+  passwordChangeSchema,
 };

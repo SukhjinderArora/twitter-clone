@@ -253,6 +253,53 @@ const verifyAndGenerateAccessToken = async (req, res, next) => {
   }
 };
 
+const changePassword = async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+  const { userId } = req;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user || !user.hashedPassword) {
+      const error = createError.Unauthorized('Invalid username or password');
+      throw error;
+    }
+    const passwordsMatch = await bcrypt.compare(
+      oldPassword,
+      user.hashedPassword
+    );
+    if (!passwordsMatch) {
+      const error = createError.Unauthorized('Invalid username or password');
+      throw error;
+    }
+    const saltRounds = 12;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        hashedPassword,
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        newUser: true,
+        googleId: true,
+        provider: true,
+        createdAt: true,
+        profile: true,
+      },
+    });
+    return res.status(200).json({ user: updatedUser });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const logout = async (req, res, next) => {
   await clearTokens(req, res, next);
   return res.sendStatus(204);
@@ -263,5 +310,6 @@ module.exports = {
   signupPassword,
   signupGoogle,
   verifyAndGenerateAccessToken,
+  changePassword,
   logout,
 };
