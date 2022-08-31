@@ -20,5 +20,6 @@ router.put(
   validateRequest,
   userController.updateProfile
 );
+router.get('/me', isAuthenticated, userController.getAuthUserInfo);
 
 module.exports = router;

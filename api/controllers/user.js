@@ -575,6 +575,27 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
+const getAuthUserInfo = async (req, res, next) => {
+  const { userId } = req;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        profile: true,
+        createdAt: true,
+      },
+    });
+    return res.status(200).json({ user });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getUserByUsername,
   getPostsByUser,
@@ -585,4 +606,5 @@ module.exports = {
   getFolloweesList,
   getRepliesByUser,
   updateProfile,
+  getAuthUserInfo,
 };
