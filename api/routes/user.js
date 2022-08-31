@@ -5,7 +5,7 @@ const userController = require('../controllers/user');
 const { isAuthenticated, validateRequest } = require('../middlewares/auth');
 const { profileSchema } = require('../services/validators');
 
-router.get('/:username', userController.getUserByUsername);
+router.get('/user/:username', userController.getUserByUsername);
 router.get('/:id/posts', userController.getPostsByUser);
 router.get('/:id/posts/liked', userController.getLikedPostsByUser);
 router.patch('/follow', isAuthenticated, userController.followUser);
