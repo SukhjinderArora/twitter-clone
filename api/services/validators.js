@@ -204,6 +204,58 @@ const passwordChangeSchema = {
   },
 };
 
+const profileSchema = {
+  name: {
+    trim: true,
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+    isLength: {
+      errorMessage:
+        'Name must be minimum 1 character and maximum 20 characters long',
+      options: {
+        min: 1,
+        max: 20,
+      },
+    },
+    escape: true,
+  },
+  bio: {
+    trim: true,
+    isLength: {
+      errorMessage: 'Bio cannot be more than 255 characters',
+      options: {
+        min: 0,
+        max: 255,
+      },
+    },
+    escape: true,
+    optional: true,
+  },
+  website: {
+    trim: true,
+    in: ['body'],
+    isURL: {
+      errorMessage: 'Invalid website URL',
+      options: {
+        protocols: ['http', 'https'],
+      },
+    },
+    optional: true,
+  },
+  dateOfBirth: {
+    notEmpty: {
+      errorMessage: 'This is a mandatory field',
+    },
+    isISO8601: {
+      errorMessage: 'Invalid Date',
+      options: {
+        strict: true,
+      },
+    },
+  },
+};
+
 module.exports = {
   signupSchema,
   loginSchema,
@@ -211,4 +263,5 @@ module.exports = {
   chatSchema,
   messageSchema,
   passwordChangeSchema,
+  profileSchema,
 };

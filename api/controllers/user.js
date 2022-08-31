@@ -540,6 +540,41 @@ const getRepliesByUser = async (req, res, next) => {
   }
 };
 
+const updateProfile = async (req, res, next) => {
+  const { userId } = req;
+  const { name, bio, website, dateOfBirth } = req.body;
+  try {
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        profile: {
+          update: {
+            name,
+            bio,
+            website,
+            dob: dateOfBirth,
+          },
+        },
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        newUser: true,
+        googleId: true,
+        provider: true,
+        createdAt: true,
+        profile: true,
+      },
+    });
+    return res.status(200).json({ user: updatedUser });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getUserByUsername,
   getPostsByUser,
@@ -549,4 +584,5 @@ module.exports = {
   getFollowersList,
   getFolloweesList,
   getRepliesByUser,
+  updateProfile,
 };
