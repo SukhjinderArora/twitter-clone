@@ -6,14 +6,12 @@ import toast from 'react-hot-toast';
 import TextArea from '../TextArea';
 import CircularProgressBar from '../CircularProgressBar';
 
-import usePageTitle from '../../hooks/usePageTitle';
 import useForm from '../../hooks/useForm';
 
 import axios from '../../utils/axios';
 import { newPostValidator } from '../../utils/validator';
 
 const ComposePost = () => {
-  usePageTitle('New Post / Kookoo');
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
   const { state } = useLocation();
