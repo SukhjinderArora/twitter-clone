@@ -5,8 +5,10 @@ import Spinner from '../components/Spinner';
 import PageHeader from '../components/PageHeader';
 import { useAuth } from '../contexts/auth-context';
 import axios from '../utils/axios';
+import usePageTitle from '../hooks/usePageTitle';
 
 const Messages = () => {
+  usePageTitle('Messages / Kookoo');
   const { isAuthenticated, user } = useAuth();
   const messagesQuery = useQuery(
     'messages',

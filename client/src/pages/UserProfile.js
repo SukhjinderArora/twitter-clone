@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import {
   Outlet,
@@ -14,9 +15,11 @@ import axios from '../utils/axios';
 import Spinner from '../components/Spinner';
 import NoMatch from './NoMatch';
 
-import { useAuth } from '../contexts/auth-context';
 import useUser from '../hooks/useUser';
 import useScrollToTop from '../hooks/useScrollToTop';
+import usePageTitle from '../hooks/usePageTitle';
+
+import { useAuth } from '../contexts/auth-context';
 import { useSocket } from '../contexts/socket-context';
 
 const UserProfile = () => {
@@ -26,10 +29,17 @@ const UserProfile = () => {
   const socket = useSocket();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { setPageTitle } = usePageTitle();
 
   const userData = useUser(username);
 
   const { user } = userData.data || {};
+
+  useEffect(() => {
+    if (user?.username) {
+      setPageTitle(`${user.profile.name} (@${user.username})`);
+    }
+  }, [user, setPageTitle]);
 
   const followUser = useMutation(
     ({ followeeId }) => {

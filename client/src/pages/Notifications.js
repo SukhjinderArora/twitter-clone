@@ -13,7 +13,10 @@ import LikeNotification from '../components/Notifications/LikeNotification';
 import RepostNotification from '../components/Notifications/RepostNotification';
 import ReplyNotification from '../components/Notifications/ReplyNotification';
 
+import usePageTitle from '../hooks/usePageTitle';
+
 const Notifications = () => {
+  usePageTitle('Notifications / Kookoo');
   const { data, hasNextPage, isLoading, fetchNextPage } = useNotifications();
   const queryClient = useQueryClient();
   const isInitialStrictModeMount = useRef(true);

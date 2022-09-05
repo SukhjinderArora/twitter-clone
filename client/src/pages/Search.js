@@ -9,10 +9,13 @@ import Spinner from '../components/Spinner';
 import User from '../components/User';
 
 import axios from '../utils/axios';
+
 import useDebounce from '../hooks/useDebounce';
+import usePageTitle from '../hooks/usePageTitle';
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  usePageTitle('Search / Kookoo');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const {
     data,
