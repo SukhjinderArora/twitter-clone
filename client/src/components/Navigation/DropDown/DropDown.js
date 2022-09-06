@@ -30,7 +30,7 @@ const DropDown = ({ anchorEl, open, onClose, children }) => {
         open
           ? 'bottom-[120%] opacity-100 visible'
           : 'bottom-0 opacity-0 invisible'
-      } left-1/2 -translate-x-1/2 rounded-md`}
+      } left-1/2 -translate-x-1/2 rounded-md min-w-full`}
       ref={containerRef}
     >
       <ul>{children}</ul>

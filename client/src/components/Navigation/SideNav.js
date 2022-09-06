@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { useState } from 'react';
-import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { IconContext } from 'react-icons';
+import { useMutation } from 'react-query';
 import {
   RiShareLine,
   RiHome7Line,
@@ -14,20 +15,37 @@ import {
   RiNotificationFill,
   RiUserLine,
   RiUserFill,
-  RiMoreLine,
-  RiMoreFill,
+  RiSettingsLine,
+  RiSettingsFill,
 } from 'react-icons/ri';
 
 import { useAuth } from '../../contexts/auth-context';
 import useNotifications from '../../hooks/useNotifications';
 
+import DropDown from './DropDown/DropDown';
+import DropDownItem from './DropDown/DropDownItem';
+
+import axios from '../../utils/axios';
+
 const SideNav = () => {
   const [, setModalOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const notificationData = useNotifications();
+
+  const logoutMutation = useMutation(
+    () => {
+      return axios.post('/api/auth/logout');
+    },
+    {
+      onSuccess: () => {
+        logout();
+      },
+    }
+  );
 
   const openModal = () => {
     setModalOpen(true);
@@ -37,6 +55,14 @@ const SideNav = () => {
       },
       replace: true,
     });
+  };
+
+  const handleDropDownOpen = (evt) => {
+    setAnchorEl(evt.currentTarget);
+  };
+
+  const handleDropDownClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -206,8 +232,8 @@ const SideNav = () => {
                 )}
               </NavLink>
             </li>
-            <li className="text-on-surface mb-3">
-              <NavLink to="/ccc">
+            <li className="text-on-surface mb-3 relative">
+              <NavLink to="/settings">
                 {({ isActive }) => (
                   <div
                     className={`flex items-center gap-3 rounded-3xl px-4 py-2 w-fit ${
@@ -223,11 +249,11 @@ const SideNav = () => {
                           },
                         }}
                       >
-                        {isActive ? <RiMoreFill /> : <RiMoreLine />}
+                        {isActive ? <RiSettingsFill /> : <RiSettingsLine />}
                       </IconContext.Provider>
                     </span>
                     <span className={`text-xl ${isActive && 'font-semibold'}`}>
-                      More
+                      Settings
                     </span>
                   </div>
                 )}
@@ -245,7 +271,7 @@ const SideNav = () => {
           </div>
         </nav>
       </div>
-      <Link to={`/${user.username}`} className="flex gap-2">
+      <div className="flex gap-2 relative">
         <div className="h-10 w-10 overflow-hidden">
           <img
             className="h-full w-full rounded-full object-cover"
@@ -258,9 +284,51 @@ const SideNav = () => {
             <p className="font-semibold">{user.profile.name}</p>
             <p className="text-sm text-on-surface/70 -mt-1">@{user.username}</p>
           </div>
-          <div className="font-bold">...</div>
+          <button
+            type="button"
+            onClick={handleDropDownOpen}
+            className="font-bold"
+          >
+            ...
+          </button>
         </div>
-      </Link>
+        <DropDown
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleDropDownClose}
+        >
+          <DropDownItem onClose={handleDropDownClose}>
+            <Link to={`/${user.username}`}>
+              <div className="flex gap-2 relative px-4 py-4 border-b border-on-surface/20">
+                <div className="h-10 w-10 overflow-hidden">
+                  <img
+                    className="h-full w-full rounded-full object-cover"
+                    src="https://i.pravatar.cc/300"
+                    alt="avatar"
+                  />
+                </div>
+                <div className="flex justify-between flex-1 items-center">
+                  <div>
+                    <p className="font-semibold">{user.profile.name}</p>
+                    <p className="text-sm text-on-surface/70 -mt-1">
+                      @{user.username}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </DropDownItem>
+          <DropDownItem onClose={handleDropDownClose}>
+            <button
+              type="button"
+              className="px-4 py-3 w-full text-left"
+              onClick={() => logoutMutation.mutate()}
+            >
+              Log out @{user.username}
+            </button>
+          </DropDownItem>
+        </DropDown>
+      </div>
     </div>
   );
 };

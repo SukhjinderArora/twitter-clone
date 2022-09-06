@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 const DropDownItem = ({ onClose, children }) => {
   return (
     <li>
-      <button type="button" onClick={onClose}>
+      <div role="button" tabIndex="0" onClick={onClose} onKeyDown={onClose}>
         {children}
-      </button>
+      </div>
     </li>
   );
 };
