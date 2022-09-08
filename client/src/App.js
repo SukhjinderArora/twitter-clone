@@ -29,6 +29,9 @@ import Notifications from './pages/Notifications';
 import Messages from './pages/Messages';
 import Chat from './pages/Chat';
 import Search from './pages/Search';
+import Settings from './pages/Settings';
+import AccountInfo from './pages/AccountInfo';
+import Display from './pages/Display';
 
 import Layout from './components/Layout';
 import SplashScreen from './components/SplashScreen';
@@ -43,6 +46,7 @@ import FollowersList from './components/FollowersList';
 import useMediaQuery from './hooks/useMediaQuery';
 
 import AddPostHeader from './components/AddPostHeader';
+import ChangePassword from './pages/ChangePassword';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -157,6 +161,47 @@ const App = () => {
             }
           />
           <Route
+            path="settings"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <Settings />
+              </RequireAuth>
+            }
+          >
+            <Route
+              index
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Navigate to="account" />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="account"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <AccountInfo />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="password"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <ChangePassword />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="display"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Display />
+                </RequireAuth>
+              }
+            />
+          </Route>
+          <Route
             path="messages"
             element={
               <RequireAuth redirectTo="/signup">
@@ -171,11 +216,46 @@ const App = () => {
               />
             )}
           </Route>
-          <Route path="/:username" element={<UserProfile />}>
-            <Route index element={<UserPosts />} />
-            <Route path="posts" element={<UserPosts />} />
-            <Route path="with_replies" element={<PostsAndReplies />} />
-            <Route path="likes" element={<LikedPosts />} />
+          <Route
+            path="/:username"
+            element={
+              <RequireAuth redirectTo="/signup">
+                <UserProfile />
+              </RequireAuth>
+            }
+          >
+            <Route
+              index
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <UserPosts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="posts"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <UserPosts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="with_replies"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <PostsAndReplies />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="likes"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <LikedPosts />
+                </RequireAuth>
+              }
+            />
           </Route>
           <Route
             path="/:username/post/:postId"
