@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { IconContext } from 'react-icons';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import {
   RiShareLine,
   RiHome7Line,
@@ -32,6 +32,7 @@ const SideNav = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { user, logout } = useAuth();
   const notificationData = useNotifications();
@@ -43,6 +44,8 @@ const SideNav = () => {
     {
       onSuccess: () => {
         logout();
+        queryClient.removeQueries();
+        navigate('/');
       },
     }
   );

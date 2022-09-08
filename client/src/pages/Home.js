@@ -102,7 +102,7 @@ const Home = () => {
       <div className="border-b border-on-surface/30">
         <ComposePost />
       </div>
-      <div className="mt-1 mb-14">
+      <div className="mt-1 mb-14 pb-20">
         {data.pages[0].info.total === 0 && (
           <div className="mt-2">
             <h1 className="text-lg text-on-surface font-bold text-center px-20">

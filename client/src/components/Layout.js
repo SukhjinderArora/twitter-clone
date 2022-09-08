@@ -6,7 +6,7 @@ import SideNav from './Navigation/SideNav';
 
 const Layout = () => {
   return (
-    <div className="h-[100vh] relative sm:flex overflow-y-auto">
+    <div className="h-[100vh] relative flex overflow-y-auto">
       <div className="hidden sm:block w-64 sticky top-0">
         <SideNav />
       </div>
