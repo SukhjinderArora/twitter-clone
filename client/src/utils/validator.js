@@ -98,3 +98,27 @@ export const messageValidator = {
     return errors;
   },
 };
+
+export const changePasswordFormValidator = {
+  validateForm: (values) => {
+    const errors = {};
+    if (!values.currentPassword.trim()) {
+      errors.currentPassword = 'This is a mandatory field';
+    }
+
+    if (!values.newPassword.trim()) {
+      errors.newPassword = 'This is a mandatory field';
+    } else if (values.newPassword.length < 8) {
+      errors.newPassword = 'Password cannot be less than 8 characters';
+    } else if (values.newPassword.length > 16) {
+      errors.newPassword = 'Password cannot be more than 16 characters';
+    }
+
+    if (!values.confirmPassword.trim()) {
+      errors.confirmPassword = 'This is a mandatory field';
+    } else if (values.confirmPassword !== values.newPassword) {
+      errors.confirmPassword = 'Confirm password does not match the password';
+    }
+    return errors;
+  },
+};

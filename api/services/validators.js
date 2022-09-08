@@ -169,7 +169,7 @@ const messageSchema = {
 };
 
 const passwordChangeSchema = {
-  oldPassword: {
+  currentPassword: {
     notEmpty: {
       errorMessage: 'This is a mandatory field',
     },

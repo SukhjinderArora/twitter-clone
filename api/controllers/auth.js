@@ -254,7 +254,7 @@ const verifyAndGenerateAccessToken = async (req, res, next) => {
 };
 
 const changePassword = async (req, res, next) => {
-  const { oldPassword, newPassword } = req.body;
+  const { currentPassword, newPassword } = req.body;
   const { userId } = req;
   try {
     const user = await prisma.user.findUnique({
@@ -267,7 +267,7 @@ const changePassword = async (req, res, next) => {
       throw error;
     }
     const passwordsMatch = await bcrypt.compare(
-      oldPassword,
+      currentPassword,
       user.hashedPassword
     );
     if (!passwordsMatch) {
