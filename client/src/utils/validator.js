@@ -140,3 +140,16 @@ export const changeUsernameValidator = {
     return errors;
   },
 };
+
+export const changeEmailValidator = {
+  validateForm: (values) => {
+    const errors = {};
+    if (!values.email.trim()) {
+      errors.email = 'This is a mandatory field';
+    } else if (!validator.isEmail(values.email)) {
+      errors.email =
+        'Email address is invalid. Please enter a valid email address.';
+    }
+    return errors;
+  },
+};

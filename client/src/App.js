@@ -31,6 +31,9 @@ import Chat from './pages/Chat';
 import Search from './pages/Search';
 import Settings from './pages/Settings';
 import AccountInfo from './pages/AccountInfo';
+import ChangePassword from './pages/ChangePassword';
+import ChangeUserName from './pages/ChangeUserName';
+import ChangeEmail from './pages/ChangeEmail';
 import Display from './pages/Display';
 
 import Layout from './components/Layout';
@@ -42,12 +45,9 @@ import PostsAndReplies from './components/Posts/PostsAndReplies';
 import LikedPosts from './components/Posts/LikedPosts';
 import FolloweesList from './components/FolloweesList';
 import FollowersList from './components/FollowersList';
+import AddPostHeader from './components/AddPostHeader';
 
 import useMediaQuery from './hooks/useMediaQuery';
-
-import AddPostHeader from './components/AddPostHeader';
-import ChangePassword from './pages/ChangePassword';
-import ChangeUserName from './pages/ChangeUserName';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -198,6 +198,14 @@ const App = () => {
               element={
                 <RequireAuth redirectTo="/signup">
                   <ChangeUserName />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="email"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <ChangeEmail />
                 </RequireAuth>
               }
             />

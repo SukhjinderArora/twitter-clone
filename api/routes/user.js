@@ -5,7 +5,8 @@ const userController = require('../controllers/user');
 const { isAuthenticated, validateRequest } = require('../middlewares/auth');
 const {
   profileSchema,
-  signupSchema: { validateUsername },
+  signupSchema: { validateUsername, validateDateOfBirth },
+  emailSchema,
 } = require('../services/validators');
 
 router.get('/user/:username', userController.getUserByUsername);
@@ -29,6 +30,20 @@ router.patch(
   checkSchema(validateUsername),
   validateRequest,
   userController.updateUsername
+);
+router.patch(
+  '/my/email',
+  isAuthenticated,
+  checkSchema(emailSchema),
+  validateRequest,
+  userController.updateEmail
+);
+router.patch(
+  '/my/dob',
+  isAuthenticated,
+  checkSchema(validateDateOfBirth),
+  validateRequest,
+  userController.updateDateOfBirth
 );
 router.get('/me', isAuthenticated, userController.getAuthUserInfo);
 

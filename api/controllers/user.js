@@ -613,7 +613,6 @@ const updateUsername = async (req, res, next) => {
         id: user.id,
       },
       data: {
-        newUser: false,
         username: username.toLowerCase(),
       },
       select: {
@@ -633,6 +632,83 @@ const updateUsername = async (req, res, next) => {
   }
 };
 
+const updateEmail = async (req, res, next) => {
+  const { userId } = req;
+  const { email } = req.body;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw createError.NotFound();
+    }
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        email,
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        newUser: true,
+        googleId: true,
+        provider: true,
+        createdAt: true,
+        profile: true,
+      },
+    });
+    return res.status(200).json({ user: updatedUser });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const updateDateOfBirth = async (req, res, next) => {
+  const { userId } = req;
+  const { dateOfBirth } = req.body;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw createError.NotFound();
+    }
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        newUser: false,
+        profile: {
+          update: {
+            dob: dateOfBirth,
+          },
+        },
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        newUser: true,
+        googleId: true,
+        provider: true,
+        createdAt: true,
+        profile: true,
+      },
+    });
+    return res.status(201).json({ user: updatedUser });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getUserByUsername,
   getPostsByUser,
@@ -645,4 +721,6 @@ module.exports = {
   updateProfile,
   getAuthUserInfo,
   updateUsername,
+  updateDateOfBirth,
+  updateEmail,
 };

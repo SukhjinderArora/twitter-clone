@@ -87,7 +87,7 @@ const AccountInfo = () => {
             </NavLink>
           </li>
           <li className="pb-4">
-            <NavLink to="/">
+            <NavLink to="/settings/email">
               <div className="flex justify-between items-center px-4">
                 <div>
                   <p className="text-on-surface">Email</p>

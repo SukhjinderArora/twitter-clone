@@ -256,6 +256,10 @@ const profileSchema = {
   },
 };
 
+const emailSchema = {
+  email: signupSchema.validateEmail.email,
+};
+
 module.exports = {
   signupSchema,
   loginSchema,
@@ -264,4 +268,5 @@ module.exports = {
   messageSchema,
   passwordChangeSchema,
   profileSchema,
+  emailSchema,
 };
