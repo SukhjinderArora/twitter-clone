@@ -19,6 +19,7 @@ const AuthContext = React.createContext({
   // eslint-disable-next-line no-unused-vars
   login: (user = {}, token = '', expiresAt = '') => {},
   logout: () => {},
+  updateUser: () => {},
   setAuthenticationStatus: () => {},
 });
 
@@ -38,6 +39,12 @@ const authReducer = (state, action) => {
       return {
         ...initialState,
         status: STATUS.IDLE,
+      };
+    }
+    case 'updateUser': {
+      return {
+        ...state,
+        user: action.payload.user,
       };
     }
     case 'status': {
@@ -70,6 +77,14 @@ const AuthProvider = ({ children }) => {
       type: 'logout',
     });
   }, []);
+  const updateUser = React.useCallback((user) => {
+    dispatch({
+      type: 'updateUser',
+      payload: {
+        user,
+      },
+    });
+  }, []);
   const setAuthenticationStatus = React.useCallback((status) => {
     dispatch({
       type: 'status',
@@ -80,8 +95,8 @@ const AuthProvider = ({ children }) => {
     clearToken();
   }, []);
   const value = React.useMemo(
-    () => ({ ...state, login, logout, setAuthenticationStatus }),
-    [state, setAuthenticationStatus, login, logout]
+    () => ({ ...state, login, logout, updateUser, setAuthenticationStatus }),
+    [state, setAuthenticationStatus, login, logout, updateUser]
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

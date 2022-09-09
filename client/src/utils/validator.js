@@ -122,3 +122,21 @@ export const changePasswordFormValidator = {
     return errors;
   },
 };
+
+export const changeUsernameValidator = {
+  validateForm: (values) => {
+    const errors = {};
+    if (!values.username.trim()) {
+      errors.username = 'This is a mandatory field';
+    } else if (values.username.length < 3) {
+      errors.username = 'Username cannot be less than 3 characters';
+    } else if (values.username.length > 30) {
+      errors.username = 'Username cannot be more than 30 characters';
+    } else if (validator.isNumeric(values.username)) {
+      errors.username = 'Username must be alphanumeric';
+    } else if (validator.contains(values.username, '@')) {
+      errors.username = 'Invalid username. Username must not contain @';
+    }
+    return errors;
+  },
+};

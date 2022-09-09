@@ -47,6 +47,7 @@ import useMediaQuery from './hooks/useMediaQuery';
 
 import AddPostHeader from './components/AddPostHeader';
 import ChangePassword from './pages/ChangePassword';
+import ChangeUserName from './pages/ChangeUserName';
 
 const App = () => {
   const { login, isAuthenticated, expiresAt, logout } = useAuth();
@@ -189,6 +190,14 @@ const App = () => {
               element={
                 <RequireAuth redirectTo="/signup">
                   <ChangePassword />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="username"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <ChangeUserName />
                 </RequireAuth>
               }
             />
