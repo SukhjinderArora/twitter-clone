@@ -3,7 +3,10 @@ const router = require('express').Router();
 
 const userController = require('../controllers/user');
 const { isAuthenticated, validateRequest } = require('../middlewares/auth');
-const { profileSchema } = require('../services/validators');
+const {
+  profileSchema,
+  signupSchema: { validateUsername },
+} = require('../services/validators');
 
 router.get('/user/:username', userController.getUserByUsername);
 router.get('/:id/posts', userController.getPostsByUser);
@@ -19,6 +22,13 @@ router.put(
   checkSchema(profileSchema),
   validateRequest,
   userController.updateProfile
+);
+router.patch(
+  '/my/username',
+  isAuthenticated,
+  checkSchema(validateUsername),
+  validateRequest,
+  userController.updateUsername
 );
 router.get('/me', isAuthenticated, userController.getAuthUserInfo);
 

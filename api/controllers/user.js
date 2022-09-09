@@ -596,6 +596,43 @@ const getAuthUserInfo = async (req, res, next) => {
   }
 };
 
+const updateUsername = async (req, res, next) => {
+  const { userId } = req;
+  const { username } = req.body;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw createError.NotFound();
+    }
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        newUser: false,
+        username: username.toLowerCase(),
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        newUser: true,
+        googleId: true,
+        provider: true,
+        createdAt: true,
+        profile: true,
+      },
+    });
+    return res.status(200).json({ user: updatedUser });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getUserByUsername,
   getPostsByUser,
@@ -607,4 +644,5 @@ module.exports = {
   getRepliesByUser,
   updateProfile,
   getAuthUserInfo,
+  updateUsername,
 };
