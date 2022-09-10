@@ -18,6 +18,7 @@ import {
   RiSettingsLine,
   RiSettingsFill,
 } from 'react-icons/ri';
+import toast from 'react-hot-toast';
 
 import { useAuth } from '../../contexts/auth-context';
 import useNotifications from '../../hooks/useNotifications';
@@ -44,6 +45,7 @@ const SideNav = () => {
     {
       onSuccess: () => {
         logout();
+        toast.dismiss();
         queryClient.removeQueries();
         navigate('/');
       },

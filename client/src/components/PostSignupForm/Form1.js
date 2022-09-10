@@ -3,42 +3,7 @@ import PropTypes from 'prop-types';
 import SelectInput from '../SelectInput';
 import Button from '../Button';
 
-const DateOptions = {
-  months: [
-    { value: '1', label: 'January' },
-    { value: '2', label: 'February' },
-    { value: '3', label: 'March' },
-    { value: '4', label: 'April' },
-    { value: '5', label: 'May' },
-    { value: '6', label: 'June' },
-    { value: '7', label: 'July' },
-    { value: '8', label: 'August' },
-    { value: '9', label: 'September' },
-    { value: '10', label: 'October' },
-    { value: '11', label: 'November' },
-    { value: '12', label: 'December' },
-  ],
-  year_range: 120,
-  daysInMonth(month, year) {
-    if (!month || !year) return [];
-    const totalDaysInMonth = new Date(year, month, 0).getDate();
-    const days = [];
-    // eslint-disable-next-line no-plusplus
-    for (let i = 1; i <= totalDaysInMonth; i++) {
-      days.push({ value: String(i), label: String(i) });
-    }
-    return days;
-  },
-  getYearsInRange(yearRange) {
-    const years = [];
-    const currentYear = new Date().getFullYear();
-    // eslint-disable-next-line no-plusplus
-    for (let i = currentYear; i >= currentYear - yearRange; i--) {
-      years.push({ value: String(i), label: String(i) });
-    }
-    return years;
-  },
-};
+import { DateOptions } from '../../utils/utils';
 
 const Form1 = ({ formData, isLoading }) => {
   return (
