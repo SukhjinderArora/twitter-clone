@@ -129,7 +129,14 @@ const App = () => {
   return (
     <div>
       <Routes location={state?.backgroundLocation || location}>
-        <Route path="/" element={<Layout />}>
+        <Route
+          path="/"
+          element={
+            <RequireAuth redirectTo="/signup">
+              <Layout />
+            </RequireAuth>
+          }
+        >
           <Route
             index
             element={

@@ -10,12 +10,14 @@ import Button from '../../components/Button';
 
 import useForm from '../../hooks/useForm';
 import { useAuth } from '../../contexts/auth-context';
+import usePageTitle from '../../hooks/usePageTitle';
 
 import { DateOptions } from '../../utils/utils';
 import { ChangeBirthDateValidator } from '../../utils/validator';
 import axios from '../../utils/axios';
 
 const ChangeBirthDate = () => {
+  usePageTitle('Change birth date / Kookoo');
   const navigate = useNavigate();
   const { updateUser } = useAuth();
   const { validateForm } = ChangeBirthDateValidator;
