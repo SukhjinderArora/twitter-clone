@@ -3,7 +3,7 @@ import { Outlet, NavLink } from 'react-router-dom';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 
-import usePageTitle from '../hooks/usePageTitle';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const Settings = () => {
   usePageTitle('Settings / Kookoo');

@@ -4,12 +4,12 @@ import { IconContext } from 'react-icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 
-import axios from '../utils/axios';
-import dayjs from '../utils/day';
+import axios from '../../utils/axios';
+import dayjs from '../../utils/day';
 
-import usePageTitle from '../hooks/usePageTitle';
+import usePageTitle from '../../hooks/usePageTitle';
 
-import Spinner from '../components/Spinner';
+import Spinner from '../../components/Spinner';
 
 const AccountInfo = () => {
   usePageTitle('Account information / Kookoo');
@@ -111,7 +111,7 @@ const AccountInfo = () => {
             </NavLink>
           </li>
           <li className="pb-4">
-            <NavLink to="/">
+            <NavLink to="/settings/birthdate">
               <div className="flex justify-between items-center px-4">
                 <div>
                   <p className="text-on-surface">Birth date</p>

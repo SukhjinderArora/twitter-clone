@@ -5,16 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import toast from 'react-hot-toast';
 
-import TextInput from '../components/TextInput';
-import Button from '../components/Button';
+import TextInput from '../../components/TextInput';
+import Button from '../../components/Button';
 
-import useForm from '../hooks/useForm';
-import { useAuth } from '../contexts/auth-context';
+import useForm from '../../hooks/useForm';
+import { useAuth } from '../../contexts/auth-context';
+import usePageTitle from '../../hooks/usePageTitle';
 
-import { changeUsernameValidator } from '../utils/validator';
-import axios from '../utils/axios';
+import { changeUsernameValidator } from '../../utils/validator';
+import axios from '../../utils/axios';
 
 const ChangeUserName = () => {
+  usePageTitle('Change username / Kookoo');
   const navigate = useNavigate();
   const { updateUser } = useAuth();
 

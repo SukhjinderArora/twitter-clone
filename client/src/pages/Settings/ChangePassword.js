@@ -5,17 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import toast from 'react-hot-toast';
 
-import TextInput from '../components/TextInput';
-import Button from '../components/Button';
+import TextInput from '../../components/TextInput';
+import Button from '../../components/Button';
 
-import usePageTitle from '../hooks/usePageTitle';
-import useForm from '../hooks/useForm';
+import usePageTitle from '../../hooks/usePageTitle';
+import useForm from '../../hooks/useForm';
 
-import { changePasswordFormValidator } from '../utils/validator';
-import axios from '../utils/axios';
+import { changePasswordFormValidator } from '../../utils/validator';
+import axios from '../../utils/axios';
 
 const ChangePassword = () => {
-  usePageTitle('Change your password / Kookoo');
+  usePageTitle('Change password / Kookoo');
   const navigate = useNavigate();
 
   const { validateForm } = changePasswordFormValidator;
