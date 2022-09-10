@@ -153,3 +153,7 @@ export const changeEmailValidator = {
     return errors;
   },
 };
+
+export const ChangeBirthDateValidator = {
+  validateForm: postSignupFormValidator.validateForm1,
+};

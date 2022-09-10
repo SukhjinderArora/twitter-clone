@@ -211,6 +211,14 @@ const App = () => {
               }
             />
             <Route
+              path="birthdate"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <ChangeBirthDate />
+                </RequireAuth>
+              }
+            />
+            <Route
               path="display"
               element={
                 <RequireAuth redirectTo="/signup">
