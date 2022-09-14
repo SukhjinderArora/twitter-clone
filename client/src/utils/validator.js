@@ -157,3 +157,32 @@ export const changeEmailValidator = {
 export const ChangeBirthDateValidator = {
   validateForm: postSignupFormValidator.validateForm1,
 };
+
+export const editProfileValidator = {
+  validateForm: (values) => {
+    const errors = {};
+    if (!values.name.trim()) {
+      errors.name = 'This is a mandatory field';
+    } else if (values.name.length < 2) {
+      errors.name = 'Name cannot be less than 2 characters';
+    } else if (values.name.length > 100) {
+      errors.name = 'Name cannot be more than 100 characters';
+    }
+    if (values.bio.trim().length > 255) {
+      errors.bio = 'Bio cannot be more than 255 characters';
+    }
+    if (values.website.trim() && !validator.isURL(values.website)) {
+      errors.website = 'Invalid website URL';
+    }
+    if (!values.month.trim()) {
+      errors.month = 'This is a mandatory field';
+    }
+    if (!values.day.trim()) {
+      errors.day = 'This is a mandatory field';
+    }
+    if (!values.year.trim()) {
+      errors.year = 'This is a mandatory field';
+    }
+    return errors;
+  },
+};

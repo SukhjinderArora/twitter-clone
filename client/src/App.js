@@ -35,6 +35,7 @@ import ChangePassword from './pages/Settings/ChangePassword';
 import ChangeUserName from './pages/Settings/ChangeUserName';
 import ChangeEmail from './pages/Settings/ChangeEmail';
 import ChangeBirthDate from './pages/Settings/ChangeBirthDate';
+import EditProfile from './pages/Settings/EditProfile';
 import Display from './pages/Settings/Display';
 
 import Layout from './components/Layout';
@@ -51,7 +52,7 @@ import AddPostHeader from './components/AddPostHeader';
 import useMediaQuery from './hooks/useMediaQuery';
 
 const App = () => {
-  const { login, isAuthenticated, expiresAt, logout } = useAuth();
+  const { login, isAuthenticated, expiresAt, logout, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const socket = useSocket();
@@ -233,6 +234,19 @@ const App = () => {
                 </RequireAuth>
               }
             />
+            <Route
+              path="profile"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Navigate
+                    to={`/${user.username}`}
+                    state={{
+                      from: location,
+                    }}
+                  />
+                </RequireAuth>
+              }
+            />
           </Route>
           <Route
             path="messages"
@@ -371,6 +385,30 @@ const App = () => {
                     }
                   >
                     <ComposePost />
+                  </Modal>
+                </RequireAuth>
+              }
+            />
+          </Routes>
+        )}
+      {state?.backgroundLocation &&
+        matchPath('/settings/profile', location.pathname) && (
+          <Routes>
+            <Route
+              path="/settings/profile"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Modal
+                    isOpen
+                    onDismiss={() =>
+                      navigate(`${state.backgroundLocation.pathname}`, {
+                        replace: true,
+                      })
+                    }
+                    rounded={!!isWidthGreaterThan640}
+                    headerVisible={false}
+                  >
+                    <EditProfile />
                   </Modal>
                 </RequireAuth>
               }

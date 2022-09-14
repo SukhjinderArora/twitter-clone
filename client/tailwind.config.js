@@ -16,6 +16,7 @@ module.exports = {
     },
     extend: {
       minHeight: (theme) => ({ ...theme('spacing') }),
+      minWidth: (theme) => ({ ...theme('spacing') }),
       colors: {
         primary: withOpacityValue('--primary'),
         'primary-light': withOpacityValue('--primary-light'),

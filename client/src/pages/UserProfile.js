@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import {
   Outlet,
@@ -6,6 +6,7 @@ import {
   useParams,
   Link,
   useNavigate,
+  useLocation,
 } from 'react-router-dom';
 import { RiCalendar2Line, RiMailLine } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
@@ -29,6 +30,7 @@ const UserProfile = () => {
   const socket = useSocket();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const location = useLocation();
   const { setPageTitle } = usePageTitle();
 
   const userData = useUser(username);
@@ -95,6 +97,21 @@ const UserProfile = () => {
     });
   };
 
+  const openModal = useCallback(() => {
+    navigate('/settings/profile', {
+      state: {
+        backgroundLocation: location,
+      },
+      replace: true,
+    });
+  }, [location, navigate]);
+
+  useEffect(() => {
+    if (location.state?.from?.pathname === '/settings/profile') {
+      openModal();
+    }
+  }, [openModal, location.state?.from?.pathname]);
+
   if (userData.isLoading)
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -116,8 +133,19 @@ const UserProfile = () => {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="flex items-center gap-2">
-            {isAuthenticated && user.id !== authUser.id && (
+          {isAuthenticated && user.id === authUser.id && (
+            <div>
+              <button
+                type="button"
+                className="text-on-surface font-semibold border-2 border-on-surface/40 rounded-full py-1 px-3"
+                onClick={openModal}
+              >
+                Edit profile
+              </button>
+            </div>
+          )}
+          {isAuthenticated && user.id !== authUser.id && (
+            <div className="flex items-center gap-2">
               <button
                 type="button"
                 className="text-on-surface border border-on-surface/30 p-1 rounded-full"
@@ -139,10 +167,7 @@ const UserProfile = () => {
                   <RiMailLine />
                 </IconContext.Provider>
               </button>
-            )}
-            {isAuthenticated &&
-              user.id !== authUser.id &&
-              user.followedBy.every(
+              {user.followedBy.every(
                 (follower) => follower.id !== authUser.id
               ) && (
                 <button
@@ -153,9 +178,7 @@ const UserProfile = () => {
                   Follow
                 </button>
               )}
-            {isAuthenticated &&
-              user.id !== authUser.id &&
-              user.followedBy.some(
+              {user.followedBy.some(
                 (follower) => follower.id === authUser.id
               ) && (
                 <button
@@ -166,7 +189,8 @@ const UserProfile = () => {
                   Unfollow
                 </button>
               )}
-          </div>
+            </div>
+          )}
         </div>
         <div className="mt-5">
           <h2 className="text-on-surface text-lg font-bold">
