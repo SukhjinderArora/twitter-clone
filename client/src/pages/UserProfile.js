@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
 import { useEffect, useCallback } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import {
@@ -8,7 +9,7 @@ import {
   useNavigate,
   useLocation,
 } from 'react-router-dom';
-import { RiCalendar2Line, RiMailLine } from 'react-icons/ri';
+import { RiCalendar2Line, RiMailLine, RiLinksLine } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 
 import axios from '../utils/axios';
@@ -198,27 +199,62 @@ const UserProfile = () => {
           </h2>
           <h5 className="text-on-surface/75 text-sm -mt-1">@{user.username}</h5>
         </div>
-        <div className="text-on-surface/75 flex gap-1 my-4">
-          <span>
-            <IconContext.Provider
-              // eslint-disable-next-line react/jsx-no-constructed-context-values
-              value={{
-                size: '24px',
-                style: {
-                  color: 'inherit',
-                },
-              }}
-            >
-              <RiCalendar2Line />
-            </IconContext.Provider>
-          </span>
-          <span>
-            Joined{' '}
-            {new Date(user.createdAt).toLocaleString('en-US', {
-              month: 'long',
-              year: 'numeric',
-            })}
-          </span>
+        <div className="my-4">
+          <p className="text-on-surface/95">{user.profile.bio}</p>
+        </div>
+        <div className="my-4 flex gap-2 flex-col sm:flex-row">
+          {user.profile.website && (
+            <div className="flex gap-1 items-center">
+              <span className="text-on-surface/75">
+                <IconContext.Provider
+                  value={{
+                    size: '18px',
+                    style: {
+                      color: 'inherit',
+                    },
+                  }}
+                >
+                  <RiLinksLine />
+                </IconContext.Provider>
+              </span>
+              <span>
+                <a
+                  href={`${
+                    user.profile.website.startsWith('https://') ||
+                    user.profile.website.startsWith('http://')
+                      ? user.profile.website
+                      : `//${user.profile.website}`
+                  }`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary"
+                >
+                  {user.profile.website}
+                </a>
+              </span>
+            </div>
+          )}
+          <div className="text-on-surface/75 flex items-center gap-1">
+            <span>
+              <IconContext.Provider
+                value={{
+                  size: '18px',
+                  style: {
+                    color: 'inherit',
+                  },
+                }}
+              >
+                <RiCalendar2Line />
+              </IconContext.Provider>
+            </span>
+            <span>
+              Joined{' '}
+              {new Date(user.createdAt).toLocaleString('en-US', {
+                month: 'long',
+                year: 'numeric',
+              })}
+            </span>
+          </div>
         </div>
         <div className="flex text-on-surface gap-4">
           <div>

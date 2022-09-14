@@ -129,7 +129,6 @@ const postSchema = {
     notEmpty: {
       errorMessage: 'This is a mandatory field',
     },
-    escape: true,
     isLength: {
       options: {
         min: 1,
@@ -157,7 +156,6 @@ const messageSchema = {
     notEmpty: {
       errorMessage: 'This is a mandatory field',
     },
-    escape: true,
     isLength: {
       options: {
         min: 1,
@@ -229,19 +227,17 @@ const profileSchema = {
         max: 255,
       },
     },
-    escape: true,
     optional: true,
   },
   website: {
     trim: true,
-    in: ['body'],
+    optional: { options: { checkFalsy: true } },
     isURL: {
       errorMessage: 'Invalid website URL',
       options: {
         protocols: ['http', 'https'],
       },
     },
-    optional: true,
   },
   dateOfBirth: {
     notEmpty: {

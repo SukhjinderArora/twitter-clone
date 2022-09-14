@@ -19,6 +19,9 @@ const Layout = () => {
           marginBottom: '3.5rem',
           inset: '0',
         }}
+        toastOptions={{
+          duration: 2000,
+        }}
       />
       <div className="sm:hidden">
         <div className="fixed bottom-0 left-0 w-full">

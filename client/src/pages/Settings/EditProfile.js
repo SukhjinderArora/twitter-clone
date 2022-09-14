@@ -44,8 +44,8 @@ const EditProfile = () => {
   const form = useForm({
     initialValues: {
       name,
-      bio,
-      website,
+      bio: bio || '',
+      website: website || '',
       month: `${dayjs(dateOfBirth).month() + 1}`,
       day: `${dayjs(dateOfBirth).date()}`,
       year: `${dayjs(dateOfBirth).year()}`,
