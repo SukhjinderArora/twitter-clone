@@ -49,7 +49,7 @@ const Display = () => {
         <h3 className="font-semibold text-xl">Color</h3>
         <div role="radiogroup" className="mt-3 flex justify-between px-4">
           {primaryColors.map((color) => (
-            <div id={color.name}>
+            <div key={color.name}>
               <RadioButton
                 id={color.name}
                 name="color"
@@ -71,7 +71,7 @@ const Display = () => {
         <div role="radiogroup" className="mt-3 flex gap-5 justify-between px-4">
           {themes.map((t) => (
             <div
-              id={t.name}
+              key={t.name}
               className="flex flex-1 py-5 px-3 gap-5 items-center cursor-pointer"
               style={{
                 backgroundColor: t.bgColor,

@@ -5,15 +5,17 @@ import { IconContext } from 'react-icons';
 
 import usePageTitle from '../../hooks/usePageTitle';
 
+import PageHeader from '../../components/PageHeader';
+
 const Settings = () => {
   usePageTitle('Settings / Kookoo');
   return (
     <div className="flex min-h-full">
-      <div className="flex-1 border-r border-on-surface/20 min-h-full py-4">
-        <header>
-          <h1 className="text-xl font-semibold px-4">Settings</h1>
-        </header>
-        <nav className="mt-4">
+      <div className="flex-1 border-r border-on-surface/20 min-h-full">
+        <div>
+          <PageHeader title="Settings" />
+        </div>
+        <nav>
           <ul>
             <li>
               <NavLink to="account">
@@ -93,7 +95,7 @@ const Settings = () => {
           </ul>
         </nav>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 empty:hidden">
         <Outlet />
       </div>
     </div>

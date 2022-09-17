@@ -178,62 +178,66 @@ const App = () => {
               </RequireAuth>
             }
           >
-            <Route
-              index
-              element={
-                <RequireAuth redirectTo="/signup">
-                  <Navigate to="account" />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="account"
-              element={
-                <RequireAuth redirectTo="/signup">
-                  <AccountInfo />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="password"
-              element={
-                <RequireAuth redirectTo="/signup">
-                  <ChangePassword />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="username"
-              element={
-                <RequireAuth redirectTo="/signup">
-                  <ChangeUserName />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="email"
-              element={
-                <RequireAuth redirectTo="/signup">
-                  <ChangeEmail />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="birthdate"
-              element={
-                <RequireAuth redirectTo="/signup">
-                  <ChangeBirthDate />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="display"
-              element={
-                <RequireAuth redirectTo="/signup">
-                  <Display />
-                </RequireAuth>
-              }
-            />
+            {isWidthGreaterThan640 && (
+              <>
+                <Route
+                  index
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <Navigate to="account" />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="account"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <AccountInfo />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="password"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <ChangePassword />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="username"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <ChangeUserName />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="email"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <ChangeEmail />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="birthdate"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <ChangeBirthDate />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="display"
+                  element={
+                    <RequireAuth redirectTo="/signup">
+                      <Display />
+                    </RequireAuth>
+                  }
+                />
+              </>
+            )}
             <Route
               path="profile"
               element={
@@ -428,6 +432,96 @@ const App = () => {
                     headerVisible={false}
                   >
                     <Chat key={location.pathname} />
+                  </Modal>
+                </RequireAuth>
+              }
+            />
+          </Routes>
+        )}
+      {!isWidthGreaterThan640 &&
+        !matchPath('/settings', location.pathname) &&
+        matchPath('/settings/*', location.pathname) && (
+          <Routes>
+            <Route
+              path="/settings/account"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Modal
+                    isOpen
+                    onDismiss={() => navigate(-1)}
+                    headerVisible={false}
+                  >
+                    <AccountInfo />
+                  </Modal>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/settings/password"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Modal
+                    isOpen
+                    onDismiss={() => navigate(-1)}
+                    headerVisible={false}
+                  >
+                    <ChangePassword />
+                  </Modal>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/settings/username"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Modal
+                    isOpen
+                    onDismiss={() => navigate(-1)}
+                    headerVisible={false}
+                  >
+                    <ChangeUserName />
+                  </Modal>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/settings/email"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Modal
+                    isOpen
+                    onDismiss={() => navigate(-1)}
+                    headerVisible={false}
+                  >
+                    <ChangeEmail />
+                  </Modal>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/settings/birthdate"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Modal
+                    isOpen
+                    onDismiss={() => navigate(-1)}
+                    headerVisible={false}
+                  >
+                    <ChangeBirthDate />
+                  </Modal>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/settings/display"
+              element={
+                <RequireAuth redirectTo="/signup">
+                  <Modal
+                    isOpen
+                    onDismiss={() => navigate(-1)}
+                    headerVisible={false}
+                  >
+                    <Display />
                   </Modal>
                 </RequireAuth>
               }
