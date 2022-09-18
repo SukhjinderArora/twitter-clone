@@ -1,17 +1,35 @@
-import { Outlet } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
 import BottomNav from './Navigation/BottomNav';
 import SideNav from './Navigation/SideNav';
+import SideDrawer from './Navigation/SideDrawer';
 
 const Layout = () => {
+  const [openSideDrawer, setOpenSideDrawer] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setOpenSideDrawer(false);
+  }, [location.pathname]);
+
   return (
     <div className="h-[100vh] relative flex overflow-y-auto">
+      <div className="sm:hidden">
+        <SideDrawer
+          isOpen={openSideDrawer}
+          direction="left"
+          onDismiss={() => setOpenSideDrawer(false)}
+        >
+          <SideNav />
+        </SideDrawer>
+      </div>
       <div className="hidden sm:block w-64 sticky top-0">
         <SideNav />
       </div>
       <div className="flex-1 min-w-0">
-        <Outlet />
+        <Outlet context={[openSideDrawer, setOpenSideDrawer]} />
       </div>
       <Toaster
         position="bottom-center"
