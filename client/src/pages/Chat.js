@@ -103,7 +103,7 @@ const Chat = () => {
   if (isError) return <div>Something went wrong.</div>;
 
   return (
-    <div className="flex flex-col justify-between border-l border-on-surface/20 min-h-full h-fit relative">
+    <div className="flex flex-col justify-between sm:border-l sm:border-on-surface/20 min-h-full h-fit relative">
       <div className="px-4 py-2 sticky top-0 backdrop-blur-sm">
         <div className="flex justify-between items-center gap-3">
           <div>
