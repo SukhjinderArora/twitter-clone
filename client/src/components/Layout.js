@@ -25,7 +25,7 @@ const Layout = () => {
           <SideNav />
         </SideDrawer>
       </div>
-      <div className="hidden sm:block w-64 sticky top-0">
+      <div className="hidden sm:block sm:w-auto lg:w-64 sticky top-0">
         <SideNav />
       </div>
       <div className="flex-1 min-w-0">

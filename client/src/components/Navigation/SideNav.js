@@ -71,7 +71,7 @@ const SideNav = () => {
   };
 
   return (
-    <div className="px-4 py-6 border-r border-on-surface/20 min-h-full flex flex-col justify-between">
+    <div className="px-4 py-6 border-r border-on-surface/20 min-h-full flex flex-col justify-between sm:items-center lg:items-stretch">
       <div>
         <div className="text-primary px-4 mb-3">
           <IconContext.Provider
@@ -84,10 +84,10 @@ const SideNav = () => {
             <RiShareLine />
           </IconContext.Provider>
         </div>
-        <nav className="navigation">
+        <nav className="navigation sm:flex sm:flex-col sm:items-center lg:block">
           <ul>
             <li className="text-on-surface mb-3">
-              <NavLink to="/home">
+              <NavLink to="/home" aria-label="Home">
                 {({ isActive }) => (
                   <div
                     className={`flex items-center gap-3 rounded-3xl px-4 py-2 w-fit ${
@@ -106,7 +106,11 @@ const SideNav = () => {
                         {isActive ? <RiHome7Fill /> : <RiHome7Line />}
                       </IconContext.Provider>
                     </span>
-                    <span className={`text-xl ${isActive && 'font-semibold'}`}>
+                    <span
+                      className={`text-xl ${
+                        isActive && 'font-semibold'
+                      } sm:hidden lg:inline`}
+                    >
                       Home
                     </span>
                   </div>
@@ -114,7 +118,7 @@ const SideNav = () => {
               </NavLink>
             </li>
             <li className="text-on-surface mb-3">
-              <NavLink to="/search">
+              <NavLink to="/search" aria-label="Search">
                 {({ isActive }) => (
                   <div
                     className={`flex items-center gap-3 rounded-3xl px-4 py-2 w-fit ${
@@ -133,7 +137,11 @@ const SideNav = () => {
                         {isActive ? <RiSearchFill /> : <RiSearchLine />}
                       </IconContext.Provider>
                     </span>
-                    <span className={`text-xl ${isActive && 'font-semibold'}`}>
+                    <span
+                      className={`text-xl ${
+                        isActive && 'font-semibold'
+                      } sm:hidden lg:inline`}
+                    >
                       Search
                     </span>
                   </div>
@@ -141,7 +149,7 @@ const SideNav = () => {
               </NavLink>
             </li>
             <li className="text-on-surface mb-3">
-              <NavLink to="/messages">
+              <NavLink to="/messages" aria-label="Messages">
                 {({ isActive }) => (
                   <div
                     className={`flex items-center gap-3 rounded-3xl px-4 py-2 w-fit ${
@@ -160,7 +168,11 @@ const SideNav = () => {
                         {isActive ? <RiMailFill /> : <RiMailLine />}
                       </IconContext.Provider>
                     </span>
-                    <span className={`text-xl ${isActive && 'font-semibold'}`}>
+                    <span
+                      className={`text-xl ${
+                        isActive && 'font-semibold'
+                      } sm:hidden lg:inline`}
+                    >
                       Messages
                     </span>
                   </div>
@@ -168,7 +180,7 @@ const SideNav = () => {
               </NavLink>
             </li>
             <li className="text-on-surface mb-3">
-              <NavLink to="/notifications">
+              <NavLink to="/notifications" aria-label="Notifications">
                 {({ isActive }) => (
                   <div
                     className={`relative flex items-center gap-3 rounded-3xl px-4 py-2 w-fit ${
@@ -191,7 +203,11 @@ const SideNav = () => {
                         )}
                       </IconContext.Provider>
                     </span>
-                    <span className={`text-xl ${isActive && 'font-semibold'}`}>
+                    <span
+                      className={`text-xl ${
+                        isActive && 'font-semibold'
+                      } sm:hidden lg:inline`}
+                    >
                       Notifications
                     </span>
                     {notificationData.isSuccess &&
@@ -211,7 +227,7 @@ const SideNav = () => {
               </NavLink>
             </li>
             <li className="text-on-surface mb-3">
-              <NavLink to={`/${user.username}`}>
+              <NavLink to={`/${user.username}`} aria-label="Profile">
                 {({ isActive }) => (
                   <div
                     className={`flex items-center gap-3 rounded-3xl px-4 py-2 w-fit ${
@@ -230,7 +246,11 @@ const SideNav = () => {
                         {isActive ? <RiUserFill /> : <RiUserLine />}
                       </IconContext.Provider>
                     </span>
-                    <span className={`text-xl ${isActive && 'font-semibold'}`}>
+                    <span
+                      className={`text-xl ${
+                        isActive && 'font-semibold'
+                      } sm:hidden lg:inline`}
+                    >
                       Profile
                     </span>
                   </div>
@@ -238,7 +258,7 @@ const SideNav = () => {
               </NavLink>
             </li>
             <li className="text-on-surface mb-3 relative">
-              <NavLink to="/settings">
+              <NavLink to="/settings" aria-label="Settings">
                 {({ isActive }) => (
                   <div
                     className={`flex items-center gap-3 rounded-3xl px-4 py-2 w-fit ${
@@ -257,7 +277,11 @@ const SideNav = () => {
                         {isActive ? <RiSettingsFill /> : <RiSettingsLine />}
                       </IconContext.Provider>
                     </span>
-                    <span className={`text-xl ${isActive && 'font-semibold'}`}>
+                    <span
+                      className={`text-xl ${
+                        isActive && 'font-semibold'
+                      } sm:hidden lg:inline`}
+                    >
                       Settings
                     </span>
                   </div>
@@ -269,22 +293,30 @@ const SideNav = () => {
             <button
               type="button"
               onClick={openModal}
-              className="bg-primary text-on-primary text-base w-full py-3 rounded-3xl"
+              className="bg-primary text-on-primary text-base w-full py-3 rounded-3xl sm:w-12 lg:w-full"
+              aria-label="Add Post"
             >
-              Add Post
+              <span className="sm:hidden lg:inline">Add Post</span>
+              <span className="hidden sm:inline lg:hidden">+</span>
             </button>
           </div>
         </nav>
       </div>
       <div className="flex gap-2 relative">
-        <div className="h-10 w-10 overflow-hidden">
+        <div
+          className="h-10 w-10 overflow-hidden"
+          onClick={handleDropDownOpen}
+          onKeyDown={handleDropDownOpen}
+          role="button"
+          tabIndex={0}
+        >
           <img
             className="h-full w-full rounded-full object-cover"
             src="https://i.pravatar.cc/300"
             alt="avatar"
           />
         </div>
-        <div className="flex justify-between flex-1 items-center">
+        <div className="flex justify-between flex-1 items-center sm:hidden lg:flex">
           <div>
             <p className="font-semibold">{user.profile.name}</p>
             <p className="text-sm text-on-surface/70 -mt-1">@{user.username}</p>

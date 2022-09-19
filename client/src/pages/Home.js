@@ -92,7 +92,7 @@ const Home = () => {
 
   return (
     <div
-      className={`bg-background relative h-fit ${
+      className={`bg-background h-fit ${
         modalOpen ? 'pointer-events-none' : ''
       }`}
     >
