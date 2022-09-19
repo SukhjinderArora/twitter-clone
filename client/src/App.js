@@ -440,6 +440,7 @@ const App = () => {
         )}
       {!isWidthGreaterThan640 &&
         !matchPath('/settings', location.pathname) &&
+        !matchPath('/settings/profile', location.pathname) &&
         matchPath('/settings/*', location.pathname) && (
           <Routes>
             <Route
