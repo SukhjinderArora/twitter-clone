@@ -15,7 +15,7 @@ const Modal = ({
   headerVisible,
 }) => {
   return (
-    <div className="relative">
+    <div className="relative" role="dialog" aria-modal="true">
       <Backdrop backdropVisible={isOpen} hideBackdrop={onDismiss} />
       <div
         className={`bg-surface fixed top-0 left-0 h-full w-full z-[999] overflow-y-auto sm:w-[500px] sm:h-fit sm:top-[20%] sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-[20%] ${
