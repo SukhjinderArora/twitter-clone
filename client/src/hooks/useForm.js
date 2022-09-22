@@ -107,14 +107,20 @@ const useForm = ({
   }, []);
 
   const handleChange = useCallback((evt) => {
+    let value;
+    if (evt.target.type === 'file') {
+      // eslint-disable-next-line prefer-destructuring
+      value = evt.target.files[0];
+    } else if (evt.target.type === 'checkbox') {
+      value = evt.target.checked;
+    } else {
+      value = evt.target.value;
+    }
     dispatch({
       type: actionTypes.CHANGE,
       input: {
         name: evt.target.name,
-        value:
-          evt.target.type === 'checkbox'
-            ? evt.target.checked
-            : evt.target.value,
+        value,
       },
     });
   }, []);

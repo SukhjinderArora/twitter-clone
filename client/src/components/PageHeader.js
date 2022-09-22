@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import { useOutletContext } from 'react-router-dom';
 
+import { useAuth } from '../contexts/auth-context';
 import useMediaQuery from '../hooks/useMediaQuery';
 
 const PageHeader = ({ title }) => {
   const [, setOpenSideDrawer] = useOutletContext();
+  const { user } = useAuth();
   const isMobileDevice = useMediaQuery('(max-width: 639px)');
 
   return (
@@ -16,7 +18,7 @@ const PageHeader = ({ title }) => {
       >
         <img
           className="h-full w-full rounded-full object-cover"
-          src="https://i.pravatar.cc/300"
+          src={user.profile.img}
           alt="avatar"
         />
       </button>

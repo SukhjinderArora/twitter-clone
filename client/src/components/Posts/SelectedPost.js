@@ -104,7 +104,7 @@ const SelectedPost = ({ post }) => {
           <div className="h-14 w-14 overflow-hidden">
             <img
               className="h-full w-full rounded-full object-cover"
-              src="https://i.pravatar.cc/300"
+              src={post.user.profile.img}
               alt="avatar"
             />
           </div>
@@ -267,6 +267,7 @@ SelectedPost.propTypes = {
       username: PropTypes.string,
       profile: PropTypes.shape({
         name: PropTypes.string,
+        img: PropTypes.string,
       }),
     }),
     createdAt: PropTypes.string,

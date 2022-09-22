@@ -129,7 +129,7 @@ const UserProfile = () => {
         <div className="flex justify-between mt-2">
           <div className="w-24 h-24 rounded-full overflow-hidden -mt-14">
             <img
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+              src={user.profile.img}
               alt="User avatar"
               className="w-full h-full object-cover"
             />

@@ -1,10 +1,18 @@
+const path = require('path');
+
 const createError = require('http-errors');
+const { nanoid } = require('nanoid');
 
 const prisma = require('../services/connect-db');
+const { uploadImage } = require('../utils/upload-image');
 const {
   NOTIFICATION_TYPE,
   NOTIFICATION_OBJECT_TYPE,
 } = require('../utils/enums');
+const cloudStorage = require('../services/cloud-storage');
+const { GCP_STORAGE_BUCKET_ID } = require('../utils/config');
+
+const bucket = cloudStorage.bucket(GCP_STORAGE_BUCKET_ID);
 
 const getUserByUsername = async (req, res, next) => {
   const { username } = req.params;
@@ -543,7 +551,22 @@ const getRepliesByUser = async (req, res, next) => {
 const updateProfile = async (req, res, next) => {
   const { userId } = req;
   const { name, bio, website, dateOfBirth } = req.body;
+  const { file } = req;
   try {
+    const userProfile = await prisma.profile.findUnique({
+      where: {
+        userId,
+      },
+    });
+    let imageUrl = userProfile.img;
+    if (file) {
+      const { ext } = path.parse(file.originalname);
+      imageUrl = await uploadImage(
+        file,
+        `images/${nanoid()}${ext}`,
+        bucket.name
+      );
+    }
     const updatedUser = await prisma.user.update({
       where: {
         id: userId,
@@ -555,6 +578,7 @@ const updateProfile = async (req, res, next) => {
             bio,
             website,
             dob: dateOfBirth,
+            img: imageUrl,
           },
         },
       },

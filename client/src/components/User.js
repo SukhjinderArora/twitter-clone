@@ -8,7 +8,7 @@ const User = ({ user }) => {
         <div className="h-10 w-10 overflow-hidden">
           <img
             className="h-full w-full rounded-full object-cover"
-            src="https://i.pravatar.cc/300"
+            src={user.profile.img}
             alt="user avatar"
           />
         </div>
@@ -34,6 +34,7 @@ User.propTypes = {
     username: PropTypes.string,
     profile: PropTypes.shape({
       name: PropTypes.string,
+      img: PropTypes.string,
     }),
   }).isRequired,
 };

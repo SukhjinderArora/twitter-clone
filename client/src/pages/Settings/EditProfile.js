@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { IconContext } from 'react-icons';
+import { RiCameraLine } from 'react-icons/ri';
 import { FiX } from 'react-icons/fi';
 import { useMutation, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
@@ -24,19 +26,25 @@ const EditProfile = () => {
   const location = useLocation();
   const queryClient = useQueryClient();
   const { user, updateUser } = useAuth();
-  const { name, bio, website, dob: dateOfBirth } = user.profile;
+  const { name, bio, website, dob: dateOfBirth, img } = user.profile;
+  const [imageUrl, setImageUrl] = useState(img);
   const { state } = location;
 
   const { validateForm } = editProfileValidator;
 
   const editProfileMutation = useMutation(
-    // eslint-disable-next-line no-shadow
-    ({ name, bio, website, dateOfBirth }) => {
-      return axios.put('/api/users/my/profile', {
-        name,
-        bio,
-        website,
-        dateOfBirth,
+    // eslint-disable-next-line no-shadow, camelcase
+    ({ name, bio, website, dateOfBirth, profile_image }) => {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('bio', bio);
+      formData.append('website', website);
+      formData.append('dateOfBirth', dateOfBirth);
+      formData.append('profile_image', profile_image);
+      return axios.put('/api/users/my/profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
     }
   );
@@ -49,6 +57,7 @@ const EditProfile = () => {
       month: `${dayjs(dateOfBirth).month() + 1}`,
       day: `${dayjs(dateOfBirth).date()}`,
       year: `${dayjs(dateOfBirth).year()}`,
+      profile_image: null,
     },
     validate: validateForm,
     onSubmit: (values) => {
@@ -60,10 +69,11 @@ const EditProfile = () => {
           dateOfBirth: new Date(
             `${values.year}/${values.month}/${values.day}`
           ).toISOString(),
+          profile_image: values.profile_image,
         },
         {
           onSuccess: (response) => {
-            queryClient.invalidateQueries(['user', user.username]);
+            queryClient.invalidateQueries();
             updateUser(response.data.user);
             toast.custom((t) => (
               <div
@@ -91,9 +101,19 @@ const EditProfile = () => {
     },
   });
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setImageUrl(fileReader.result);
+    };
+    fileReader.readAsDataURL(file);
+    form.handleChange(e);
+  };
+
   return (
     <div>
-      <div className="px-4 py-2 sticky top-0">
+      <div className="px-4 py-2 sticky top-0 bg-surface z-50">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -138,6 +158,51 @@ const EditProfile = () => {
         </div>
       </div>
       <form className="px-4 py-4" onSubmit={form.handleSubmit}>
+        <div className="mb-4">
+          <input
+            id="profile-img-input"
+            type="file"
+            className="visually-hidden peer"
+            onChange={handleImageChange}
+            onFocus={form.handleFocus}
+            onBlur={form.handleBlur}
+            name="profile_image"
+            accept=".png, .jpg, .jpeg"
+          />
+          <label
+            htmlFor="profile-img-input"
+            className="inline-block w-[100px] h-[100px] cursor-pointer border border-transparent peer-focus:border-primary relative group"
+            aria-label="Add picture"
+            title="Add picture"
+          >
+            <div className="w-full h-full rounded-full overflow-hidden">
+              <img
+                src={imageUrl}
+                // this is temporary
+                alt="user avatar"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="text-white absolute top-0 left-0 w-full h-full rounded-full flex items-center justify-center bg-black/25 group-hover:bg-black/40">
+              <div className="px-3 py-3 bg-black/40 rounded-full">
+                <IconContext.Provider
+                  // eslint-disable-next-line react/jsx-no-constructed-context-values
+                  value={{
+                    size: '22px',
+                    style: {
+                      color: 'inherit',
+                    },
+                  }}
+                >
+                  <RiCameraLine />
+                </IconContext.Provider>
+              </div>
+            </div>
+          </label>
+          <span className="text-on-error text-xs inline-block w-full">
+            {form.touched.profile_image && form.errors.profile_image}
+          </span>
+        </div>
         <div className="mb-2">
           <TextInput
             id="name"

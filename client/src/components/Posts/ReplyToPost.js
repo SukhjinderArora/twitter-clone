@@ -12,6 +12,7 @@ import axios from '../../utils/axios';
 
 import useForm from '../../hooks/useForm';
 import { useSocket } from '../../contexts/socket-context';
+import { useAuth } from '../../contexts/auth-context';
 
 const ReplyToPost = ({ post }) => {
   const [progress, setProgress] = useState(0);
@@ -19,6 +20,7 @@ const ReplyToPost = ({ post }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const { user } = useAuth();
   const socket = useSocket();
 
   const postReply = useMutation(({ postId, content }) => {
@@ -96,7 +98,7 @@ const ReplyToPost = ({ post }) => {
         <div className="h-10 w-10 overflow-hidden">
           <img
             className="h-full w-full rounded-full object-cover"
-            src="https://i.pravatar.cc/300"
+            src={user.profile.img}
             alt="avatar"
           />
         </div>

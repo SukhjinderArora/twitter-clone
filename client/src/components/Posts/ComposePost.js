@@ -10,6 +10,7 @@ import useForm from '../../hooks/useForm';
 
 import axios from '../../utils/axios';
 import { newPostValidator } from '../../utils/validator';
+import { useAuth } from '../../contexts/auth-context';
 
 const ComposePost = () => {
   const [progress, setProgress] = useState(0);
@@ -20,6 +21,7 @@ const ComposePost = () => {
       content,
     });
   });
+  const { user } = useAuth();
   const { validateForm } = newPostValidator;
   const form = useForm({
     initialValues: {
@@ -83,7 +85,7 @@ const ComposePost = () => {
         <div className="h-10 w-10 overflow-hidden">
           <img
             className="h-full w-full rounded-full object-cover"
-            src="https://i.pravatar.cc/300"
+            src={user.profile.img}
             alt="user avatar"
           />
         </div>

@@ -183,6 +183,16 @@ export const editProfileValidator = {
     if (!values.year.trim()) {
       errors.year = 'This is a mandatory field';
     }
+    if (values.profile_image) {
+      const imageMimeType = /image\/(png|jpg|jpeg)/i;
+      if (!values.profile_image.type.match(imageMimeType)) {
+        errors.profile_image =
+          'Invalid file type. Only .jpg, .png, and .jpeg files are allowed';
+      } else if (values.profile_image.size > 1024 * 1024) {
+        errors.profile_image =
+          'File size too large. File should be less than 1MB';
+      }
+    }
     return errors;
   },
 };

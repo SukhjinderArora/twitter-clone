@@ -8,6 +8,8 @@ const {
   REFRESH_TOKEN_LIFE,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
+  GCP_PROJECT_ID,
+  GCP_STORAGE_BUCKET_ID,
 } = process.env;
 
 module.exports = {
@@ -20,4 +22,6 @@ module.exports = {
   REFRESH_TOKEN_LIFE,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
+  GCP_PROJECT_ID,
+  GCP_STORAGE_BUCKET_ID,
 };

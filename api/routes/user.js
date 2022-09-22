@@ -1,5 +1,24 @@
 const { checkSchema } = require('express-validator');
+const multer = require('multer');
 const router = require('express').Router();
+
+const { InvalidFileTypeError } = require('../utils/errors');
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 1024 * 1024,
+    files: 1,
+  },
+  fileFilter: (req, file, cb) => {
+    const imageMimeType = /image\/(png|jpg|jpeg)/i;
+    if (!file.mimetype.match(imageMimeType)) {
+      cb(new InvalidFileTypeError('Invalid file type'));
+      return;
+    }
+    cb(null, true);
+  },
+}).single('profile_image');
 
 const userController = require('../controllers/user');
 const { isAuthenticated, validateRequest } = require('../middlewares/auth');
@@ -20,6 +39,34 @@ router.get('/:id/posts/replies', userController.getRepliesByUser);
 router.put(
   '/my/profile/',
   isAuthenticated,
+  (req, res, next) => {
+    upload(req, res, (err) => {
+      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+          errors: [
+            {
+              msg: 'File size too large. File should be less than 1MB',
+              param: 'profile_image',
+            },
+          ],
+        });
+      }
+      if (err instanceof InvalidFileTypeError) {
+        return res.status(400).json({
+          errors: [
+            {
+              msg: 'Invalid file type. Only .jpg, .png, and .jpeg files are allowed',
+              param: 'profile_image',
+            },
+          ],
+        });
+      }
+      if (err) {
+        return next(err);
+      }
+      return next();
+    });
+  },
   checkSchema(profileSchema),
   validateRequest,
   userController.updateProfile

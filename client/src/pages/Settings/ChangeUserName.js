@@ -2,7 +2,7 @@
 import { RiArrowLeftLine } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 
 import TextInput from '../../components/TextInput';
@@ -18,6 +18,8 @@ import axios from '../../utils/axios';
 const ChangeUserName = () => {
   usePageTitle('Change username / Kookoo');
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const { updateUser } = useAuth();
 
   const { validateForm } = changeUsernameValidator;
@@ -41,6 +43,7 @@ const ChangeUserName = () => {
         {
           onSuccess: (response) => {
             updateUser(response.data.user);
+            queryClient.invalidateQueries();
             resetForm();
             toast.custom((t) => (
               <div

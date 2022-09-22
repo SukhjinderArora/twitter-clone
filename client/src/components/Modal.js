@@ -22,34 +22,36 @@ const Modal = ({
           !isOpen && 'hidden'
         } ${rounded && 'rounded-3xl'}`}
       >
-        {customHeader ||
-          (headerVisible && (
-            <div className="p-4 flex items-center relative">
-              {closeButtonVisible && (
-                <button
-                  type="button"
-                  onClick={onDismiss}
-                  className="absolute top-1/2 -translate-y-1/2 text-on-surface"
-                >
-                  <IconContext.Provider
-                    // eslint-disable-next-line react/jsx-no-constructed-context-values
-                    value={{
-                      size: '32px',
-                      style: {
-                        color: 'inherit',
-                      },
-                    }}
+        <div className="h-full sm:max-h-[90vh] sm:overflow-y-auto">
+          {customHeader ||
+            (headerVisible && (
+              <div className="p-4 flex items-center relative">
+                {closeButtonVisible && (
+                  <button
+                    type="button"
+                    onClick={onDismiss}
+                    className="absolute top-1/2 -translate-y-1/2 text-on-surface"
                   >
-                    <FiX />
-                  </IconContext.Provider>
-                </button>
-              )}
-              <h1 className="text-on-surface font-bold text-2xl text-center flex-1">
-                {title}
-              </h1>
-            </div>
-          ))}
-        {children}
+                    <IconContext.Provider
+                      // eslint-disable-next-line react/jsx-no-constructed-context-values
+                      value={{
+                        size: '32px',
+                        style: {
+                          color: 'inherit',
+                        },
+                      }}
+                    >
+                      <FiX />
+                    </IconContext.Provider>
+                  </button>
+                )}
+                <h1 className="text-on-surface font-bold text-2xl text-center flex-1">
+                  {title}
+                </h1>
+              </div>
+            ))}
+          {children}
+        </div>
       </div>
     </div>
   );

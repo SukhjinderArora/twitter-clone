@@ -312,7 +312,7 @@ const SideNav = () => {
         >
           <img
             className="h-full w-full rounded-full object-cover"
-            src="https://i.pravatar.cc/300"
+            src={user.profile.img}
             alt="avatar"
           />
         </div>
@@ -340,7 +340,7 @@ const SideNav = () => {
                 <div className="h-10 w-10 overflow-hidden">
                   <img
                     className="h-full w-full rounded-full object-cover"
-                    src="https://i.pravatar.cc/300"
+                    src={user.profile.img}
                     alt="avatar"
                   />
                 </div>

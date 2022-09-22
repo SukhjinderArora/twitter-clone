@@ -129,7 +129,7 @@ const Chat = () => {
             <div className="h-6 w-6 overflow-hidden">
               <img
                 className="h-full w-full rounded-full object-cover"
-                src="https://i.pravatar.cc/300"
+                src={data.chat.participant.profile.img}
                 alt="avatar"
               />
             </div>

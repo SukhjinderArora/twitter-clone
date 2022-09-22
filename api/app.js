@@ -22,6 +22,7 @@ const isDev = NODE_ENV === 'development';
 
 app.use(morgan('dev'));
 app.use(helmet());
+app.use(helmet.hidePoweredBy());
 
 if (isDev) {
   app.use(
