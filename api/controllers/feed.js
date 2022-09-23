@@ -47,8 +47,6 @@ const getUserHomeFeed = async (req, res, next) => {
       orderBy: {
         createdAt: 'desc',
       },
-      // skip: (page - 1) * limit,
-      // take: limit,
       include: {
         user: {
           select: {
@@ -81,8 +79,6 @@ const getUserHomeFeed = async (req, res, next) => {
       orderBy: {
         createdAt: 'desc',
       },
-      // skip: (page - 1) * limit,
-      // take: limit,
       include: {
         user: {
           select: {

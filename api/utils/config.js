@@ -10,6 +10,7 @@ const {
   GOOGLE_CLIENT_SECRET,
   GCP_PROJECT_ID,
   GCP_STORAGE_BUCKET_ID,
+  GCP_SERVICE_ACCOUNT_KEY,
 } = process.env;
 
 module.exports = {
@@ -24,4 +25,5 @@ module.exports = {
   GOOGLE_CLIENT_SECRET,
   GCP_PROJECT_ID,
   GCP_STORAGE_BUCKET_ID,
+  GCP_SERVICE_ACCOUNT_KEY,
 };

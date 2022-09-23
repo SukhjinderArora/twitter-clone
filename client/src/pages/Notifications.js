@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
 import useNotifications from '../hooks/useNotifications';
@@ -19,7 +19,6 @@ const Notifications = () => {
   usePageTitle('Notifications / Kookoo');
   const { data, hasNextPage, isLoading, fetchNextPage } = useNotifications();
   const queryClient = useQueryClient();
-  const isInitialStrictModeMount = useRef(true);
   const markNotificationAsRead = useMutation(
     async () => {
       try {
@@ -39,10 +38,7 @@ const Notifications = () => {
   useEffect(
     () => {
       return () => {
-        if (!isInitialStrictModeMount.current) {
-          markNotificationAsRead.mutate();
-        }
-        isInitialStrictModeMount.current = false;
+        markNotificationAsRead.mutate();
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

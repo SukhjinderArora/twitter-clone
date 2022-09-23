@@ -1,12 +1,9 @@
 const { Storage } = require('@google-cloud/storage');
-const path = require('path');
 
-const serviceKey = path.join(__dirname, '..', 'configs', 'gcp-keys.json');
-
-const { GCP_PROJECT_ID } = require('../utils/config');
+const { GCP_PROJECT_ID, GCP_SERVICE_ACCOUNT_KEY } = require('../utils/config');
 
 const storage = new Storage({
-  keyFilename: serviceKey,
+  credentials: JSON.parse(GCP_SERVICE_ACCOUNT_KEY),
   projectId: GCP_PROJECT_ID,
 });
 

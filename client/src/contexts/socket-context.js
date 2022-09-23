@@ -13,12 +13,15 @@ const SocketProvider = ({ children }) => {
   React.useEffect(() => {
     let socketIO = null;
     if (isAuthenticated) {
-      socketIO = io('http://localhost:5000', {
-        withCredentials: true,
-        extraHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      socketIO = io(
+        process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : '',
+        {
+          withCredentials: true,
+          extraHeaders: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setSocket(socketIO);
     }
     return () => {

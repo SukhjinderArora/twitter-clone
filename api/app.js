@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -21,8 +22,25 @@ const app = express();
 const isDev = NODE_ENV === 'development';
 
 app.use(morgan('dev'));
-app.use(helmet());
-app.use(helmet.hidePoweredBy());
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+    referrerPolicy: {
+      policy: 'strict-origin-when-cross-origin',
+    },
+  })
+);
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      'img-src': ["'self'", 'https: data:'],
+      'script-src': ["'self'", 'accounts.google.com'],
+      'default-src': ["'self'", '*.google.com'],
+    },
+  })
+);
 
 if (isDev) {
   app.use(
@@ -37,6 +55,10 @@ if (isDev) {
 app.use(express.json({ type: 'application/json' }));
 app.use(cookieParser(COOKIE_SECRET));
 
+if (!isDev) {
+  app.use(express.static(path.join(__dirname, 'public')));
+}
+
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/users', usersRoutes);
@@ -44,6 +66,12 @@ app.use('/api/feed', feedRoutes);
 app.use('/api/notification', notificationRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/search', searchRoutes);
+
+if (!isDev) {
+  app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+  });
+}
 
 app.use((req, res, next) => {
   next(createError.NotFound());

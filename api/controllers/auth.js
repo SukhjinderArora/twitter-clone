@@ -185,6 +185,7 @@ const signupGoogle = async (req, res, next) => {
         profile: {
           create: {
             name,
+            img: 'https://storage.googleapis.com/twitter-clone-347513.appspot.com/images/default_avatar.jpg',
           },
         },
       },
