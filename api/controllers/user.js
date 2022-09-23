@@ -5,12 +5,14 @@ const { nanoid } = require('nanoid');
 
 const prisma = require('../services/connect-db');
 const { uploadImage } = require('../utils/upload-image');
+const { deleteImage } = require('../utils/delete-image');
 const {
   NOTIFICATION_TYPE,
   NOTIFICATION_OBJECT_TYPE,
 } = require('../utils/enums');
 const cloudStorage = require('../services/cloud-storage');
 const { GCP_STORAGE_BUCKET_ID } = require('../utils/config');
+const logger = require('../utils/logger');
 
 const bucket = cloudStorage.bucket(GCP_STORAGE_BUCKET_ID);
 
@@ -560,12 +562,21 @@ const updateProfile = async (req, res, next) => {
     });
     let imageUrl = userProfile.img;
     if (file) {
+      const prevImageUrl = imageUrl;
       const { ext } = path.parse(file.originalname);
       imageUrl = await uploadImage(
         file,
         `images/${nanoid()}${ext}`,
         bucket.name
       );
+      if (!prevImageUrl.includes('default_avatar')) {
+        const oldFileName = prevImageUrl.split(
+          `https://storage.googleapis.com/${bucket.name}/`
+        )[1];
+        deleteImage(oldFileName, bucket.name).catch((error) => {
+          logger.error(error);
+        });
+      }
     }
     const updatedUser = await prisma.user.update({
       where: {
