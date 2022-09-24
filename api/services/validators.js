@@ -112,6 +112,7 @@ const signupSchema = {
 
 const loginSchema = {
   username: {
+    trim: true,
     notEmpty: {
       errorMessage: 'This is a mandatory field',
     },
