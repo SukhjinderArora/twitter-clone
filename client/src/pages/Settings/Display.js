@@ -49,7 +49,13 @@ const Display = () => {
         <h3 className="font-semibold text-xl">Color</h3>
         <div role="radiogroup" className="mt-3 flex justify-between px-4">
           {primaryColors.map((color) => (
-            <div key={color.name}>
+            <div
+              key={color.name}
+              onClick={() => setPrimaryColor(color.name)}
+              onKeyDown={(e) => e.key !== 'Tab' && setPrimaryColor(color.name)}
+              role="button"
+              tabIndex={0}
+            >
               <RadioButton
                 id={color.name}
                 name="color"
@@ -81,7 +87,7 @@ const Display = () => {
                 }`,
               }}
               onClick={() => setTheme(t.name)}
-              onKeyDown={() => setTheme(t.name)}
+              onKeyDown={(e) => e.key !== 'Tab' && setTheme(t.name)}
               role="button"
               tabIndex={0}
             >
