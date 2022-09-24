@@ -11,7 +11,7 @@ const Form2 = ({ formData, isLoading }) => {
           What should we call you?
         </h1>
         <h4 className="text-on-surface/75 text-sm">
-          Your @username is unique. You can always change is later.
+          Your @username is unique. You can always change it later.
         </h4>
       </div>
       <div className="mb-4">
