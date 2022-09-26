@@ -268,7 +268,7 @@ To be able to run this application locally on your system, you'll need:
    docker-compose down
    ```
 
-# Develoying To Heroku
+# Deploying To Heroku
 
 ### Prerequisites:
 
