@@ -25,11 +25,18 @@ const clearTokens = async (req, res, next) => {
   const { refreshToken } = signedCookies;
   if (refreshToken) {
     try {
-      await prisma.session.delete({
+      const token = await prisma.session.findUnique({
         where: {
           refreshToken,
         },
       });
+      if (token) {
+        await prisma.session.delete({
+          where: {
+            refreshToken: token,
+          },
+        });
+      }
     } catch (error) {
       return next(error);
     }
