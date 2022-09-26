@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img title="Netflix" src="https://cdn-icons-png.flaticon.com/512/929/929468.png" alt="NETFLIX Logo" width="200" />
+  <img title="kookoo" src="https://cdn-icons-png.flaticon.com/512/929/929468.png" alt="Kookoo Logo" width="200" />
   <br>
 KooKoo - A Twitter Clone Application Built Using React, NodeJS, Express & PostgreSQL
 </h1>
