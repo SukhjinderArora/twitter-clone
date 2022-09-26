@@ -33,6 +33,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
     container_name: twitter_clone_api
+    entrypoint: ["/bin/bash", "./startup.sh"]
     volumes:
       - ./api:/home/node/app
       - ./api/prisma:/home/node/app/prisma
