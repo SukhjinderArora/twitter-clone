@@ -307,7 +307,7 @@ To be able to deploy this app to Heroku, you'll need:
     heroku create <application-name> --manifest
     ```
 
-4.  After running this command, you'll get a Heroku remote URL of a new empty Git repository on Heroku. To set that empty git repository on Heroku as the remote on your local repository, run:
+4.  After running this command, you'll get a remote URL of a new empty Git repository on Heroku. To set that empty git repository on Heroku as the remote on your local repository, run:
 
     ```bash
      git remote add heroku <remote-url>
