@@ -262,11 +262,25 @@ To be able to run this application locally on your system, you'll need:
    docker-compose up -d postgres api client
    ```
 
-9. Shut down the application by running:
+9. Optionally, you can use `npx prisma db seed` to seed the database with dummy users. This command has to be executed from inside the running `api` container. To do so, run:
 
    ```bash
-   docker-compose down
+   docker exec -it twitter_clone_api /bin/bash
    ```
+
+   **Note**: `twitter_clone_api` is the name of the `api` container in `docker-compose.yml` file.
+
+   Once inside the container, run the following command from the terminal to seed the database:
+
+   ```bash
+   npx prisma db seed
+   ```
+
+10. Shut down the application by running:
+
+    ```bash
+    docker-compose down
+    ```
 
 # Deploying To Heroku
 
