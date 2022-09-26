@@ -1,1 +1,0 @@
-# Twitter Clone Application Client

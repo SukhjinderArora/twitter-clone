@@ -32,6 +32,13 @@ KooKoo - A Twitter Clone Application Built Using React, NodeJS, Express & Postgr
     - [Display Page](#display-page)
   - [Add Post Page](#add-post-page)
   - [Edit Profile Page](#edit-profile-page)
+- [Live Demo](#live-demo)
+- [Technologies Used](#technologies-used)
+- [Development Workflow](#development-workflow)
+- [Deploying To Heroku](#deploying-to-heroku)
+- [Author](#author)
+- [Helpful Resources](#helpful-resources)
+- [License](#license)
 
 # Project Walk-Through
 
@@ -195,3 +202,157 @@ Users can add new posts by clicking on the **Add Post** button in the sidebar or
 ![ScreenShot](/screenshots/Edit-Profile.png)
 
 Users can update their profile details using the **_Edit Profile Form_**. This form allows users to update their profile picture, name, bio, and date of birth. The fields are validated on both the server and the client side.
+
+# Live Demo
+
+**_Take a look on the live version here:_** https://kookoo-web.herokuapp.com/
+
+# Technologies Used
+
+This project is built using:
+
+- ReactJS
+- React Hooks
+- Custom React Hooks Like `useForm` and `useInView`
+- React Query
+- React Router V6
+- Tailwind CSS
+- NodeJS
+- Express
+- PostgreSQL
+- Prisma
+- Socket.IO
+- Google Cloud Storage
+- Multer
+- Docker
+- Docker Compose
+- Heroku
+
+# Development Workflow
+
+### Prerequisites:
+
+To be able to run this application locally on your system, you'll need:
+
+- [Git](https://git-scm.com/downloads) version 2.25 or higher
+- [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) version 4.6.0 or higher | OR | [Docker Engine](https://docs.docker.com/engine/install/ubuntu/) version 20.10.13 or higher AND Docker Compose version 1.29.2 or higher
+
+### Steps to run this application locally:
+
+1. Start by cloning the repository into your local file system.
+
+   ```bash
+   git clone https://github.com/SukhjinderArora/twitter-clone.git
+   ```
+
+2. CD in to the project directory
+
+   ```bash
+   cd twitter-clone
+   ```
+
+3. Open the repository in your favorite code editor.
+4. Go into the `api` directory inside the project directory.
+5. Rename the `.env.example` to `.env` and set up all the environment variables mentioned in that file.
+6. Now go into the `client` directory inside the project directory.
+7. Rename the `.env.example` to `.env` and set up all the environment variables mentioned in that file.
+8. Finally run this command to start the application:
+
+   ```bash
+   docker-compose up -d postgres api client
+   ```
+
+9. Shut down the application by running:
+
+   ```bash
+   docker-compose down
+   ```
+
+# Develoying To Heroku
+
+### Prerequisites:
+
+To be able to deploy this app to Heroku, you'll need:
+
+- An [Heroku](https://www.heroku.com/) account
+- [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed on your system
+
+### Steps to deploy this app on Heroku:
+
+1.  To provision the PostgreSQL database add-on from the `heroku.yml` file, you'll need to switch the Heroku CLI to the beta update channel. Then install the `heroku-manifest` plugin.
+
+    ```bash
+     heroku update beta
+     heroku plugins:install @heroku-cli/plugin-manifest
+    ```
+
+    **Note:** You can switch back to the stable update stream and remove the plugin at any time:
+
+    ```bash
+       heroku update stable
+       heroku plugins:remove manifest
+    ```
+
+    **Note:** You can provision the database manually from the Heroku dashboard if you do not want to switch to the beta channel.
+
+2.  Now login to Heroku by running the following command:
+
+    ```bash
+    heroku login
+    ```
+
+3.  `CD` into the project's root directory and run:
+
+    ```bash
+    heroku create <application-name> --manifest
+    ```
+
+4.  After running this command, you'll get a Heroku remote URL of a new empty Git repository on Heroku. To set that empty git repository on Heroku as the remote on your local repository, run:
+
+    ```bash
+     git remote add heroku <remote-url>
+    ```
+
+5.  `CD` into the `client` directory of the project and run the following command to build the react application:
+
+    ```bash
+    cd client
+    npm run build-and-move
+    ```
+
+    This command builds the React application and moves the `build` directory from the `client` directory to the `api` directory and renames it to the `public` directory.
+
+6.  Now, `cd` into the project's root directory and run the following command to push the application to the remote Heroku repository:
+
+    ```bash
+    git subtree push --prefix api heroku main
+    ```
+
+    Because we only want to push the `api` directory to Heroku, this command will generate a new commit tree with the `api` directory as root, and push it to the remote Heroku repository.
+
+7.  Check the logs to ensure that the application has been successfully deployed by running:
+
+    ```bash
+    heroku logs
+    ```
+
+8.  You should now be able to access the application at `https://<application-name>.herokuapp.com/` in your browser.
+
+# Author
+
+**Sukhjinder Arora**
+
+- Github: https://github.com/sukhjinderArora
+- LinkedIn: https://linkedin.com/in/sukhjinder-arora
+- Website: https://sukhjinderarora.com
+
+# Helpful Resources
+
+- [Sign-in with Google](https://developers.google.com/identity/gsi/web/guides/overview)
+- [Image upload with Google Cloud Storage and Node.JS](https://medium.com/@olamilekan001/image-upload-with-google-cloud-storage-and-node-js-a1cf9baa1876)
+- [Deploying a Node.js and PostgreSQL Application to Heroku](https://www.newline.co/@kchan/deploying-a-nodejs-and-postgresql-application-to-heroku--0903a181)
+- [Building Docker Images with heroku.yml](https://devcenter.heroku.com/articles/build-docker-images-heroku-yml)
+
+# License
+
+MIT License
