@@ -32,6 +32,7 @@ KooKoo - A Twitter Clone Application Built Using React, NodeJS, Express & Postgr
     - [Display Page](#display-page)
   - [Add Post Page](#add-post-page)
   - [Edit Profile Page](#edit-profile-page)
+- [Responsive design](#responsive-design)
 - [Live Demo](#live-demo)
 - [Technologies Used](#technologies-used)
 - [Development Workflow](#development-workflow)
@@ -202,6 +203,34 @@ Users can add new posts by clicking on the **Add Post** button in the sidebar or
 ![ScreenShot](/screenshots/Edit-Profile.png)
 
 Users can update their profile details using the **_Edit Profile Form_**. This form allows users to update their profile picture, name, bio, and date of birth. The fields are validated on both the server and the client side.
+
+# Responsive Design
+
+This is web app is fully responsive to devices of all screen sizes. For example:
+
+<p align="center">
+  <img src="screenshots/mobile/home.png" width="32%" />
+  <img src="screenshots/mobile/side-drawer.png" width="32%" /> 
+  <img src="screenshots/mobile/search.png" width="32%" />
+</p>
+<p align="center">
+  <img src="screenshots/mobile/notification.png" width="32%" />
+  <img src="screenshots/mobile/messages.png" width="32%" /> 
+  <img src="screenshots/mobile/chat.png" width="32%" />
+</p>
+<p align="center">
+  <img src="screenshots/mobile/edit-profile.png" width="32%" />
+  <img src="screenshots/mobile/settings.png" width="32%" /> 
+  <img src="screenshots/mobile/display.png" width="32%" />
+</p>
+<p align="center">
+  <img src="screenshots/tablet/account-info.png" width="45%" />
+  <img src="screenshots/tablet/display.png" width="45%" /> 
+</p>
+<p align="center">
+  <img src="screenshots/tablet/edit-profile.png" width="45%" />
+  <img src="screenshots/tablet/messages.png" width="45%" /> 
+</p>
 
 # Live Demo
 
