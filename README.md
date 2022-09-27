@@ -354,7 +354,7 @@ To be able to deploy this app to Heroku, you'll need:
 
 # Author
 
-**Sukhjinder Arora**
+**Sukhjinder Arora** 👨‍💻
 
 - Github: https://github.com/sukhjinderArora
 - LinkedIn: https://linkedin.com/in/sukhjinder-arora
