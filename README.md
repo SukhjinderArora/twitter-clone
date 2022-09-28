@@ -379,7 +379,9 @@ To be able to deploy this app to Heroku, you'll need:
     heroku logs
     ```
 
-8.  You should now be able to access the application at `https://<application-name>.herokuapp.com/` in your browser.
+8.  Set up the environment variables in your application dashboard on Heroku.
+
+9.  You should now be able to access the application at `https://<application-name>.herokuapp.com/` in your browser.
 
 # Author
 
