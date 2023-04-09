@@ -9,13 +9,13 @@ const logger = require('../utils/logger');
 const setupSocketServer = (server) => {
   const isDev = NODE_ENV === 'development';
 
-  const options = isDev && {
+  const options = isDev ? {
     cors: {
       origin: 'http://localhost:3000',
       optionsSuccessStatus: 200,
       credentials: true,
-    },
-  };
+    }
+  } : {};
 
   const io = new Server(server, options);
 
