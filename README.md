@@ -9,7 +9,7 @@ KooKoo - A Twitter Clone Application Built Using React, NodeJS, Express & Postgr
   <br><br>
   In this app, users can create a new post (tweet), like posts, repost posts, follow other users, and chat with other users. Users can also see posts of other users they follow on their Home page and search for other users using the Search page. Users can sign in using either username and password or Google sign-in. It also has support for changing usernames, email, and passwords. Users can also upload an image to use as a profile picture. Users can also switch between dark, light, and dim themes and change accent color to their liking.
   <br><br>
-  <strong><em>Take a look at the live version here:</em></strong> https://kookoo-web.herokuapp.com/
+  <strong><em>Take a look at the live version here:</em></strong> https://kookoo.up.railway.app/
 </p>
 
 ## Table of Contents
@@ -234,7 +234,7 @@ This is web app is fully responsive to devices of all screen sizes. For example:
 
 # Live Demo
 
-**_Take a look on the live version here:_** https://kookoo-web.herokuapp.com/
+**_Take a look on the live version here:_** https://kookoo.up.railway.app/home
 
 # Technologies Used
 
