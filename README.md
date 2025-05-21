@@ -234,7 +234,7 @@ This is web app is fully responsive to devices of all screen sizes. For example:
 
 # Live Demo
 
-**_Take a look on the live version here:_** https://kookoo.up.railway.app/home
+**_Take a look on the live version here:_** https://kookoo.up.railway.app/home **_or the recorded demo:_** https://www.youtube.com/watch?v=r3uxMZ5rudI
 
 # Technologies Used
 
